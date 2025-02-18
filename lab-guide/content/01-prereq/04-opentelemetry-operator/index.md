@@ -1,5 +1,14 @@
 ## Deploy OpenTelemetry Operator
 
+### Validate current working directory
+Command:
+```sh
+cd /workspaces/enablement-kubernetes-opentelemetry
+pwd
+```
+Sample output:
+> /workspaces/enablement-kubernetes-opentelemetry
+
 ### Create `dynatrace` namespace
 Command:
 ```sh
@@ -24,7 +33,7 @@ https://cert-manager.io/docs/installation/
 
 Command:
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/popecruzdt/dt-k8s-otel-o11y-dtu/refs/heads/main/manifests/cert-manager.yaml
+kubectl apply -f cluster-manifests/cert-manager.yaml
 ```
 Sample output:
 > namespace/cert-manager created\
@@ -41,7 +50,7 @@ The OpenTelemetry Operator will deploy and manage the custom resource `OpenTelem
 
 Command:
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/popecruzdt/dt-k8s-otel-o11y-dtu/refs/heads/main/manifests/opentelemetry-operator.yaml
+kubectl apply -f cluster-manifests/opentelemetry-operator.yaml
 ```
 Sample output:
 > namespace/opentelemetry-operator-system created\
