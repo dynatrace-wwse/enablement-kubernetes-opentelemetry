@@ -37,8 +37,10 @@
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [30100, 30110, 30120, 30130, 30140, 3000],
-
+  "forwardPorts": [30100, 3000],
+  // old config
+  // "forwardPorts": [30100, 30110, 30120, 30130, 30140, 3000],
+  
   // add labels
   "portsAttributes": {
     "30100": { "label": "front end" },
