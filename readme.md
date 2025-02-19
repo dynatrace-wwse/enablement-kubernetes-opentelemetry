@@ -1,9 +1,15 @@
 id: enablement-kubernetes-opentelemetry
+
 summary: kubernetes observability with dynatrace and opentelemetry
+
 author: Tony Pope-Cruz
+
 # Enablement Kubernetes OpenTelemetry
 
-## Codespaces Cluster Set Up
+During this hands-on training, we’ll learn how to capture logs, traces, and metrics from Kubernetes using OpenTelemetry and ship them to Dynatrace for analysis.  This will demonstrate how to use Dynatrace with OpenTelemetry; without any Dynatrace native components installed on the Kubernetes cluster (Operator, OneAgent, ActiveGate, etc.).
+
+### Codespaces Cluster Set Up
+
 Create a new instance `enablement-kubernetes-opentelemetry` Codespaces.
 
 Navigate to the Github repository.  Click on `Code`.  Click on `Codespaces`.  Click on `New with options`.
@@ -34,3 +40,33 @@ kubectl get pods -n astronomy-shop
 ```
 
 ![github codespace ready](assets/img/github_codespace_ready.png)
+
+### Launching Lab Guide
+
+Move into the lab-guide directory
+
+Command:
+```sh
+cd lab-guide
+```
+
+Generate the lab guide content
+
+Command:
+```sh
+node bin/generator.js
+```
+
+Launch the lab guide as a Node.js server
+
+Command:
+```sh
+nohup node bin/server.js > /dev/null 2>&1 &
+```
+
+Move back into the base directory
+
+Command:
+```sh
+cd /workspaces/enablement-kubernetes-opentelemetry
+```
