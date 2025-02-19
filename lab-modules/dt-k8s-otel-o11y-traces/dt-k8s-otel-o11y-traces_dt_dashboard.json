@@ -1,0 +1,438 @@
+{
+    "version": 15,
+    "variables": [],
+    "tiles": {
+        "0": {
+            "type": "data",
+            "title": "Service Response Time",
+            "query": "timeseries sum(dt.service.request.response_time), by: {dt.entity.service}\n| lookup [ fetch dt.entity.service\n            | filter serviceType == \"UNIFIED\" and serviceDetectionAttributes[`k8s.namespace.name`] == \"astronomy-shop\"\n            | filterOut isNotNull(serviceDetectionAttributes[`istio.canonical_service`])\n            | fields id, entity.name, k8s.namespace.name = serviceDetectionAttributes[`k8s.namespace.name`] ], sourceField:dt.entity.service, lookupField: id, prefix: \"service.\"\n| filterOut isNull(service.id)\n| fieldsRemove service.id, service.k8s.namespace.name",
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            },
+            "visualization": "lineChart",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "groupingThresholdValue": 0,
+                        "valueType": "relative"
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "service.entity.name",
+                        "categoryAxisLabel": "service.entity.name",
+                        "valueAxis": "interval",
+                        "valueAxisLabel": "interval"
+                    },
+                    "hiddenLegendFields": [
+                        "dt.entity.service"
+                    ],
+                    "fieldMapping": {
+                        "timestamp": "timeframe",
+                        "leftAxisValues": [
+                            "sum(dt.service.request.response_time)"
+                        ],
+                        "leftAxisDimensions": [
+                            "dt.entity.service",
+                            "service.entity.name"
+                        ]
+                    },
+                    "leftYAxisSettings": {
+                        "label": "Duration/Latency"
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "recordField": "dt.entity.service",
+                    "autoscale": true,
+                    "alignment": "center",
+                    "colorThresholdTarget": "value"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [],
+                    "columnWidths": {}
+                },
+                "honeycomb": {
+                    "shape": "hexagon",
+                    "legend": "auto",
+                    "dataMappings": {
+                        "value": "dt.entity.service"
+                    },
+                    "displayedFields": [
+                        "dt.entity.service"
+                    ],
+                    "colorMode": "color-palette",
+                    "colorPalette": "categorical"
+                },
+                "histogram": {
+                    "dataMappings": [
+                        {
+                            "valueAxis": "interval",
+                            "rangeAxis": ""
+                        }
+                    ]
+                }
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 100,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            }
+        },
+        "1": {
+            "type": "data",
+            "title": "Service Throughput",
+            "query": "timeseries sum(dt.service.request.count), by: {dt.entity.service}\n| lookup [ fetch dt.entity.service\n            | filter serviceType == \"UNIFIED\" and serviceDetectionAttributes[`k8s.namespace.name`] == \"astronomy-shop\"\n            | filterOut isNotNull(serviceDetectionAttributes[`istio.canonical_service`])\n            | fields id, entity.name, k8s.namespace.name = serviceDetectionAttributes[`k8s.namespace.name`] ], sourceField:dt.entity.service, lookupField: id, prefix: \"service.\"\n| filterOut isNull(service.id)\n| fieldsRemove service.id, service.k8s.namespace.name",
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            },
+            "visualization": "barChart",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "groupingThresholdValue": 0,
+                        "valueType": "relative"
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "service.entity.name",
+                        "categoryAxisLabel": "service.entity.name",
+                        "valueAxis": "interval",
+                        "valueAxisLabel": "interval"
+                    },
+                    "hiddenLegendFields": [
+                        "dt.entity.service"
+                    ],
+                    "fieldMapping": {
+                        "timestamp": "timeframe",
+                        "leftAxisValues": [
+                            "sum(dt.service.request.count)"
+                        ],
+                        "leftAxisDimensions": [
+                            "dt.entity.service",
+                            "service.entity.name"
+                        ]
+                    },
+                    "leftYAxisSettings": {
+                        "label": "Requests/Spans"
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "recordField": "dt.entity.service",
+                    "autoscale": true,
+                    "alignment": "center",
+                    "colorThresholdTarget": "value"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [],
+                    "columnWidths": {}
+                },
+                "honeycomb": {
+                    "shape": "hexagon",
+                    "legend": "auto",
+                    "dataMappings": {
+                        "value": "dt.entity.service"
+                    },
+                    "displayedFields": [
+                        "dt.entity.service"
+                    ],
+                    "colorMode": "color-palette",
+                    "colorPalette": "categorical"
+                },
+                "histogram": {
+                    "dataMappings": [
+                        {
+                            "valueAxis": "interval",
+                            "rangeAxis": ""
+                        }
+                    ]
+                }
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 100,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            }
+        },
+        "2": {
+            "type": "data",
+            "title": "Service Failures",
+            "query": "timeseries sum(dt.service.request.failure_count), by: {dt.entity.service}\n| lookup [ fetch dt.entity.service\n            | filter serviceType == \"UNIFIED\" and serviceDetectionAttributes[`k8s.namespace.name`] == \"astronomy-shop\"\n            | filterOut isNotNull(serviceDetectionAttributes[`istio.canonical_service`])\n            | fields id, entity.name, k8s.namespace.name = serviceDetectionAttributes[`k8s.namespace.name`] ], sourceField:dt.entity.service, lookupField: id, prefix: \"service.\"\n| filterOut isNull(service.id)\n| fieldsRemove service.id, service.k8s.namespace.name",
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            },
+            "visualization": "barChart",
+            "visualizationSettings": {
+                "thresholds": [],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "groupingThresholdValue": 0,
+                        "valueType": "relative"
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "service.entity.name",
+                        "categoryAxisLabel": "service.entity.name",
+                        "valueAxis": "interval",
+                        "valueAxisLabel": "interval"
+                    },
+                    "hiddenLegendFields": [
+                        "dt.entity.service"
+                    ],
+                    "fieldMapping": {
+                        "timestamp": "timeframe",
+                        "leftAxisValues": [
+                            "sum(dt.service.request.failure_count)"
+                        ],
+                        "leftAxisDimensions": [
+                            "dt.entity.service",
+                            "service.entity.name"
+                        ]
+                    },
+                    "leftYAxisSettings": {
+                        "label": "Failures"
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "recordField": "dt.entity.service",
+                    "autoscale": true,
+                    "alignment": "center",
+                    "colorThresholdTarget": "value"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [],
+                    "columnWidths": {}
+                },
+                "honeycomb": {
+                    "shape": "hexagon",
+                    "legend": "auto",
+                    "dataMappings": {
+                        "value": "dt.entity.service"
+                    },
+                    "displayedFields": [
+                        "dt.entity.service"
+                    ],
+                    "colorMode": "color-palette",
+                    "colorPalette": "categorical"
+                },
+                "histogram": {
+                    "dataMappings": [
+                        {
+                            "valueAxis": "interval",
+                            "rangeAxis": ""
+                        }
+                    ]
+                }
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 100,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            }
+        },
+        "3": {
+            "type": "data",
+            "title": "Service Failure Rate",
+            "query": "timeseries {\n  request_count = sum(dt.service.request.count),\n  failure_count = sum(dt.service.request.failure_count)\n }, by: {dt.entity.service}\n| fieldsAdd failure_rate = (failure_count[] / request_count[]) * 100\n| fieldsRemove request_count, failure_count\n| lookup [ fetch dt.entity.service\n            | filter serviceType == \"UNIFIED\" and serviceDetectionAttributes[`k8s.namespace.name`] == \"astronomy-shop\"\n            | filterOut isNotNull(serviceDetectionAttributes[`istio.canonical_service`])\n            | fields id, entity.name, k8s.namespace.name = serviceDetectionAttributes[`k8s.namespace.name`] ], sourceField:dt.entity.service, lookupField: id, prefix: \"service.\"\n| filterOut isNull(service.id)\n| fieldsRemove service.id, service.k8s.namespace.name",
+            "davis": {
+                "enabled": false,
+                "davisVisualization": {
+                    "isAvailable": true
+                }
+            },
+            "visualization": "areaChart",
+            "visualizationSettings": {
+                "thresholds": [
+                    {
+                        "id": 1,
+                        "field": "",
+                        "title": "Failure Rate",
+                        "isEnabled": true,
+                        "rules": [
+                            {
+                                "id": 0,
+                                "color": {
+                                    "Default": "var(--dt-colors-charts-categorical-color-09-default, #649438)"
+                                },
+                                "comparator": "≥",
+                                "label": ""
+                            },
+                            {
+                                "id": 1,
+                                "color": {
+                                    "Default": "var(--dt-colors-charts-categorical-color-14-default, #d56b1a)"
+                                },
+                                "comparator": "≥",
+                                "label": "",
+                                "value": 50
+                            },
+                            {
+                                "id": 2,
+                                "color": {
+                                    "Default": "var(--dt-colors-charts-categorical-color-12-default, #cd3741)"
+                                },
+                                "comparator": "≥",
+                                "label": "",
+                                "value": 80
+                            }
+                        ]
+                    }
+                ],
+                "chartSettings": {
+                    "gapPolicy": "connect",
+                    "circleChartSettings": {
+                        "groupingThresholdType": "relative",
+                        "groupingThresholdValue": 0,
+                        "valueType": "relative"
+                    },
+                    "categoryOverrides": {},
+                    "categoricalBarChartSettings": {
+                        "categoryAxis": "service.entity.name",
+                        "categoryAxisLabel": "service.entity.name",
+                        "valueAxis": "interval",
+                        "valueAxisLabel": "interval"
+                    },
+                    "hiddenLegendFields": [
+                        "dt.entity.service"
+                    ],
+                    "fieldMapping": {
+                        "timestamp": "timeframe",
+                        "leftAxisValues": [
+                            "failure_rate"
+                        ],
+                        "leftAxisDimensions": [
+                            "dt.entity.service",
+                            "service.entity.name"
+                        ]
+                    },
+                    "leftYAxisSettings": {
+                        "label": "Failure Rate",
+                        "min": 0,
+                        "max": 105
+                    }
+                },
+                "singleValue": {
+                    "showLabel": true,
+                    "label": "",
+                    "prefixIcon": "",
+                    "recordField": "dt.entity.service",
+                    "autoscale": true,
+                    "alignment": "center",
+                    "colorThresholdTarget": "value"
+                },
+                "table": {
+                    "rowDensity": "condensed",
+                    "enableSparklines": false,
+                    "hiddenColumns": [],
+                    "lineWrapIds": [],
+                    "columnWidths": {}
+                },
+                "honeycomb": {
+                    "shape": "hexagon",
+                    "legend": "auto",
+                    "dataMappings": {
+                        "value": "dt.entity.service"
+                    },
+                    "displayedFields": [
+                        "dt.entity.service"
+                    ],
+                    "colorMode": "color-palette",
+                    "colorPalette": "categorical"
+                },
+                "histogram": {
+                    "dataMappings": [
+                        {
+                            "valueAxis": "interval",
+                            "rangeAxis": ""
+                        }
+                    ]
+                },
+                "unitsOverrides": [
+                    {
+                        "identifier": "failure_rate",
+                        "unitCategory": "percentage",
+                        "baseUnit": "percent",
+                        "displayUnit": null,
+                        "decimals": 2,
+                        "suffix": "",
+                        "delimiter": false,
+                        "added": 1718043592519
+                    }
+                ]
+            },
+            "querySettings": {
+                "maxResultRecords": 1000,
+                "defaultScanLimitGbytes": 500,
+                "maxResultMegaBytes": 100,
+                "defaultSamplingRatio": 10,
+                "enableSampling": false
+            }
+        }
+    },
+    "layouts": {
+        "0": {
+            "x": 0,
+            "y": 6,
+            "w": 11,
+            "h": 6
+        },
+        "1": {
+            "x": 0,
+            "y": 0,
+            "w": 11,
+            "h": 6
+        },
+        "2": {
+            "x": 11,
+            "y": 0,
+            "w": 11,
+            "h": 6
+        },
+        "3": {
+            "x": 11,
+            "y": 6,
+            "w": 11,
+            "h": 6
+        }
+    },
+    "importedWithCode": false
+}

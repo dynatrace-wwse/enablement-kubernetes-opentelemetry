@@ -1,0 +1,76 @@
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: dynatrace-metrics-node
+  namespace: dynatrace
+spec:
+  envFrom:
+  - secretRef:
+      name: dynatrace-otelcol-dt-api-credentials
+  env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+  mode: "daemonset"
+  image: "otel/opentelemetry-collector-contrib:0.103.0"
+  # podAnnotations:
+      # metrics.dynatrace.com/scrape: 'true'
+      # metrics.dynatrace.com/port: '8888'
+  observability:
+    metrics:
+      enableMetrics: true
+  resources:
+    limits:
+      memory: 512Mi
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      kubeletstats:
+        collection_interval: 30s
+        auth_type: 'serviceAccount'
+        endpoint: '${env:K8S_NODE_NAME}:10250'
+        insecure_skip_verify: true
+        metric_groups:
+          - node
+          - pod
+          - container
+
+    processors:
+      batch:
+        send_batch_max_size: 1000
+        timeout: 30s
+        send_batch_size: 800
+      resource/kind:
+        attributes:
+        - key: k8s.cluster.name
+          value: dt-k8s-o11y-kind
+          action: insert
+
+    exporters:
+      otlphttp/dynatrace:
+        endpoint: "${env:DT_ENDPOINT}"
+        headers:
+          Authorization: "Api-Token ${env:DT_API_TOKEN}"
+      debug:
+        verbosity: basic
+        sampling_initial: 5
+        sampling_thereafter: 20
+
+    service:
+      telemetry:
+        logs:
+          level: "info"
+        metrics:
+          level: "detailed"
+      pipelines:
+        metrics:
+          receivers: [otlp,kubeletstats]
+          processors: [resource/kind,batch]
+          exporters: [otlphttp/dynatrace,debug]

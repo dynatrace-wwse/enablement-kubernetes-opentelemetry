@@ -1,0 +1,126 @@
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: dynatrace-traces
+  namespace: dynatrace
+spec:
+  envFrom:
+  - secretRef:
+      name: dynatrace-otelcol-dt-api-credentials
+  mode: "deployment"
+  image: "ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:0.8.0"
+  # podAnnotations:
+      # metrics.dynatrace.com/scrape: 'true'
+      # metrics.dynatrace.com/port: '8888'
+  observability:
+    metrics:
+      enableMetrics: true
+  resources:
+    limits:
+      memory: 512Mi
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      batch:
+        send_batch_max_size: 1000
+        timeout: 30s
+        send_batch_size: 800
+      k8sattributes:
+        auth_type: "serviceAccount"
+        passthrough: false
+        # filter:
+        #  node_from_env_var: KUBE_NODE_NAME
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.daemonset.name
+            - k8s.job.name
+            - k8s.cronjob.name
+            - k8s.replicaset.name
+            - k8s.statefulset.name
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.node.name
+            - k8s.container.name
+            - container.id
+            - container.image.name
+            - container.image.tag
+          labels:
+            - tag_name: app.label.component
+              key: app.kubernetes.io/component
+              from: pod
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.name
+          #- sources:
+          #    - from: resource_attribute
+          #      name: k8s.pod.ip
+          - sources:
+              - from: connection
+      resourcedetection/gcp:
+        # detectors: [env, gcp]
+        detectors: [env]
+        timeout: 2s
+        override: false
+      resource/kind:
+        attributes:
+        - key: cloud.account.id
+          value: dt-k8s-o11y-account
+          action: insert
+        - key: k8s.cluster.name
+          value: dt-k8s-o11y-kind
+          action: insert
+      resource:
+        attributes:
+        - key: k8s.pod.ip
+          action: delete
+        - key: telemetry.sdk.name
+          value: opentelemetry
+          action: insert
+        - key: dynatrace.otel.collector
+          value: dynatrace-traces
+          action: insert
+        - key: dt.security_context
+          from_attribute: k8s.cluster.name
+          action: insert
+      filter/static:
+        error_mode: ignore
+        traces:
+          span:
+            - 'IsMatch(attributes["http.url"], ".*image.*")'
+            - 'IsMatch(attributes["http.url"], ".*_next.*")'
+
+    exporters:
+      otlphttp/dynatrace:
+        endpoint: "${env:DT_ENDPOINT}"
+        headers:
+          Authorization: "Api-Token ${env:DT_API_TOKEN}"
+      debug:
+        verbosity: basic
+        sampling_initial: 5
+        sampling_thereafter: 20
+
+    service:
+      telemetry:
+        logs:
+          level: "info"
+        metrics:
+          level: "detailed"
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [filter/static,k8sattributes,resourcedetection/gcp,resource/kind,resource,batch]
+          exporters: [otlphttp/dynatrace,debug]
