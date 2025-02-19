@@ -70,3 +70,12 @@ Command:
 ```sh
 cd /workspaces/enablement-kubernetes-opentelemetry
 ```
+
+Open the lab guide in your browser from the Codespaces instance exposed ports
+
+![lab guide port](assets/img/github_codespace_lab_guide_port.png)
+
+![lab guide browser](assets/img/github_codespace_lab_guide_browser.png)
+
+Use the lab guide to move through the hands on exercises.
+
