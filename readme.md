@@ -8,6 +8,14 @@ author: Tony Pope-Cruz
 
 During this hands-on training, we’ll learn how to capture logs, traces, and metrics from Kubernetes using OpenTelemetry and ship them to Dynatrace for analysis.  This will demonstrate how to use Dynatrace with OpenTelemetry; without any Dynatrace native components installed on the Kubernetes cluster (Operator, OneAgent, ActiveGate, etc.).
 
+### Pre-requisites
+
+You will need the following items to complete this hands on training/lab:
+
+1. A GitHub account [GitHub Sign Up](https://github.com/signup)
+1. A Dynatrace SaaS tenant [Dynatrace SaaS](https://www.dynatrace.com/signup/)
+    * You will need full Admin access to the tenant to avoid any permission issues
+
 ### Codespaces Cluster Set Up
 
 Create a new instance `enablement-kubernetes-opentelemetry` Codespaces.
