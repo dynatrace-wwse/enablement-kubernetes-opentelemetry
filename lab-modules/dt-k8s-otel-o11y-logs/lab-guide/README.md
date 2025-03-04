@@ -2,7 +2,7 @@
 
 Clone the repo:
 ```sh
-git clone --single-branch --branch code-spaces https://github.com/popecruzdt/dt-k8s-otel-o11y-logs.git
+git clone --single-branch --branch code-spaces https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/tree/main/lab-modules/dt-k8s-otel-o11y-logs.git
 ```
 
 Move into the lab guide directory:

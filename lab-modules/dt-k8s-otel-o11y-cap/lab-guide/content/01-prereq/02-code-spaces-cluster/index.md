@@ -2,7 +2,7 @@
 
 Create a new instance or use an existing instance of the `dt-k8s-otel-o11y-cluster` Codespaces.
 
-[dt-k8s-otel-o11y-cluster](https://github.com/popecruzdt/dt-k8s-otel-o11y-cluster/tree/code-spaces)
+[dt-k8s-otel-o11y-cluster](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/tree/main/lab-modules/dt-k8s-otel-o11y-cluster/tree/code-spaces)
 
 Navigate to the Github repository.  Click on `Code`.  Click on `Codespaces`.  Click on `New with options`.
 
