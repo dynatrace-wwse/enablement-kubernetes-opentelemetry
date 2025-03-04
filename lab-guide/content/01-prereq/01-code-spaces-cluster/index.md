@@ -1,8 +1,8 @@
 ## Codespaces Cluster Set Up
 
-Create a new instance or use an existing instance of the `dt-k8s-otel-o11y-cluster` Codespaces.
+Create a new instance or use an existing instance of the `enablement-kubernetes-opentelemetry` Codespaces.
 
-[dt-k8s-otel-o11y-cluster](https://github.com/popecruzdt/dt-k8s-otel-o11y-cluster/tree/code-spaces)
+[enablement-kubernetes-opentelemetry](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry)
 
 Navigate to the Github repository.  Click on `Code`.  Click on `Codespaces`.  Click on `New with options`.
 

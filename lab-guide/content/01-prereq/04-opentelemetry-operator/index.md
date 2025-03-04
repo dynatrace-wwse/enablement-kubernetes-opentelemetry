@@ -3,19 +3,23 @@
 ### Validate current working directory
 Command:
 ```sh
-cd /workspaces/enablement-kubernetes-opentelemetry
 pwd
 ```
 Sample output:
-> /workspaces/enablement-kubernetes-opentelemetry
+> /repos/enablement-kubernetes-opentelemetry
+
+You should find yourself at the base directory of the repository. If not, then navigate to it.
 
 ### Create `dynatrace` namespace
 Command:
 ```sh
 kubectl create namespace dynatrace
 ```
+
 Sample output:
+```sh
 > namespace/dynatrace created
+```
 
 ### Create `dynatrace-otelcol-dt-api-credentials` secret
 
@@ -26,7 +30,10 @@ Command:
 kubectl create secret generic dynatrace-otelcol-dt-api-credentials --from-literal=DT_ENDPOINT=$DT_ENDPOINT --from-literal=DT_API_TOKEN=$DT_API_TOKEN -n dynatrace
 ```
 Sample output:
+
+```sh
 > secret/dynatrace-otelcol-dt-api-credentials created
+```
 
 ### Deploy `cert-manager`, pre-requisite for `opentelemetry-operator`
 https://cert-manager.io/docs/installation/

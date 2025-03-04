@@ -12,7 +12,7 @@ dynatrace opentelemetry ingest for kubernetes using opentelemetry collector dtu 
 
 Clone the repo:
 ```sh
-git clone https://github.com/popecruzdt/dt-k8s-otel-o11y-dtu.git
+git clone https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry.git 
 ```
 
 Install Node if not already installed:
