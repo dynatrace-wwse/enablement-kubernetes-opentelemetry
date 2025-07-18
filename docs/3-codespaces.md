@@ -1,10 +1,11 @@
 --8<-- "snippets/send-bizevent/3-codespaces.js"
+# Codespaces
 
 ## Create Codespace
 
 Click to open Codespaces for this lab repository:
-<!--TODO: Update Codespaces Repo URL -->
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dynatrace-wwse/repo-name){target="_blank"}
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dynatrace-wwse/enablement-kubernetes-opentelemetry){target="_blank"}
 
 <!--TODO: Update Codespace Configuration -->
 !!! tip "Codespace Configuration"
@@ -35,6 +36,16 @@ After a couple of minutes, you'll see this screen in your Codespaces terminal. I
 
 Sample output:
 ![Codespaces finish](img/codespaces_finish.png)
+
+### Validate Astronomy Shop
+When the Codespace instance is idle, validate the `astronomy-shop` pods are running.
+
+Command:
+```sh
+kubectl get pods -n astronomy-shop
+```
+
+![github codespace ready](./img/prereq-github_codespace_ready.png)
 
 ## Tips & Tricks
 
@@ -89,10 +100,115 @@ Verify service:
 kubectl get svc astroshop-frontendproxy -n astroshop
 ```
 
+## Finish Codespace Setup
+
+### Define workshop user variables
+In your Github Codespaces Terminal set the environment variables:
+
+!!! tip "Sprint Environment"
+    Are you using a Sprint environment for your Dynatrace tenant?  If so, then use `export DT_ENDPOINT=https://{your-environment-id}.sprint.dynatracelabs.com/api/v2/otlp` instead of the `live` version below.
+
+```
+export DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
+export DT_API_TOKEN={your-api-token}
+export NAME=<INITIALS>-k8s-otel-o11y
+```
+
+### Deploy OpenTelemetry Operator
+
+**Move to the base directory**
+
+Command:
+```sh
+cd $BASE_DIR
+pwd
+```
+Sample output:
+> /workspaces/enablement-kubernetes-opentelemetry
+
+You should find yourself at the base directory of the repository. If not, then navigate to it.
+
+**Create `dynatrace` namespace**
+
+Create the `dynatrace` namespace.  This is where we'll deploy the OpenTelemetry Collectors.
+
+Command:
+```sh
+kubectl create namespace dynatrace
+```
+
+Sample output:
+```sh
+> namespace/dynatrace created
+```
+
+**Create `dynatrace-otelcol-dt-api-credentials` secret**
+
+The secret holds the API endpoint and API token that OpenTelemetry data will be sent to.
+
+Command:
+```sh
+kubectl create secret generic dynatrace-otelcol-dt-api-credentials --from-literal=DT_ENDPOINT=$DT_ENDPOINT --from-literal=DT_API_TOKEN=$DT_API_TOKEN -n dynatrace
+```
+Sample output:
+
+```sh
+> secret/dynatrace-otelcol-dt-api-credentials created
+```
+
+**Deploy `cert-manager`, pre-requisite for `opentelemetry-operator`**
+
+[Cert-Manager Documentation](https://cert-manager.io/docs/installation/){target=_blank}
+
+Command:
+```sh
+kubectl apply -f cluster-manifests/cert-manager.yaml
+```
+
+Sample output:
+> namespace/cert-manager created\
+> customresourcedefinition.apiextensions.k8s.io/certificaterequests.cert-manager.io created\
+> customresourcedefinition.apiextensions.k8s.io/certificates.cert-manager.io created\
+> ...\
+> validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook created
+
+Wait 30-60 seconds for cert-manager to finish initializing before continuing.
+
+**Deploy `opentelemetry-operator`**
+
+The OpenTelemetry Operator will deploy and manage the custom resource `OpenTelemetryCollector` deployed on the cluster.
+
+Command:
+```sh
+kubectl apply -f cluster-manifests/opentelemetry-operator.yaml
+```
+
+Sample output:
+> namespace/opentelemetry-operator-system created\
+> customresourcedefinition.apiextensions.k8s.io/instrumentations.opentelemetry.io created\
+> customresourcedefinition.apiextensions.k8s.io/opampbridges.opentelemetry.io created\
+> ...\
+> validatingwebhookconfiguration.admissionregistration.k8s.io/opentelemetry-operator-validating-webhook-configuration configured
+
+Wait 30-60 seconds for opentelemetry-operator-controller-manager to finish initializing before continuing.
+
+Validate that the OpenTelemetry Operator components are running.
+
+Command:
+```sh
+kubectl get pods -n opentelemetry-operator-system
+```
+
+Sample output:
+
+| NAME                             | READY | STATUS  | RESTARTS | AGE |
+|----------------------------------|-------|---------|----------|-----|
+| opentelemetry-operator-controller-manager-5d746dbd64-rf9st   | 2/2   | Running | 0        | 1m  |
+
 ## Continue
-<!--TODO: Update the continue section -->
-In the next section, ...
+
+In the next section, we'll ship logs from Kubernetes to Dynatrace using OpenTelemetry.
 
 <div class="grid cards" markdown>
-- [Continue to Deploy Dynatrace:octicons-arrow-right-24:](4-content-placeholder.md)
+- [Continue to OpenTelemetry Logs:octicons-arrow-right-24:](4-opentelemetry-logs.md)
 </div>

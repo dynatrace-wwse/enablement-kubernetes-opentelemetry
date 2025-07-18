@@ -4,6 +4,8 @@
 source /workspaces/$RepositoryName/.devcontainer/util/functions.sh
 source /workspaces/$RepositoryName/.devcontainer/util/local.sh
 
+export BASE_DIR="/workspaces/$RepositoryName"
+
 #This is for professors
 #exposeMkdocs
 

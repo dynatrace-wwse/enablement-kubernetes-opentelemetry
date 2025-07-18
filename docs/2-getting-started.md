@@ -1,28 +1,27 @@
 --8<-- "snippets/send-bizevent/2-getting-started.js"
+# Getting Started
 
-<!--TODO: Update requirements -->
 --8<-- "snippets/requirements.md"
 
 ## Prerequisites
 
 You will need full administrator access to a Dynatrace SaaS tenant with a DPS license.
 
-<!--TODO: Update prerequisite bulleted list -->
-* Prerequisite 1
-* Prerequisite 2
+* Generate Dynatrace Access Token
 
-<!--TODO: Update prerequisite details -->
-### Prerequisite 1
+### Generate Dynatrace Access Token
 
-Prerequisite 1 Details
+Generate a new API access token with the following scopes:
 
-![Screenshot](./img/screenshot.png)
+```
+Ingest events
+Ingest logs
+Ingest metrics
+Ingest OpenTelemetry traces
+```
+[See Related Dynatrace API Token Creation Documentation](https://docs.dynatrace.com/docs/dynatrace-api/basics/dynatrace-api-authentication#create-token)
 
-### Prerequisite 2
-
-Prerequisite 2 Details
-
-![Screenshot](./img/screenshot.png)
+![dt access token](./img/prereq-dt_access_token.png)
 
 ## Continue
 
