@@ -18,9 +18,9 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deplo
 
 ## Prerequisites
 
-## Import Dashboard into Dynatrace
+### Import Dashboard into Dynatrace
 
-[Dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-traces/dt-k8s-otel-o11y-traces_dt_dashboard.json)
+[Dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-traces/dt-k8s-otel-o11y-traces_dt_dashboard.json){target="_blank"}
 
 ### Define workshop user variables
 In your Github Codespaces Terminal set the environment variables:
