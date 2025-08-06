@@ -59,5 +59,5 @@ During this hands-on training, we’ll learn how to capture logs, traces, and me
 In the next section, we'll review the prerequisites for this lab needed before launching our Codespaces instance.
 
 <div class="grid cards" markdown>
-- [Continue to getting started:octicons-arrow-right-24:](2-getting-started.md)
+- [Continue to Getting Started:octicons-arrow-right-24:](2-getting-started.md)
 </div>
