@@ -1,0 +1,1344 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../4-opentelemetry-logs/">
+      
+      
+        <link rel="next" href="../6-opentelemetry-metrics/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+    
+    
+      
+        <title>5. OpenTelemetry Traces - Dynatrace Enablement Lab: Kubernetes OpenTelemetry</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+  
+      
+    
+    <script type="text/javascript" src="https://js-cdn.dynatrace.com/jstag/1612cf70810/bf81393wlb/ad7b68fd2b9d9448_complete.js" crossorigin="anonymous"></script>
+
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#opentelemetry-traces" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Dynatrace Enablement Lab: Kubernetes OpenTelemetry" class="md-header__button md-logo" aria-label="Dynatrace Enablement Lab: Kubernetes OpenTelemetry" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dynatrace Enablement Lab: Kubernetes OpenTelemetry
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5. OpenTelemetry Traces
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    View Code on GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Dynatrace Enablement Lab: Kubernetes OpenTelemetry" class="md-nav__button md-logo" aria-label="Dynatrace Enablement Lab: Kubernetes OpenTelemetry" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Dynatrace Enablement Lab: Kubernetes OpenTelemetry
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    View Code on GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. About
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2. Getting started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-codespaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3. Codespaces
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4-opentelemetry-logs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4. OpenTelemetry Logs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    5. OpenTelemetry Traces
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    5. OpenTelemetry Traces
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opentelemetry-collector-for-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenTelemetry Collector for Traces
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenTelemetry Collector for Traces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#otlp-receiver" class="md-nav__link">
+    <span class="md-ellipsis">
+      otlp Receiver
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-opentelemetry-collector-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy OpenTelemetry Collector Deployment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyze-opentelemetry-traces-in-dynatrace" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analyze OpenTelemetry Traces in Dynatrace
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k8sattributes-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      k8sattributes Processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="k8sattributes Processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-kubernetes-rbac" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure Kubernetes RBAC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-k8sattributes-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add k8sattributes Processor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resourcedetection-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      resourcedetection Processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="resourcedetection Processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-resourcedetection-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add resourcedetection Processor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      resource Processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="resource Processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-resource-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add resource Processor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynatrace-dashboard-with-unified-services-from-opentelemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynatrace Dashboard with Unified Services from OpenTelemetry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrap Up
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wrap Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-learned-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Learned Today
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continue
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-opentelemetry-metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6. OpenTelemetry Metrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-opentelemetry-capstone/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7. OpenTelemetry Capstone
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cleanup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8. Cleanup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opentelemetry-collector-for-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenTelemetry Collector for Traces
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenTelemetry Collector for Traces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#otlp-receiver" class="md-nav__link">
+    <span class="md-ellipsis">
+      otlp Receiver
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-opentelemetry-collector-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy OpenTelemetry Collector Deployment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyze-opentelemetry-traces-in-dynatrace" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analyze OpenTelemetry Traces in Dynatrace
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k8sattributes-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      k8sattributes Processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="k8sattributes Processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-kubernetes-rbac" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure Kubernetes RBAC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-k8sattributes-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add k8sattributes Processor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resourcedetection-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      resourcedetection Processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="resourcedetection Processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-resourcedetection-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add resourcedetection Processor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      resource Processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="resource Processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-resource-processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add resource Processor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynatrace-dashboard-with-unified-services-from-opentelemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynatrace Dashboard with Unified Services from OpenTelemetry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrap Up
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wrap Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-learned-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      What You Learned Today
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continue
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  dynatrace.sendBizEvent('page_load', {"page": "5. OpenTelemetry Traces"})
+});
+</script>
+<h1 id="opentelemetry-traces">OpenTelemetry Traces<a class="headerlink" href="#opentelemetry-traces" title="Permanent link">#</a></h1>
+<p>In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deployment (Gateway) to collect application traces/spans, generated by OpenTelemetry, from a Kubernetes cluster and ship them to Dynatrace.</p>
+<p><strong>Lab tasks:</strong></p>
+<ol>
+<li>Deploy OpenTelemetry Collector as a Deployment</li>
+<li>Configure OpenTelemetry Collector service pipeline for span enrichment</li>
+<li>Analyze application reliability via traces in Dynatrace</li>
+</ol>
+<p><img alt="dynatrace otel service overview" src="../img/traces-dt_otel_service_overview.png" />
+<img alt="dynatrace otel service traces" src="../img/traces-dt_otel_service_traces.png" /></p>
+<div class="grid cards">
+<ul>
+<li><a href="https://docs.dynatrace.com/docs/ingest-from/opentelemetry" target="_blank">Learn More<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></li>
+</ul>
+</div>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
+<p><strong>Import Dashboard into Dynatrace</strong></p>
+<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-traces/dt-k8s-otel-o11y-traces_dt_dashboard.json" target="_blank">Dashboard</a></p>
+<p><strong>Define workshop user variables</strong></p>
+<p>In your Github Codespaces Terminal set the environment variables:</p>
+<div class="admonition tip">
+<p class="admonition-title">Sprint Environment</p>
+<p>Are you using a Sprint environment for your Dynatrace tenant?  If so, then use <code>export DT_ENDPOINT=https://{your-environment-id}.sprint.dynatracelabs.com/api/v2/otlp</code> instead of the <code>live</code> version below.</p>
+</div>
+<div class="highlight"><pre><span></span><code>export DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
+export DT_API_TOKEN={your-api-token}
+export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
+</code></pre></div>
+<p><strong>Move into the traces module directory</strong></p>
+<p>Command:
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="nv">$BASE_DIR</span>/lab-modules/dt-k8s-otel-o11y-traces
+</code></pre></div></p>
+<h2 id="opentelemetry-collector-for-traces">OpenTelemetry Collector for Traces<a class="headerlink" href="#opentelemetry-collector-for-traces" title="Permanent link">#</a></h2>
+<p><a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment" target="_blank">Dynatrace Documentation</a></p>
+<p>Distributed traces and their spans, generated by OpenTelemetry agents and SDKs, are exported from their origin to an <code>otlp</code> receiver.  These traces/spans can be sent directly to Dynatrace, using the OTLP ingest API.  However, it is highly recommended to use the OpenTelemetry Collector to process, filter, and manipulate the data first.</p>
+<h3 id="otlp-receiver"><code>otlp</code> Receiver<a class="headerlink" href="#otlp-receiver" title="Permanent link">#</a></h3>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver" target="_blank">OpenTelemetry Documentation</a></p>
+<p>Adding the <code>otlp</code> receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">receivers:</span>
+<span class="w">      </span><span class="no">otlp:</span>
+<span class="w">        </span><span class="no">protocols:</span>
+<span class="w">          </span><span class="no">grpc:</span>
+<span class="w">            </span><span class="no">endpoint: 0.0.0.0:4317</span>
+<span class="w">          </span><span class="no">http:</span>
+<span class="w">            </span><span class="no">endpoint: 0.0.0.0:4318</span>
+<span class="w">    </span><span class="no">service:</span>
+<span class="w">      </span><span class="no">pipelines:</span>
+<span class="w">        </span><span class="no">traces:</span>
+<span class="w">          </span><span class="no">receivers: [otlp]</span>
+<span class="w">          </span><span class="no">processors: [batch]</span>
+<span class="w">          </span><span class="no">exporters: [otlphttp/dynatrace]</span>
+</code></pre></div>
+<h3 id="deploy-opentelemetry-collector-deployment">Deploy OpenTelemetry Collector Deployment<a class="headerlink" href="#deploy-opentelemetry-collector-deployment" title="Permanent link">#</a></h3>
+<p><a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway" target="_blank">Dynatrace Documentation</a></p>
+<p>The gateway collector deployment pattern consists of applications (or other collectors) sending telemetry signals to a single OTLP endpoint provided by one or more collector instances running as a standalone service (for example, a deployment in Kubernetes), typically per cluster, per data center or per region.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-traces</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-otelcol-dt-api-credentials</span>
+<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;deployment&quot;</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest&quot;</span>
+</code></pre></div>
+Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/traces/otel-collector-traces-crd-01.yaml
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>opentelemetrycollector.opentelemetry.io/dynatrace-traces created</p>
+</blockquote>
+<p><strong>Validate running pod(s)</strong></p>
+<p>Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</code></pre></div></p>
+<p>Sample output:</p>
+<table>
+<thead>
+<tr>
+<th>NAME</th>
+<th>READY</th>
+<th>STATUS</th>
+<th>RESTARTS</th>
+<th>AGE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dynatrace-traces-collector-559d5b9d77-ms24p</td>
+<td>1/1</td>
+<td>Running</td>
+<td>0</td>
+<td>1m</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Export OpenTelemetry data from <code>astronomy-shop</code> to OpenTelemetry Collector - Dynatrace Distro</strong></p>
+<p>The <code>astronomy-shop</code> demo application has the OpenTelemetry agents and SDKs already instrumented.  These agents and SDKs are generating traces (logs and metrics too) that are being exported to a Collector running within the <code>astronomy-shop</code> namespace bundled into the application deployment.  We want these traces to be shipped to Dynatrace as well.</p>
+<p><strong>Customize astronomy-shop helm values</strong></p>
+<p>OpenTelemetry data created by agents and SDKs should include <code>service.name</code> and <code>service.namespace</code> attributes.  We will make the <code>service.namespace</code> unique to our deployment using our <code>NAME</code> environment variable declared earlier, using a <code>sed</code> command on the Helm chart's <code>values.yaml</code> file.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">default</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># List of environment variables applied to all components</span>
+<span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_SERVICE_NAME</span>
+<span class="w">      </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">fieldRef</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="w">          </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;metadata.labels[&#39;app.kubernetes.io/component&#39;]&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_COLLECTOR_NAME</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">include</span><span class="nv"> </span><span class="s">&quot;otel-demo.name&quot;</span><span class="nv"> </span><span class="s">.</span><span class="nv"> </span><span class="s">}}-otelcol&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cumulative</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_RESOURCE_ATTRIBUTES</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;service.name=$(OTEL_SERVICE_NAME),service.namespace=NAME_TO_REPLACE,service.version={{</span><span class="nv"> </span><span class="s">.Chart.AppVersion</span><span class="nv"> </span><span class="s">}}&#39;</span>
+</code></pre></div>
+<blockquote>
+<p>service.namespace=NAME_TO_REPLACE\
+service.namespace=INITIALS-k8s-otel-o11y</p>
+</blockquote>
+<p>Command:
+<div class="highlight"><pre><span></span><code>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml
+</code></pre></div></p>
+<p><strong>Update <code>astronomy-shop</code> OpenTelemetry Collector export endpoint via helm</strong></p>
+<p>Our <code>collector-values.yaml</code> contains new configurations for the application so that the <code>astronomy-shop</code> Collector includes exporters that ship to the Collectors deployed in the <code>dynatrace</code> namespace.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">exporters</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Dynatrace OTel Collectors</span>
+<span class="w">  </span><span class="nt">otlphttp/dttraces</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-traces-collector.dynatrace.svc.cluster.local:4318</span>
+<span class="w">  </span><span class="nt">otlphttp/dtlogs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-logs-collector.dynatrace.svc.cluster.local:4318</span>
+<span class="w">  </span><span class="nt">otlphttp/dtmetrics</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-metrics-cluster-collector.dynatrace.svc.cluster.local:4318</span>
+</code></pre></div>
+<p>Command:
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>NAME: astronomy-shop\
+LAST DEPLOYED: Thu Jun 27 20:58:38 2024\
+NAMESPACE: astronomy-shop\
+STATUS: deployed\
+REVISION: 2</p>
+</blockquote>
+<h3 id="analyze-opentelemetry-traces-in-dynatrace">Analyze OpenTelemetry Traces in Dynatrace<a class="headerlink" href="#analyze-opentelemetry-traces-in-dynatrace" title="Permanent link">#</a></h3>
+<p>Result:</p>
+<p>Open the Distributed Traces Classic App to view the traces in Dynatrace (you can use the new Distributed Traces App if available as well).</p>
+<p><img alt="dt distributed traces" src="../img/traces-dt_distributed_traces.png" /></p>
+<p>Locate a trace from the <code>checkoutservice</code> service with a trace/request name of <code>oteldemo.CheckoutService/PlaceOrder</code>.  This is a nice end-to-end trace.</p>
+<p><img alt="dt trace waterfall" src="../img/traces-dt_trace_waterfall.png" /></p>
+<p>Click on a span to see the various attributes that are attached to the span.</p>
+<p><img alt="dt trace attributes" src="../img/traces-dt_trace_attributes.png" /></p>
+<p>These attributes are good, but we can add more to provide better Kubernetes context to these transactions.</p>
+<p><a href="https://docs.dynatrace.com/docs/observe-and-explore/distributed-traces/analysis/get-started" target="_blank">Refer to the Dynatrace documentation for more details</a></p>
+<h2 id="k8sattributes-processor">k8sattributes Processor<a class="headerlink" href="#k8sattributes-processor" title="Permanent link">#</a></h2>
+<p><strong>Add Kubernetes Attributes with the <code>k8sattributes</code> Processor</strong></p>
+<p>The Kubernetes Attributes Processor automatically discovers Kubernetes pods, extracts their metadata, and adds the extracted metadata to spans, metrics, and logs as resource attributes.</p>
+<p>The Kubernetes Attributes Processor is one of the most important components for a collector running in Kubernetes. Any collector receiving application data should use it. Because it adds Kubernetes context to your telemetry, the Kubernetes Attributes Processor lets you correlate your application’s traces, metrics, and logs signals with your Kubernetes telemetry, such as pod metrics and traces.</p>
+<h3 id="configure-kubernetes-rbac">Configure Kubernetes RBAC<a class="headerlink" href="#configure-kubernetes-rbac" title="Permanent link">#</a></h3>
+<p><strong>Create <code>clusterrole</code> with read access to Kubernetes objects</strong></p>
+<p>Since the processor uses the Kubernetes API, it needs the correct permission to work correctly. For most use cases, you should give the service account running the collector the following permissions via a ClusterRole.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-traces</span>
+<span class="nt">rules</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;pods&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;namespaces&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;nodes&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">]</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;apps&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;replicasets&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">]</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;extensions&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;replicasets&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-traces.yaml
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-traces created</p>
+</blockquote>
+<p><strong>Create <code>clusterrolebinding</code> for OpenTelemetry Collector service account</strong></p>
+<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-traces-crb</span>
+<span class="nt">subjects</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-traces-collector</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
+<span class="nt">roleRef</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-traces</span>
+<span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</code></pre></div>
+Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-traces-crb.yaml
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-traces-crb created</p>
+</blockquote>
+<h3 id="add-k8sattributes-processor">Add <code>k8sattributes</code> Processor<a class="headerlink" href="#add-k8sattributes-processor" title="Permanent link">#</a></h3>
+<p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-attributes-processor" target="_blank">OpenTelemetry Documentation</a></p>
+<p>The <code>k8sattributes</code> processor will query metadata from the cluster about the k8s objects.  The Collector will then marry this metadata to the telemetry.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nt">k8sattributes</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serviceAccount&quot;</span>
+<span class="w">    </span><span class="nt">passthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">filter</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="nt">node_from_env_var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KUBE_NODE_NAME</span>
+<span class="w">    </span><span class="nt">extract</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.namespace.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.deployment.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.daemonset.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.job.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cronjob.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.replicaset.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.statefulset.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.uid</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.node.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.container.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.id</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.image.name</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.image.tag</span>
+<span class="w">        </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tag_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.label.component</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.kubernetes.io/component</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">from</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pod</span>
+<span class="w">    </span><span class="nt">pod_association</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.uid</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.name</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.ip</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connection</span>
+</code></pre></div>
+Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/traces/otel-collector-traces-crd-02.yaml
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>opentelemetrycollector.opentelemetry.io/dynatrace-traces configured</p>
+</blockquote>
+<p><strong>Validate running pod(s)</strong></p>
+<p>Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</code></pre></div></p>
+<p>Sample output:</p>
+<table>
+<thead>
+<tr>
+<th>NAME</th>
+<th>READY</th>
+<th>STATUS</th>
+<th>RESTARTS</th>
+<th>AGE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dynatrace-traces-collector-559d5b9d77-xn84p</td>
+<td>1/1</td>
+<td>Running</td>
+<td>0</td>
+<td>1m</td>
+</tr>
+</tbody>
+</table>
+<p><strong>OpenTelemetry Traces in Dynatrace with Kubernetes Attributes</strong></p>
+<p>Dynatrace utilizes the <code>service.name</code>, <code>k8s.workload.name</code> and <code>k8s.namespace.name</code> to generate the unified service.</p>
+<p><a href="https://docs.dynatrace.com/docs/platform-modules/applications-and-microservices/services/service-detection-and-naming/service-types/unified-service#service-detection" target="_blank">Dynatrace Documentation</a></p>
+<p>Result:</p>
+<p>With the additional Kubernetes attributes attached to the spans, Dynatrace will detect new unified services.</p>
+<p><img alt="dt unified service detection" src="../img/traces-dt_otel_unified_service_namespace.png" /></p>
+<p>Locate a new trace from the new <code>checkoutservice</code> service with a trace/request name of <code>oteldemo.CheckoutService/PlaceOrder</code>.  Click on a span to see the new resource attributes that have been added to the span.</p>
+<p><img alt="dt otel k8sattributes processor" src="../img/traces-dt_otel_k8sattributes_processor.png" /></p>
+<h2 id="resourcedetection-processor">resourcedetection Processor<a class="headerlink" href="#resourcedetection-processor" title="Permanent link">#</a></h2>
+<h3 id="add-resourcedetection-processor">Add <code>resourcedetection</code> Processor<a class="headerlink" href="#add-resourcedetection-processor" title="Permanent link">#</a></h3>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/README.md#gcp-metadata" target="_blank">OpenTelemetry Documentation</a></p>
+<p>The resource detection processor can be used to detect resource information from the host, in a format that conforms to the OpenTelemetry resource semantic conventions, and append or override the resource value in telemetry data with this information.  Detectors are available for AWS, Azure, GCP, and several other platforms; see the documentation for more details.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">resourcedetection/gcp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">detectors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">env</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gcp</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2s</span>
+<span class="w">    </span><span class="nt">override</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<p><strong>note:</strong> for this lab, the Kind cluster does not have cloud metadata to collect.  These values will be spoofed for the purposes of this lab.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">resource/kind</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.account.id</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt-k8s-o11y-account</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cluster.name</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt-k8s-o11y-kind</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</code></pre></div>
+<p>Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/traces/otel-collector-traces-crd-03.yaml
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>opentelemetrycollector.opentelemetry.io/dynatrace-traces configured</p>
+</blockquote>
+<p><strong>Validate running pod(s)</strong></p>
+<p>Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</code></pre></div></p>
+<p>Sample output:</p>
+<table>
+<thead>
+<tr>
+<th>NAME</th>
+<th>READY</th>
+<th>STATUS</th>
+<th>RESTARTS</th>
+<th>AGE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dynatrace-traces-collector-559d5b9d77-rp21d</td>
+<td>1/1</td>
+<td>Running</td>
+<td>0</td>
+<td>1m</td>
+</tr>
+</tbody>
+</table>
+<p><strong>OpenTelemetry Traces in Dynatrace with Cloud Attributes</strong></p>
+<p>Result:</p>
+<p>Locate a new trace from the new <code>checkoutservice</code> service with a trace/request name of <code>oteldemo.CheckoutService/PlaceOrder</code>.  Click on a span to see the new resource attributes that have been added to the span.</p>
+<p><img alt="dt otel resourcedetection processor" src="../img/traces-dt_otel_resourcedetection_processor.png" />
+** In a real world scenario, <code>cloud.account.id</code> may be considered sensitive data; blurred for this reason.</p>
+<h2 id="resource-processor">resource Processor<a class="headerlink" href="#resource-processor" title="Permanent link">#</a></h2>
+<h3 id="add-resource-processor">Add <code>resource</code> Processor<a class="headerlink" href="#add-resource-processor" title="Permanent link">#</a></h3>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourceprocessor" target="_blank">OpenTelemetry Documentation</a></p>
+<p>The <code>resource</code> processor allows us to directly add, remove, or change resource attributes on the telemetry.  View the documentation for more details.</p>
+<p>We will use this processor to make the follow changes to our telemetry:
+* <code>k8s.pod.ip</code> values in our data are either the same or invalid; delete the useless attribute
+* <code>telemetry.sdk.name</code> set to <code>opentelemetry</code> will allow us to easily identify data captured through OpenTelemetry
+* <code>dynatrace.otel.collector</code> is a non-standardized attribute that we made up to help us identify which Collector captured this data
+* <code>dt.security_context</code> is a Dynatrace specific attribute that we use to manage user permissions to the telemetry
+    * This could also be set using OpenPipeline, but this puts control of this attribute's value at the app/infra layer (optionally)</p>
+<p><div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.ip</span>
+<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.sdk.name</span>
+<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry</span>
+<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace.otel.collector</span>
+<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-traces</span>
+<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt.security_context</span>
+<span class="w">          </span><span class="nt">from_attribute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cluster.name</span>
+<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</code></pre></div>
+Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/traces/otel-collector-traces-crd-04.yaml
+</code></pre></div>
+Sample output:</p>
+<blockquote>
+<p>opentelemetrycollector.opentelemetry.io/dynatrace-traces configured</p>
+</blockquote>
+<p><strong>Validate running pod(s)</strong></p>
+<p>Command:
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</code></pre></div></p>
+<p>Sample output:</p>
+<table>
+<thead>
+<tr>
+<th>NAME</th>
+<th>READY</th>
+<th>STATUS</th>
+<th>RESTARTS</th>
+<th>AGE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dynatrace-traces-collector-559d5b9d77-ny98q</td>
+<td>1/1</td>
+<td>Running</td>
+<td>0</td>
+<td>1m</td>
+</tr>
+</tbody>
+</table>
+<p><strong>OpenTelemetry Traces in Dynatrace with Custom Resource Attributes</strong></p>
+<p>Result:</p>
+<p>Locate a new trace from the new <code>checkoutservice</code> service with a trace/request name of <code>oteldemo.CheckoutService/PlaceOrder</code>.  Click on a span to see the new resource attributes that have been added to the span.</p>
+<p><img alt="dt otel resource processor" src="../img/traces-dt_otel_resource_processor.png" /></p>
+<h2 id="dynatrace-dashboard-with-unified-services-from-opentelemetry">Dynatrace Dashboard with Unified Services from OpenTelemetry<a class="headerlink" href="#dynatrace-dashboard-with-unified-services-from-opentelemetry" title="Permanent link">#</a></h2>
+<p>Open the Dashboard that you imported to view the throughput, response time, and failure metrics for the <code>astronomy-shop</code> application services.</p>
+<p><img alt="dashboard" src="../img/traces-dt_traces_dashboard.png" /></p>
+<h2 id="wrap-up">Wrap Up<a class="headerlink" href="#wrap-up" title="Permanent link">#</a></h2>
+<h3 id="what-you-learned-today">What You Learned Today<a class="headerlink" href="#what-you-learned-today" title="Permanent link">#</a></h3>
+<p>By completing this lab, you've successfully deployed the OpenTelemetry Collector to collect traces, enrich span attributes for better context, and ship those traces/spans to Dynatrace for analysis.</p>
+<ul>
+<li>The OpenTelemetry Collector was deployed as a Deployment, behaving as a Gateway on the cluster</li>
+<li>The Dynatrace Distro of OpenTelemetry Collector includes supported modules needed to ship traces to Dynatrace<ul>
+<li>The <code>otlp</code> receiver receives traces (and other signals) from OpenTelemetry exporters via gRPC/HTTP</li>
+<li>The <code>k8sattributes</code> processor enriches the spans with Kubernetes attributes</li>
+<li>The <code>resourcedetection</code> processor enriches the spans with cloud and cluster (GCP/GKE) attributes</li>
+<li>The <code>resource</code> processor enriches the spans with custom (resource) attributes</li>
+</ul>
+</li>
+<li>Dynatrace allows you to perform powerful queries and analysis of the trace/span data</li>
+</ul>
+<h2 id="continue">Continue<a class="headerlink" href="#continue" title="Permanent link">#</a></h2>
+<p>In the next section, we'll ship metrics and datapoints from Kubernetes to Dynatrace using OpenTelemetry.</p>
+<div class="grid cards">
+<ul>
+<li><a href="../6-opentelemetry-metrics/">Continue to OpenTelemetry Metrics<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
