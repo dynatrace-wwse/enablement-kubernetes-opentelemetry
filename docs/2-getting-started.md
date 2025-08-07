@@ -19,7 +19,7 @@ Ingest logs
 Ingest metrics
 Ingest OpenTelemetry traces
 ```
-[See Related Dynatrace API Token Creation Documentation](https://docs.dynatrace.com/docs/dynatrace-api/basics/dynatrace-api-authentication#create-token)
+[See Related Dynatrace API Token Creation Documentation](https://docs.dynatrace.com/docs/dynatrace-api/basics/dynatrace-api-authentication#create-token){target=_blank}
 
 ![dt access token](./img/prereq-dt_access_token.png)
 
