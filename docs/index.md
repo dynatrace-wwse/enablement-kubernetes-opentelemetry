@@ -1,9 +1,8 @@
 --8<-- "snippets/send-bizevent/index.js"
 # Kubernetes OpenTelemetry
-<!--TODO: Update disclaimer (optional) -->
+
 --8<-- "snippets/disclaimer.md"
 
-<!--TODO: Update lab overview (match readme) -->
 ## Lab Overview
 
 During this hands-on training, we’ll learn how to capture logs, traces, and metrics from Kubernetes using OpenTelemetry and ship them to Dynatrace for analysis.  This will demonstrate how to use Dynatrace with OpenTelemetry; without any Dynatrace native components installed on the Kubernetes cluster (Operator, OneAgent, ActiveGate, etc.).
