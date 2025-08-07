@@ -195,7 +195,7 @@ Sample output:
 
 **OpenTelemetry Collector - Dynatrace Distro (Deployment)**
 
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment){target=_blank}
 
 Receivers:
 `otlp`, `prometheus`
