@@ -1,10 +1,7 @@
-id: enablement-kubernetes-opentelemetry
+--8<-- "snippets/send-bizevent/index.js"
+# Kubernetes OpenTelemetry
 
-summary: kubernetes observability with dynatrace and opentelemetry
-
-author: Tony Pope-Cruz
-
-# Enablement Kubernetes OpenTelemetry
+--8<-- "snippets/disclaimer.md"
 
 ## Lab Overview
 
@@ -40,6 +37,26 @@ During this hands-on training, we’ll learn how to capture logs, traces, and me
     - Analyze metrics, traces, and logs in Dynatrace
     - Observe OpenTelemetry Collector health in Dynatrace
 
-Ready to learn how to ship OpenTelemetry signals to Dynatrace?
+<!--TODO: Update tech spec of lab components -->
+## Technical Specification
 
-## [View the Lab Guide](https://dynatrace-wwse.github.io/enablement-kubernetes-opentelemetry)
+### Technologies Used
+- [Dynatrace](https://www.dynatrace.com/trial)
+- [Kubernetes Kind](https://kind.sigs.k8s.io/)
+    - tested on Kind tag 0.27.0
+- [Cert Manager](https://cert-manager.io/) - *prerequisite for OpenTelemetry Operator
+    - tested on cert-manager v1.15.3
+- [Dynatrace Operator](https://github.com/Dynatrace/dynatrace-operator)
+    - tested on v1.4.2 (April 2025)
+- Dynatrace OneAgent
+    - tested on v1.309 (April 2025)
+
+### Reference Architecture
+
+## Continue
+
+In the next section, we'll review the prerequisites for this lab needed before launching our Codespaces instance.
+
+<div class="grid cards" markdown>
+- [Continue to Getting Started:octicons-arrow-right-24:](2-getting-started.md)
+</div>
