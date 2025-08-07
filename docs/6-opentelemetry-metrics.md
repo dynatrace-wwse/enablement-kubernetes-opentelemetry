@@ -19,7 +19,7 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Daemo
 
 ### Import Notebook into Dynatrace
 
-[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-metrics/dt-k8s-otel-o11y-metrics_dt_notebook.json)
+[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-metrics/dt-k8s-otel-o11y-metrics_dt_notebook.json){target="_blank"}
 
 ### Define workshop user variables
 In your Github Codespaces Terminal set the environment variables:
@@ -41,13 +41,13 @@ cd $BASE_DIR/lab-modules/dt-k8s-otel-o11y-metrics
 
 ## Collector for Node Metrics
 
-### Kubernetes Node Metrics
+**Kubernetes Node Metrics**
 
 Each Kubernetes Node runs a kubelet that includes an API server. The `kubeletstats` Receiver connects to that kubelet via the API server to collect metrics about the node and the workloads running on the node.
 
 ### Deploy OpenTelemetry Collector 
 
-### Contrib Distro - Daemonset (Node Agent)
+**Contrib Distro - Daemonset (Node Agent)**
 
 The `kubeletstats` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
 
@@ -78,11 +78,14 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/dynatrace-metrics-node created
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                             | READY | STATUS  | RESTARTS | AGE |
 |----------------------------------|-------|---------|----------|-----|
 | dynatrace-metrics-node-collector-2kzlp   | 1/1   | Running | 0        | 1m  |
@@ -114,6 +117,7 @@ rules:
     resources: ['horizontalpodautoscalers']
     verbs: ['get', 'list', 'watch']
 ```
+
 Command:
 ```sh
 kubectl apply -f opentelemetry/rbac/otel-collector-k8s-clusterrole-metrics.yaml
@@ -145,7 +149,7 @@ Sample output:
 > clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-metrics-crb created
 
 ### `kubeletstats` receiver
-https://opentelemetry.io/docs/kubernetes/collector/components/#kubeletstats-receiver
+[OpenTelemetry Documentation](https://opentelemetry.io/docs/kubernetes/collector/components/#kubeletstats-receiver){target="_blank"}
 
 By default, metrics will be collected for pods and nodes, but you can configure the receiver to collect container and volume metrics as well. The receiver also allows configuring how often the metrics are collected:
 
@@ -162,11 +166,11 @@ config: |
           - pod
           - container
 ```
-Default Metrics:
 
-https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/kubeletstatsreceiver/documentation.md
+**Default Metrics:** [OpenTelemetry Documentation](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/kubeletstatsreceiver/documentation.md){target="_blank"}
 
 **note:** for this lab, the Kind cluster does not have cluster metadata to collect.  These values will be spoofed for the purposes of this lab.
+
 ```yaml
 resource/kind:
   attributes:
@@ -191,7 +195,8 @@ The Kubernetes Attributes Processor automatically discovers Kubernetes pods, ext
 The Kubernetes Attributes Processor is one of the most important components for a collector running in Kubernetes. Any collector receiving application data should use it. Because it adds Kubernetes context to your telemetry, the Kubernetes Attributes Processor lets you correlate your application’s traces, metrics, and logs signals with your Kubernetes telemetry, such as pod metrics and traces.
 
 ### Add `k8sattributes` processor
-https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-attributes-processor
+
+[OpenTelemetry Documentation](https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-attributes-processor){target="_blank"}
 
 The `k8sattributes` processor will query metadata from the cluster about the k8s objects.  The Collector will then marry this metadata to the telemetry.
 
@@ -242,11 +247,14 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/dynatrace-metrics-node configured
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                             | READY | STATUS  | RESTARTS | AGE |
 |----------------------------------|-------|---------|----------|-----|
 | dynatrace-metrics-node-collector-drk1p   | 1/1   | Running | 0        | 1m  |
@@ -257,6 +265,7 @@ DQL:
 timeseries pod_cpu = avg(k8s.pod.cpu.utilization), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
 | filter k8s.namespace.name == "astronomy-shop" and k8s.deployment.name == "astronomy-shop-productcatalogservice"
 ```
+
 Result:
 
 ![dql_kubeletstats_pod_cpu](./img/metrics-dql_kubeletstats_pod_cpu.png)
@@ -270,7 +279,7 @@ The Kubernetes Cluster Receiver collects metrics and entity events about the clu
 ### Deploy OpenTelemetry Collector
 
 ### Contrib Distro - Deployment (Gateway)
-https://github.com/open-telemetry/opentelemetry-operator
+[OpenTelemetry Documentation](https://github.com/open-telemetry/opentelemetry-operator){target="_blank"}
 
 The `k8s_cluster` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
 
@@ -298,17 +307,22 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/dynatrace-metrics-cluster created
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                             | READY | STATUS  | RESTARTS | AGE |
 |----------------------------------|-------|---------|----------|-----|
 | dynatrace-metrics-cluster-collector-7bd8dc4995-6sgs2   | 1/1   | Running | 0        | 1m  |
 
 ### `k8s_cluster` receiver
-https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver
+
+[OpenTelemetry Documentation](https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver){target="_blank"}
+
 ```yaml
 config: |
     receivers:
@@ -318,9 +332,7 @@ config: |
         allocatable_types_to_report: [ "cpu","memory" ]
         metadata_collection_interval: 5m
 ```
-Default Metrics:
-
-https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/k8sclusterreceiver/documentation.md
+**Default Metrics:** [OpenTelemetry Documentation](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/k8sclusterreceiver/documentation.md){target="_blank"}
 
 ### Query Deployment metrics in Dynatrace
 DQL:
@@ -336,7 +348,7 @@ Result:
 The `astronomy-shop` demo application has the OpenTelemetry agents and SDKs already instrumented.  These agents and SDKs are generating metrics (traces and logs too) that are being exported to a Collector running within the `astronomy-shop` namespace bundled into the application deployment.  We want these metrics to be shipped to Dynatrace as well.
 
 ### `otlp` receiver
-https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver
+[OpenTelemetry Documentation](https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver){target="_blank"}
 
 Adding the `otlp` receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
 
@@ -433,14 +445,16 @@ Result:
 ### Browse available metrics in Dynatrace
 You can browse all available metrics from OpenTelemetry sources in the Metrics Browser.  Filter on `Dimension:otel.scope.name` to find relevant metrics.
 
-https://docs.dynatrace.com/docs/observe-and-explore/dashboards-classic/metrics-browser
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/observe-and-explore/dashboards-classic/metrics-browser){target="_blank"}
 
 ![dt_otel_scope_metrics](./img/metrics-dt_otel_scope_metrics.png)
 
 ## Wrap Up
 
-### What You Learned Today 
+### What You Learned Today
+
 By completing this lab, you've successfully deployed the OpenTelemetry Collector to collect metrics, enrich metric attributes for better context, and ship those metrics to Dynatrace for analysis.
+
 - One Community Contrib Distro OpenTelemetry Collector was deployed as a DaemonSet, behaving as an Agent running on each Node
     * The `kubeletstats` receiver scrapes metrics from the local kubelet on the Node
     * The `k8sattributes` processor enriches the metrics with Kubernetes attributes that may be missing without it

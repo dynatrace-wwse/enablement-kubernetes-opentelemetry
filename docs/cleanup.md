@@ -20,13 +20,13 @@ By using OpenTelemetry in this way, you can gain deep insights into the performa
 
 ### References
 
-[Dynatrace OpenTelemetry](https://docs.dynatrace.com/docs/ingest-from/opentelemetry)
+[Dynatrace OpenTelemetry](https://docs.dynatrace.com/docs/ingest-from/opentelemetry){target="_blank"}
 
-[Dynatrace OpenTelemetry Collector](https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector)
+[Dynatrace OpenTelemetry Collector](https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector){target="_blank"}
 
-[Dynatrace OpenTelemetry Collector Use Cases](https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/use-cases)
+[Dynatrace OpenTelemetry Collector Use Cases](https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/use-cases){target="_blank"}
 
-[OpenTelemetry Demo Astronomy Shop](https://opentelemetry.io/docs/demo/)
+[OpenTelemetry Demo Astronomy Shop](https://opentelemetry.io/docs/demo/){target="_blank"}
 
 ### Delete Codespaces Instance
 

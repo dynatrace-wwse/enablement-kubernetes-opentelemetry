@@ -22,10 +22,10 @@ In this lab module we'll utilize multiple OpenTelemetry Collectors to collect ap
 ### Import Dashboards into Dynatrace
 
 ![astronomy-shop dashboard](./img/capstone-dt_astronomy_shop_dashboard.png)
-[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-cap/dt-k8s-otel-o11y-cap_dt_dashboard.json)
+[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-cap/dt-k8s-otel-o11y-cap_dt_dashboard.json){target="_blank"}
 
 ![collector health dashboard](./img/capstone-dt_collector_health_dashboard.png)
-[collector health dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-cap/OpenTelemetry_Collector_%5BIsItObservable%5D_dt_dashboard.json)
+[collector health dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-cap/OpenTelemetry_Collector_%5BIsItObservable%5D_dt_dashboard.json){target="_blank"}
 
 ### Define workshop user variables
 In your Github Codespaces Terminal set the environment variables:
@@ -75,7 +75,7 @@ Sample output:
 > secret/dynatrace-otelcol-dt-api-credentials created
 
 ### Deploy `cert-manager`, pre-requisite for `opentelemetry-operator`
-https://cert-manager.io/docs/installation/
+[Cert Manager Documentation](https://cert-manager.io/docs/installation/){target="_blank"}
 
 Command:
 ```sh
@@ -113,7 +113,9 @@ Command:
 ```sh
 kubectl get pods -n opentelemetry-operator-system
 ```
+
 Sample output:
+
 | NAME                             | READY | STATUS  | RESTARTS | AGE |
 |----------------------------------|-------|---------|----------|-----|
 | opentelemetry-operator-controller-manager-5d746dbd64-rf9st   | 2/2   | Running | 0        | 1m  |
@@ -201,7 +203,7 @@ Receivers:
 ### Deploy Collector
 
 ### Deploy OpenTelemetry Collector CRD
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway){target="_blank"}
 ```yaml
 ---
 apiVersion: opentelemetry.io/v1alpha1
@@ -224,11 +226,14 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/dynatrace-deployment created
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                                       | READY | STATUS  | RESTARTS | AGE |
 |--------------------------------------------|-------|---------|----------|-----|
 | dynatrace-deployment-collector-796546fbd6-kqflf | 1/1   | Running | 0        | 1m  |
@@ -236,7 +241,7 @@ Sample output:
 ## Dynatrace Daemonset Collector
 
 ### OpenTelemetry Collector - Dynatrace Distro (Daemonset)
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment){target="_blank"}
 
 Receivers:
 `filelog`, `prometheus`
@@ -253,7 +258,8 @@ Receivers:
 ### Deploy Collector
 
 ### Deploy OpenTelemetry Collector CRD
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--agent
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--agent){target="_blank"}
+
 ```yaml
 ---
 apiVersion: opentelemetry.io/v1alpha1
@@ -276,11 +282,14 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/dynatrace-daemonset created
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                                       | READY | STATUS  | RESTARTS | AGE |
 |--------------------------------------------|-------|---------|----------|-----|
 | dynatrace-daemonset-collector-h69pz | 1/1   | Running | 0        | 1m  |
@@ -288,7 +297,7 @@ Sample output:
 ## Contrib Deployment Collector
 
 ### OpenTelemetry Collector - Contrib Distro (Deployment)
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment){target="_blank"}
 
 Receivers:
 `otlp`, `prometheus`, `k8s_cluster`, `k8sobjects`
@@ -305,7 +314,8 @@ Receivers:
 ### Deploy Collector
 
 ### Deploy OpenTelemetry Collector CRD
-https://opentelemetry.io/docs/kubernetes/operator/
+[OpenTelemetry Documentation](https://opentelemetry.io/docs/kubernetes/operator/){target="_blank"}
+
 ```yaml
 ---
 apiVersion: opentelemetry.io/v1alpha1
@@ -328,11 +338,14 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/contrib-deployment created
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                                       | READY | STATUS  | RESTARTS | AGE |
 |--------------------------------------------|-------|---------|----------|-----|
 | contrib-deployment-collector-74dfc4d9f4-s97k6 | 1/1   | Running | 0        | 1m  |
@@ -340,7 +353,6 @@ Sample output:
 ## Contrib Daemonset Collector
 
 ### OpenTelemetry Collector - Contrib Distro (Daemonset)
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment
 
 Receivers:
 `prometheus`, `kubeletstats`
@@ -357,7 +369,7 @@ Receivers:
 ### Deploy Collector
 
 ### Deploy OpenTelemetry Collector CRD
-https://opentelemetry.io/docs/kubernetes/operator/
+
 ```yaml
 ---
 apiVersion: opentelemetry.io/v1alpha1
@@ -380,11 +392,14 @@ Sample output:
 > opentelemetrycollector.opentelemetry.io/contrib-daemonset created
 
 ### Validate running pod(s)
+
 Command:
 ```sh
 kubectl get pods -n dynatrace
 ```
+
 Sample output:
+
 | NAME                                       | READY | STATUS  | RESTARTS | AGE |
 |--------------------------------------------|-------|---------|----------|-----|
 | contrib-daemonset-collector-d92tw | 1/1   | Running | 0        | 1m  |
@@ -482,12 +497,12 @@ Sample output:
 
 ### Analyze metrics, traces, and logs in Dynatrace dashboard
 ![astronomy-shop dashboard](./img/capstone-dt_astronomy_shop_dashboard.png)
-[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-cap/dt-k8s-otel-o11y-cap_dt_dashboard.json)
+[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/dt-k8s-otel-o11y-cap/dt-k8s-otel-o11y-cap_dt_dashboard.json){target="_blank"}
 
 ## OpenTelemetry Collector Health
 
 ### Observe OpenTelemetry Collector health in Dynatrace
-https://opentelemetry.io/docs/collector/internal-telemetry/
+[OpenTelemetry Documentation](https://opentelemetry.io/docs/collector/internal-telemetry/){target="_blank"}
 
 * Add `dynatrace.otel.collector` to Dynatrace's metric attribute allow list
 * Enable OpenTelemetry Collector health metrics (Prometheus)
@@ -497,7 +512,7 @@ https://opentelemetry.io/docs/collector/internal-telemetry/
 ### Add `dynatrace.otel.collector` to Dynatrace's metric attribute allow list
 By default, the metric attribute `dynatrace.otel.collector` is dropped by Dynatrace.  Add it to the allow list in your Dynatrace tenant:
 
-https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/getting-started/metrics/configuration
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/getting-started/metrics/configuration){target="_blank"}
 ![dt otel metrics add collector attribute](./img/capstone-dt_otelmetrics_add_collector_attribute.png)
 
 ### Enable OpenTelemetry Collector health metrics (Prometheus)
@@ -576,9 +591,10 @@ spec:
 ```
 
 ### Modify OpenTelemetry Collector health metrics for Dynatrace support
+
 Specific metric types are supported by Dynatrace:
 
-https://docs.dynatrace.com/docs/platform-modules/infrastructure-monitoring/container-platform-monitoring/kubernetes-monitoring/monitor-prometheus-metrics#usage
+[Dynatrace Documentation](https://docs.dynatrace.com/docs/platform-modules/infrastructure-monitoring/container-platform-monitoring/kubernetes-monitoring/monitor-prometheus-metrics#usage){target="_blank"}
 
 Convert unsupported cumulative sum metric types to delta type for Dynatrace support:
 ```yaml
@@ -591,6 +607,9 @@ service:
     processors: [cumulativetodelta,batch]
     exporters: [otlphttp/dynatrace]
 ```
+
+!!! tip "Histogram Metric Support"
+  In a recent update, Dynatrace added support for histogram metrics.  This configuration is no longer required.  However, it may still be useful to see how this can be accomplished.
 
 Filter out (remove) unsupported histogram metric types for Dynatrace support:
 ```yaml
@@ -616,11 +635,12 @@ Prometheus metrics from the OpenTelemetry Collector have the `otelcol_` prefix a
 Example dashboard for OpenTelemetry Collector health has been created by the `IsItObservable` team:
 ![dt_collector_health_dashboard_short](./img/capstone-dt_collector_health_dashboard_short.png)
 
-[YouTube Video](https://youtu.be/Qxt3XAMJNhA?si=LY_37zRJC8hCTpjX&t=2630)
+[YouTube Video](https://youtu.be/Qxt3XAMJNhA?si=LY_37zRJC8hCTpjX&t=2630){target="_blank"}
 
 ## Wrap Up
 
-### What You Learned Today 
+### What You Learned Today
+
 By completing this lab, you've successfully deployed the OpenTelemetry Collector to collect metrics, traces, and logs from Kubernetes and ship them to Dynatrace for analysis.
 
 - The Dynatrace Distro of OpenTelemetry Collector includes supported modules needed to ship telemetry to Dynatrace
