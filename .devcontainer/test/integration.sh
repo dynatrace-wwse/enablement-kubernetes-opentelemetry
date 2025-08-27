@@ -7,12 +7,10 @@ source $REPO_PATH/.devcontainer/test/test_functions.sh
 
 printInfoSection "Running integration Tests for the Enablement Framework"
 
-assertRunningPod dynatrace operator
+assertRunningPod astronomy-shop astronomy-shop-accountingservice 
 
-assertRunningPod dynatrace activegate
+assertRunningPod astronomy-shop astronomy-shop-frontend 
 
-assertRunningPod dynatrace oneagent
-
-assertRunningPod todoapp todoapp
+assertRunningPod astronomy-shop astronomy-shop-frontendproxy 
 
 assertRunningApp 30100
