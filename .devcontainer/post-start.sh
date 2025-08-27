@@ -1,13 +1,10 @@
 #!/bin/bash
-
-#load the functions into the shell
-source /workspaces/$RepositoryName/.devcontainer/util/functions.sh
-source /workspaces/$RepositoryName/.devcontainer/util/local.sh
-
-export BASE_DIR="/workspaces/$RepositoryName"
-
-#This is for professors
-#exposeMkdocs
+##############################################################
+##  In here you add whatever action should happen after the container ha been created
+##  such as exposing the application.
+##############################################################
+#Load the functions into the shell
+source .devcontainer/util/source_framework.sh
 
 exposeAstronomyShop
 

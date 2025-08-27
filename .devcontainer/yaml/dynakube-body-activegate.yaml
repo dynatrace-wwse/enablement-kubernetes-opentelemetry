@@ -1,11 +1,4 @@
-  # For AppOnly we add provisionally log monitoring to specific image.
-  templates:
-    logMonitoring:
-      imageRef:
-        repository: public.ecr.aws/dynatrace/dynatrace-logmodule
-        tag: 1.315.62.20250613-075406
-  #extensions: {}
-  logMonitoring: {}
+
   # Configuration for ActiveGate instances.
   #
   activeGate:

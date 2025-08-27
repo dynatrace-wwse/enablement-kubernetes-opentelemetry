@@ -1,12 +1,9 @@
 #!/bin/bash
 #loading functions to script
 export SECONDS=0
-source /workspaces/$RepositoryName/.devcontainer/util/functions.sh
-source /workspaces/$RepositoryName/.devcontainer/util/local.sh
+source .devcontainer/util/source_framework.sh
 
-bindFunctionsInShell
-
-setupAliases
+setUpTerminal
 
 startKindCluster
 

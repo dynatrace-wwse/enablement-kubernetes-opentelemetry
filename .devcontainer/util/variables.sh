@@ -6,19 +6,47 @@
 # ======================================================================
 
 # VARIABLES DECLARATION
+# Active Gate Version - https://gallery.ecr.aws/dynatrace/dynatrace-activegate
+AG_IMAGE="public.ecr.aws/dynatrace/dynatrace-activegate:1.319.40.20250825-155600"
+export AG_IMAGE=$AG_IMAGE
+# OneAgent Version - https://gallery.ecr.aws/dynatrace/dynatrace-oneagent
+OA_IMAGE="public.ecr.aws/dynatrace/dynatrace-oneagent:1.319.68.20250813-080958"
+export OA_IMAGE=$OA_IMAGE
+
+ENDPOINT_CODESPACES_TRACKER=https://codespaces-tracker.whydevslovedynatrace.com/api/receive
+CODESPACES_TRACKER_TOKEN_STRING="ilovedynatrace"
+
 #https://cert-manager.io/docs/release-notes/
 CERTMANAGER_VERSION=1.15.3
 
 # RUNME Version
-RUNME_CLI_VERSION=3.10.2
+RUNME_CLI_VERSION=3.13.2
 
 # Setting up the variable since its not set when instantiating the vscode folder.
-CODESPACE_VSCODE_FOLDER="/workspaces/$RepositoryName"
+#CODESPACE_VSCODE_FOLDER="$REPO_PATH"
 # Codespace Persisted share folder
 CODESPACE_PSHARE_FOLDER="/workspaces/.codespaces/.persistedshare"
 
 # Dynamic Variables between phases
-ENV_FILE="$CODESPACE_VSCODE_FOLDER/.devcontainer/util/.env"
+ENV_FILE="$REPO_PATH/.devcontainer/util/.env"
+
+# Calculating GH Repository
+if [ -z "$GITHUB_REPOSITORY" ]; then
+  GITHUB_REPOSITORY=$(git remote get-url origin)
+  export GITHUB_REPOSITORY=$GITHUB_REPOSITORY
+fi
+
+# Calculating instantiation type
+if [[ $CODESPACES == true ]]; then
+  INSTANTIATION_TYPE="github-codespaces"
+elif [[ $REMOTE_CONTAINERS == true ]]; then
+  INSTANTIATION_TYPE="remote-container"
+elif [[ -n $GITHUB_WORKFLOW ]] || [[ -n $GITHUB_STEP_SUMMARY ]]; then
+  INSTANTIATION_TYPE="github-workflow"
+else 
+  INSTANTIATION_TYPE="local-docker-container"
+fi
+export INSTANTIATION_TYPE=$INSTANTIATION_TYPE
 
 if [ -e "$ENV_FILE" ]; then
   # file exists
@@ -28,6 +56,13 @@ else
   echo -e "DURATION=0\nERROR_COUNT=0" > $ENV_FILE
   source $ENV_FILE
 fi
+
+# Calculating architecture
+ARCH=$(arch)
+export ARCH=$ARCH
+
+CODESPACES_TRACKER_TOKEN=$(echo -n $CODESPACES_TRACKER_TOKEN_STRING | base64)
+export CODESPACES_TRACKER_TOKEN=$CODESPACES_TRACKER_TOKEN
 
 # ColorCoding
 GREEN="\e[32m"
