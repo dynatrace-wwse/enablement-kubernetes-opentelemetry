@@ -139,7 +139,6 @@ gradle-app.setting
 .project
 .classpath
 bin/
-test/
 
 
 # mkdocs renders static files in site
@@ -167,8 +166,33 @@ site/*
 **/tmp/**
 
 # no env files
-.devcontainer/util/.env
-.devcontainer/.env
-.devcontainer/runlocal/.env
+.devcontainer/util/.env*
+.devcontainer/.env*
+.devcontainer/runlocal/.env*
 
+# no logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
+# Node
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env

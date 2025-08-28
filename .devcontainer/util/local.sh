@@ -24,7 +24,7 @@ deployAstronomyShopOpenTelemetry() {
   fi
 
   # Generate new values file from default-values
-  sed "s,NAME_TO_REPLACE,$NAME," $CODESPACE_VSCODE_FOLDER/cluster-manifests/astronomy-shop/default-values.yaml > $CODESPACE_VSCODE_FOLDER/.devcontainer/yaml/gen/default-values.yaml
+  sed "s,NAME_TO_REPLACE,$NAME," $REPO_PATH/cluster-manifests/astronomy-shop/default-values.yaml > $REPO_PATH/.devcontainer/yaml/gen/default-values.yaml
   
   # add the opentelemetry charts to helm
   helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
@@ -33,7 +33,7 @@ deployAstronomyShopOpenTelemetry() {
   kubectl create namespace astronomy-shop
   
   # use helm to deploy the opentelemetry demo app astronomy-shop
-  helm install astronomy-shop open-telemetry/opentelemetry-demo --values $CODESPACE_VSCODE_FOLDER/.devcontainer/yaml/gen/default-values.yaml --namespace astronomy-shop --version "0.31.0"
+  helm install astronomy-shop open-telemetry/opentelemetry-demo --values $REPO_PATH/.devcontainer/yaml/gen/default-values.yaml --namespace astronomy-shop --version "0.31.0"
   
   # Wait for ready pods
   waitForAllReadyPods astronomy-shop
@@ -78,7 +78,7 @@ deployOpenTelemetryCapstone() {
     exit 1
   fi
 
-  export CAPSTONE_DIR=$CODESPACE_VSCODE_FOLDER/lab-modules/opentelemetry-capstone
+  export CAPSTONE_DIR=$REPO_PATH/lab-modules/opentelemetry-capstone
 
   printInfo "All required variables are set."
 
