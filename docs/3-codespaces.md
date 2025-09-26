@@ -1,5 +1,6 @@
 --8<-- "snippets/send-bizevent/3-codespaces.js"
-# Codespaces
+
+--8<-- "snippets/dt-enablement.md"
 
 ## Create Codespace
 
