@@ -2,6 +2,9 @@
 
 # Clean Up
 
+--8<-- "snippets/feedback.md"
+
+
 ### Summary
 
 OpenTelemetry is a powerful observability framework that can be used to monitor the health of Kubernetes clusters and containerized workloads.
