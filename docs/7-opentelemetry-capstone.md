@@ -8,7 +8,7 @@ In this lab module we'll utilize multiple OpenTelemetry Collectors to collect ap
 
 **Lab tasks:**
 
-1. Deploy 4 OpenTelemetry Collectors
+1. Deploy 2 OpenTelemetry Collectors
 2. Configure OpenTelemetry Collector service pipeline for data enrichment
 3. Analyze metrics, traces, and logs in Dynatrace
 4. Observe OpenTelemetry Collector health in Dynatrace
@@ -39,7 +39,7 @@ export DT_API_TOKEN={your-api-token}
 export NAME=<INITIALS>-k8s-otel-o11y
 ```
 
-**Move into the metrics module directory**
+**Move into the capstone module directory**
 
 Command:
 ```sh
@@ -173,12 +173,6 @@ subjects:
 - kind: ServiceAccount
   name: dynatrace-daemonset-collector
   namespace: dynatrace
-- kind: ServiceAccount
-  name: contrib-deployment-collector
-  namespace: dynatrace
-- kind: ServiceAccount
-  name: contrib-daemonset-collector
-  namespace: dynatrace
 roleRef:
   kind: ClusterRole
   name: otel-collector-k8s-clusterrole
@@ -198,23 +192,23 @@ Sample output:
 [Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment){target=_blank}
 
 Receivers:
-`otlp`, `prometheus`
+`otlp`, `prometheus`, `k8s_cluster`, `k8sobjects`
 
-| MODULE        | DT DEPLOY | DT DAEMON | CON DEPLOY | CON DAEMON |
-|---------------|-----------|-----------|------------|------------|
-| otlp          | - [x]     | - [ ]     | - [x]      | - [ ]      |
-| prometheus    | - [x]     | - [x]     | - [x]      | - [x]      |
-| filelog       | - [ ]     | - [x]     | - [ ]      | - [ ]      |
-| kubeletstats  | - [ ]     | - [ ]     | - [ ]      | - [x]      |
-| k8s_cluster   | - [ ]     | - [ ]     | - [x]      | - [ ]      |
-| k8sobjects    | - [ ]     | - [ ]     | - [x]      | - [ ]      |
+| MODULE        | DT DEPLOY | DT DAEMON |
+|---------------|-----------|-----------|
+| otlp          | - [x]     | - [ ]     |
+| prometheus    | - [x]     | - [x]     |
+| filelog       | - [ ]     | - [x]     |
+| kubeletstats  | - [ ]     | - [x]     |
+| k8s_cluster   | - [x]     | - [ ]     |
+| k8sobjects    | - [x]     | - [ ]     |
 
 **Deploy OpenTelemetry Collector CRD**
 
 [Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway){target="_blank"}
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-deployment
@@ -253,16 +247,16 @@ Sample output:
 [Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment){target="_blank"}
 
 Receivers:
-`filelog`, `prometheus`
+`filelog`, `prometheus`, `kubeletstats`
 
-| MODULE        | DT DEPLOY | DT DAEMON | CON DEPLOY | CON DAEMON |
-|---------------|-----------|-----------|------------|------------|
-| otlp          | - [x]     | - [ ]     | - [x]      | - [ ]      |
-| prometheus    | - [x]     | - [x]     | - [x]      | - [x]      |
-| filelog       | - [ ]     | - [x]     | - [ ]      | - [ ]      |
-| kubeletstats  | - [ ]     | - [ ]     | - [ ]      | - [x]      |
-| k8s_cluster   | - [ ]     | - [ ]     | - [x]      | - [ ]      |
-| k8sobjects    | - [ ]     | - [ ]     | - [x]      | - [ ]      |
+| MODULE        | DT DEPLOY | DT DAEMON |
+|---------------|-----------|-----------|
+| otlp          | - [x]     | - [ ]     |
+| prometheus    | - [x]     | - [x]     |
+| filelog       | - [ ]     | - [x]     |
+| kubeletstats  | - [ ]     | - [x]     |
+| k8s_cluster   | - [x]     | - [ ]     |
+| k8sobjects    | - [x]     | - [ ]     |
 
 **Deploy OpenTelemetry Collector CRD**
 
@@ -270,7 +264,7 @@ Receivers:
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-daemonset
@@ -301,114 +295,6 @@ Sample output:
 | NAME                                       | READY | STATUS  | RESTARTS | AGE |
 |--------------------------------------------|-------|---------|----------|-----|
 | dynatrace-daemonset-collector-h69pz | 1/1   | Running | 0        | 1m  |
-
-## Contrib Deployment Collector
-
-**OpenTelemetry Collector - Contrib Distro (Deployment)**
-
-[Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment){target="_blank"}
-
-Receivers:
-`otlp`, `prometheus`, `k8s_cluster`, `k8sobjects`
-
-| MODULE        | DT DEPLOY | DT DAEMON | CON DEPLOY | CON DAEMON |
-|---------------|-----------|-----------|------------|------------|
-| otlp          | - [x]     | - [ ]     | - [x]      | - [ ]      |
-| prometheus    | - [x]     | - [x]     | - [x]      | - [x]      |
-| filelog       | - [ ]     | - [x]     | - [ ]      | - [ ]      |
-| kubeletstats  | - [ ]     | - [ ]     | - [ ]      | - [x]      |
-| k8s_cluster   | - [ ]     | - [ ]     | - [x]      | - [ ]      |
-| k8sobjects    | - [ ]     | - [ ]     | - [x]      | - [ ]      |
-
-**Deploy OpenTelemetry Collector CRD**
-
-[OpenTelemetry Documentation](https://opentelemetry.io/docs/kubernetes/operator/){target="_blank"}
-
-```yaml
----
-apiVersion: opentelemetry.io/v1alpha1
-kind: OpenTelemetryCollector
-metadata:
-  name: contrib-deployment
-  namespace: dynatrace
-spec:
-  envFrom:
-  - secretRef:
-      name: dynatrace-otelcol-dt-api-credentials
-  mode: "deployment"
-  image: "otel/opentelemetry-collector-contrib:0.103.0"
-```
-Command:
-```sh
-kubectl apply -f opentelemetry/collector/contrib/otel-collector-contrib-deployment-crd.yaml
-```
-Sample output:
-> opentelemetrycollector.opentelemetry.io/contrib-deployment created
-
-**Validate running pod(s)**
-
-Command:
-```sh
-kubectl get pods -n dynatrace
-```
-
-Sample output:
-
-| NAME                                       | READY | STATUS  | RESTARTS | AGE |
-|--------------------------------------------|-------|---------|----------|-----|
-| contrib-deployment-collector-74dfc4d9f4-s97k6 | 1/1   | Running | 0        | 1m  |
-
-## Contrib Daemonset Collector
-
-**OpenTelemetry Collector - Contrib Distro (Daemonset)**
-
-Receivers:
-`prometheus`, `kubeletstats`
-
-| MODULE        | DT DEPLOY | DT DAEMON | CON DEPLOY | CON DAEMON |
-|---------------|-----------|-----------|------------|------------|
-| otlp          | - [x]     | - [ ]     | - [x]      | - [ ]      |
-| prometheus    | - [x]     | - [x]     | - [x]      | - [x]      |
-| filelog       | - [ ]     | - [x]     | - [ ]      | - [ ]      |
-| kubeletstats  | - [ ]     | - [ ]     | - [ ]      | - [x]      |
-| k8s_cluster   | - [ ]     | - [ ]     | - [x]      | - [ ]      |
-| k8sobjects    | - [ ]     | - [ ]     | - [x]      | - [ ]      |
-
-**Deploy OpenTelemetry Collector CRD**
-
-```yaml
----
-apiVersion: opentelemetry.io/v1alpha1
-kind: OpenTelemetryCollector
-metadata:
-  name: contrib-daemonset
-  namespace: dynatrace
-spec:
-  envFrom:
-  - secretRef:
-      name: dynatrace-otelcol-dt-api-credentials
-  mode: "daemonset"
-  image: "otel/opentelemetry-collector-contrib:0.103.0"
-```
-Command:
-```sh
-kubectl apply -f opentelemetry/collector/contrib/otel-collector-contrib-daemonset-crd.yaml
-```
-Sample output:
-> opentelemetrycollector.opentelemetry.io/contrib-daemonset created
-
-**Validate running pod(s)**
-
-Command:
-```sh
-kubectl get pods -n dynatrace
-```
-
-Sample output:
-
-| NAME                                       | READY | STATUS  | RESTARTS | AGE |
-|--------------------------------------------|-------|---------|----------|-----|
-| contrib-daemonset-collector-d92tw | 1/1   | Running | 0        | 1m  |
 
 ## Configure Astronomy Shop OTLP Export
 
@@ -483,14 +369,14 @@ default:
 
 Command:
 ```sh
-sed -i "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml
+sed "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml > astronomy-shop/sed/collector-values.yaml
 ```
 
 Update `astronomy-shop` OpenTelemetry Collector export endpoint via helm
 
 Command:
 ```sh
-helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
+helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/sed/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
 ```
 Sample output:
 > NAME: astronomy-shop\
@@ -528,7 +414,7 @@ By default, the metric attribute `dynatrace.otel.collector` is dropped by Dynatr
 Enable metric generation for Collector CRD:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -541,7 +427,7 @@ spec:
 Enable publishing of metric generation to Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -563,13 +449,12 @@ spec:
       telemetry:
         metrics:
           level: "normal"
-          address: ${MY_POD_IP}:8888
 ```
 
 Enable scraping of metrics from Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -657,7 +542,6 @@ By completing this lab, you've successfully deployed the OpenTelemetry Collector
     - The `otlp` receiver receives metrics, traces, and logs from OpenTelemetry exporters via gRPC/HTTP
     - The `filelog` receiver scrapes logs from the Node filesystem and parses the contents
     - The `prometheus` receiver scrapes metric data exposed by Pod Prometheus endpoints
-- The Contrib Distro of OpenTelemetry Collector includes additional modules needed to ship telemetry to Dynatrace
     - The `kubeletstats` receiver scrapes metrics from the local kubelet on the Node
     - The `k8s_cluster` receiver queries the Kubernetes cluster API to retrieve metrics
     - The `k8sobjects` receiver watches for Kubernetes events (and other resources) on the cluster

@@ -154,7 +154,7 @@ spec:
           encoding: "json"
         metrics:
           level: "normal"
-          address: ${MY_POD_IP}:8888
+
       pipelines:
         metrics:
           receivers: [prometheus,otlp,k8s_cluster]
