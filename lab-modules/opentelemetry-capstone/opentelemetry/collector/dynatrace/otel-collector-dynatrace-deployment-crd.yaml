@@ -45,6 +45,17 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+      k8s_cluster:
+        collection_interval: 60s
+        node_conditions_to_report: [ "Ready", "MemoryPressure", "DiskPressure" ]
+        allocatable_types_to_report: [ "cpu","memory" ]
+        metadata_collection_interval: 5m
+      k8sobjects/events:
+        auth_type: serviceAccount
+        objects:
+          - name: events
+            mode: watch
+            namespaces: [astronomy-shop,dynatrace]
 
     processors:
       batch:
@@ -148,10 +159,10 @@ spec:
           encoding: "json"
         metrics:
           level: "normal"
-          
+
       pipelines:
         metrics:
-          receivers: [prometheus,otlp]
+          receivers: [prometheus,otlp,k8s_cluster]
           processors: [memory_limiter,filter/histogram,k8sattributes,resourcedetection/gcp,resource/kind,resource,cumulativetodelta,batch]
           exporters: [otlphttp/dynatrace,debug]
         traces:
@@ -159,6 +170,6 @@ spec:
           processors: [memory_limiter,k8sattributes,resourcedetection/gcp,resource/kind,resource,batch]
           exporters: [otlphttp/dynatrace,debug]
         logs:
-          receivers: [otlp]
+          receivers: [otlp,k8sobjects/events]
           processors: [memory_limiter,k8sattributes,resourcedetection/gcp,resource/kind,resource,batch]
           exporters: [otlphttp/dynatrace,debug]

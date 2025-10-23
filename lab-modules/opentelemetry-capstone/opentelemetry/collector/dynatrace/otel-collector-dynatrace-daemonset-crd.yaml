@@ -71,6 +71,15 @@ spec:
           # parse container logs
           - type: container
             id: container-parser
+      kubeletstats:
+        collection_interval: 30s
+        auth_type: 'serviceAccount'
+        endpoint: '${env:K8S_NODE_NAME}:10250'
+        insecure_skip_verify: true
+        metric_groups:
+          - node
+          - pod
+          - container
 
     processors:
       batch:
@@ -169,10 +178,10 @@ spec:
           encoding: "json"
         metrics:
           level: "normal"
-          
+
       pipelines:
         metrics:
-          receivers: [prometheus]
+          receivers: [prometheus,kubeletstats]
           processors: [memory_limiter,k8sattributes,resourcedetection/gcp,resource/kind,resource,cumulativetodelta,batch]
           exporters: [otlphttp/dynatrace,debug]
         logs:
