@@ -201,3 +201,6 @@ dist-ssr
 *.sw?
 .env
 .dt-app
+
+# Sed command swaps to sed directory
+*/sed/*.yaml
