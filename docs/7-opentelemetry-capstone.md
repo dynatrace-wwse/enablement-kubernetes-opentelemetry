@@ -208,7 +208,7 @@ Receivers:
 [Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway){target="_blank"}
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-deployment
@@ -264,7 +264,7 @@ Receivers:
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-daemonset
@@ -414,7 +414,7 @@ By default, the metric attribute `dynatrace.otel.collector` is dropped by Dynatr
 Enable metric generation for Collector CRD:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -427,7 +427,7 @@ spec:
 Enable publishing of metric generation to Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -454,7 +454,7 @@ spec:
 Enable scraping of metrics from Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
