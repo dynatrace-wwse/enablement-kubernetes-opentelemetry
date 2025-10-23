@@ -10,12 +10,6 @@ subjects:
 - kind: ServiceAccount
   name: dynatrace-daemonset-collector
   namespace: dynatrace
-- kind: ServiceAccount
-  name: contrib-deployment-collector
-  namespace: dynatrace
-- kind: ServiceAccount
-  name: contrib-daemonset-collector
-  namespace: dynatrace
 roleRef:
   kind: ClusterRole
   name: otel-collector-k8s-clusterrole
