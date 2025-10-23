@@ -563,7 +563,6 @@ spec:
       telemetry:
         metrics:
           level: "normal"
-          address: ${MY_POD_IP}:8888
 ```
 
 Enable scraping of metrics from Prometheus endpoint:
