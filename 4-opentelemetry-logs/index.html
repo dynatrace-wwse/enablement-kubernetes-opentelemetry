@@ -967,7 +967,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
 <p><strong>Import Notebook into Dynatrace</strong></p>
-<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-logs/opentelemetry-logs_dt_notebook.json" target="_blank">Notebook</a></p>
+<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/notebooks/opentelemetry-logs_dt_notebook.json" target="_blank">Notebook</a></p>
 <p><strong>Define workshop user variables</strong></p>
 <p>In your Github Codespaces Terminal set the environment variables:</p>
 <div class="admonition tip">
@@ -989,7 +989,7 @@ export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
 <a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--agent" target="_blank">Dynatrace Documentation</a></p>
 <p>Pod (and container) logs are written to the filesystem of the Node where the pod is running.  Therefore the Collector must be deployed as a Daemonset to read the log files on the local Node.</p>
 <p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1alpha1</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs</span>
@@ -1037,21 +1037,21 @@ Sample output:</p>
 <p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#filelog-receiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>The Filelog Receiver tails and parses logs from files. Although it’s not a Kubernetes-specific receiver, it is still the de facto solution for collecting any logs from Kubernetes.  Logs from the Kubernetes Node's filesystem will be read from the Collector running on that Node.  This is why the Collector is deployed as a Daemonset and not a Deployment (or Sidecar).</p>
 <p>The Filelog Receiver is composed of Operators that are chained together to process a log. Each Operator performs a simple responsibility, such as parsing a timestamp or JSON. Configuring a Filelog Receiver is not trivial.  Refer to the documentation for details.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">    </span><span class="no">receivers:</span>
-<span class="w">      </span><span class="no">filelog:</span>
-<span class="w">        </span><span class="no">...</span>
-<span class="w">    </span><span class="no">service:</span>
-<span class="w">      </span><span class="no">pipelines:</span>
-<span class="w">        </span><span class="no">logs:</span>
-<span class="w">          </span><span class="no">receivers: [filelog]</span>
-<span class="w">          </span><span class="no">processors: [batch]</span>
-<span class="w">          </span><span class="no">exporters: [otlphttp/dynatrace]</span>
+<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">filelog</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">filelog</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
 <div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
 <span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
 <span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
 <span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span>
@@ -1334,20 +1334,20 @@ Result:</p>
 <p>The <code>astronomy-shop</code> demo application has the OpenTelemetry agents and SDKs already instrumented.  These agents and SDKs are generating logs (traces and metrics too) that are being exported to a Collector running within the <code>astronomy-shop</code> namespace bundled into the application deployment.  We want these logs to be shipped to Dynatrace as well.</p>
 <p><a href="https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>Adding the <code>otlp</code> receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
-<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">    </span><span class="no">receivers:</span>
-<span class="w">      </span><span class="no">otlp:</span>
-<span class="w">        </span><span class="no">protocols:</span>
-<span class="w">          </span><span class="no">grpc:</span>
-<span class="w">            </span><span class="no">endpoint: 0.0.0.0:4317</span>
-<span class="w">          </span><span class="no">http:</span>
-<span class="w">            </span><span class="no">endpoint: 0.0.0.0:4318</span>
-<span class="w">    </span><span class="no">service:</span>
-<span class="w">      </span><span class="no">pipelines:</span>
-<span class="w">        </span><span class="no">logs:</span>
-<span class="w">          </span><span class="no">receivers: [otlp]</span>
-<span class="w">          </span><span class="no">processors: [batch]</span>
-<span class="w">          </span><span class="no">exporters: [otlphttp/dynatrace]</span>
+<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">grpc</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+<span class="w">          </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4318</span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
 </code></pre></div></p>
 <p>Command:
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-05.yaml
@@ -1403,7 +1403,7 @@ Sample output:</p>
 service.namespace=INITIALS-k8s-otel-o11y</p>
 </blockquote>
 <p>Command:
-<div class="highlight"><pre><span></span><code>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml
+<div class="highlight"><pre><span></span><code>sed<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>&gt;<span class="w"> </span>astronomy-shop/sed/collector-values.yaml
 </code></pre></div></p>
 <p><strong>Update <code>astronomy-shop</code> OpenTelemetry Collector export endpoint via helm</strong></p>
 <p>Our <code>collector-values.yaml</code> contains new configurations for the application so that the <code>astronomy-shop</code> Collector includes exporters that ship to the Collectors deployed in the <code>dynatrace</code> namespace.</p>
@@ -1417,7 +1417,7 @@ service.namespace=INITIALS-k8s-otel-o11y</p>
 <span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-metrics-cluster-collector.dynatrace.svc.cluster.local:4318</span>
 </code></pre></div>
 <p>Command:</p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/sed/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
 </code></pre></div>
 <p>Sample output:</p>
 <blockquote>
@@ -1441,7 +1441,7 @@ Result:</p>
 <p><a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment" target="_blank">OpenTelemetry Documentation</a></p>
 <p>The Kubernetes Objects receiver collects, either by pulling or watching, objects from the Kubernetes API server. The most common use case for this receiver is watching Kubernetes events, but it can be used to collect any type of Kubernetes object.</p>
 <h3 id="k8sobjects-receiver"><code>k8sobjects</code> Receiver<a class="headerlink" href="#k8sobjects-receiver" title="Permanent link">#</a></h3>
-<p>https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-objects-receiver</p>
+<p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-objects-receiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>Our goal is to capture any events related to the <code>astronomy-shop</code> and <code>dynatrace</code> namespaces.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">receivers</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">k8sobjects/events</span><span class="p">:</span>
@@ -1451,7 +1451,6 @@ Result:</p>
 <span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watch</span>
 <span class="w">        </span><span class="nt">namespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">astronomy-shop</span><span class="p p-Indicator">,</span><span class="nv">dynatrace</span><span class="p p-Indicator">]</span>
 </code></pre></div>
-<p>The <code>k8sobjects</code> receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the <code>contrib</code> image.</p>
 <h3 id="configure-kubernetes-rbac_1">Configure Kubernetes RBAC<a class="headerlink" href="#configure-kubernetes-rbac_1" title="Permanent link">#</a></h3>
 <p><strong>Create <code>clusterrole</code> with read access to Kubernetes events</strong></p>
 <p>Since the processor uses the Kubernetes API, it needs the correct permission to work correctly. Since service accounts are the only authentication option you must give the service account the proper access. For any object you want to collect you need to ensure the name is added to the cluster role. </p>
@@ -1504,11 +1503,9 @@ Sample output:</p>
 <span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watch</span>
 <span class="w">        </span><span class="nt">namespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">astronomy-shop</span><span class="p p-Indicator">,</span><span class="nv">dynatrace</span><span class="p p-Indicator">]</span>
 </code></pre></div>
-<p><strong>Deploy OpenTelemetry Collector - Contrib Distro - Deployment (Gateway)</strong></p>
-<p><a href="https://github.com/open-telemetry/opentelemetry-operator" target="_blank">OpenTelemetry Documentation</a></p>
 <p>Since the receiver gathers telemetry for the cluster as a whole, only one instance of the receiver is needed across the cluster in order to collect all the data.</p>
 <p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1alpha1</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-events</span>
@@ -1518,7 +1515,7 @@ Sample output:</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-otelcol-dt-api-credentials</span>
 <span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;deployment&quot;</span>
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;otel/opentelemetry-collector-contrib:0.103.0&quot;</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest&quot;</span>
 </code></pre></div>
 Command:
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/events/otel-collector-events-crd-01.yaml
@@ -1592,9 +1589,6 @@ Result:</p>
 <li>The <code>k8sattributes</code> processor enriches the logs with Kubernetes attributes</li>
 <li>The <code>resourcedetection</code> processor enriches the logs with cloud and cluster attributes</li>
 <li>The <code>resource</code> processor enriches the logs with custom (resource) attributes</li>
-</ul>
-</li>
-<li>The Community Contrib Distro of OpenTelemetry Collector includes modules needed to ship events to Dynatrace<ul>
 <li>The <code>k8sobjects</code> receiver watches for Kubernetes events (and other resources) on the cluster</li>
 </ul>
 </li>

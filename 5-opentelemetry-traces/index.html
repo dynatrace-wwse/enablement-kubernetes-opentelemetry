@@ -862,6 +862,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li>Configure OpenTelemetry Collector service pipeline for span enrichment</li>
 <li>Analyze application reliability via traces in Dynatrace</li>
 </ol>
+<!-- TODO: Remove classic screens -->
 <p><img alt="dynatrace otel service overview" src="../img/traces-dt_otel_service_overview.png" />
 <img alt="dynatrace otel service traces" src="../img/traces-dt_otel_service_traces.png" /></p>
 <div class="grid cards">
@@ -870,8 +871,9 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
+<!-- TODO: Add trace/span query Notebook -->
 <p><strong>Import Dashboard into Dynatrace</strong></p>
-<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-traces/opentelemetry-traces_dt_dashboard.json" target="_blank">Dashboard</a></p>
+<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_dashboard.json" target="_blank">Dashboard</a></p>
 <p><strong>Define workshop user variables</strong></p>
 <p>In your Github Codespaces Terminal set the environment variables:</p>
 <div class="admonition tip">
@@ -892,26 +894,26 @@ export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
 <h3 id="otlp-receiver"><code>otlp</code> Receiver<a class="headerlink" href="#otlp-receiver" title="Permanent link">#</a></h3>
 <p><a href="https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>Adding the <code>otlp</code> receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">    </span><span class="no">receivers:</span>
-<span class="w">      </span><span class="no">otlp:</span>
-<span class="w">        </span><span class="no">protocols:</span>
-<span class="w">          </span><span class="no">grpc:</span>
-<span class="w">            </span><span class="no">endpoint: 0.0.0.0:4317</span>
-<span class="w">          </span><span class="no">http:</span>
-<span class="w">            </span><span class="no">endpoint: 0.0.0.0:4318</span>
-<span class="w">    </span><span class="no">service:</span>
-<span class="w">      </span><span class="no">pipelines:</span>
-<span class="w">        </span><span class="no">traces:</span>
-<span class="w">          </span><span class="no">receivers: [otlp]</span>
-<span class="w">          </span><span class="no">processors: [batch]</span>
-<span class="w">          </span><span class="no">exporters: [otlphttp/dynatrace]</span>
+<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">grpc</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+<span class="w">          </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4318</span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">traces</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <h3 id="deploy-opentelemetry-collector-deployment">Deploy OpenTelemetry Collector Deployment<a class="headerlink" href="#deploy-opentelemetry-collector-deployment" title="Permanent link">#</a></h3>
 <p><a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway" target="_blank">Dynatrace Documentation</a></p>
 <p>The gateway collector deployment pattern consists of applications (or other collectors) sending telemetry signals to a single OTLP endpoint provided by one or more collector instances running as a standalone service (for example, a deployment in Kubernetes), typically per cluster, per data center or per region.</p>
 <p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1alpha1</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-traces</span>
@@ -979,7 +981,7 @@ Sample output:</p>
 service.namespace=INITIALS-k8s-otel-o11y</p>
 </blockquote>
 <p>Command:
-<div class="highlight"><pre><span></span><code>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml
+<div class="highlight"><pre><span></span><code>sed<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>&gt;<span class="w"> </span>astronomy-shop/sed/collector-values.yaml
 </code></pre></div></p>
 <p><strong>Update <code>astronomy-shop</code> OpenTelemetry Collector export endpoint via helm</strong></p>
 <p>Our <code>collector-values.yaml</code> contains new configurations for the application so that the <code>astronomy-shop</code> Collector includes exporters that ship to the Collectors deployed in the <code>dynatrace</code> namespace.</p>
@@ -993,7 +995,7 @@ service.namespace=INITIALS-k8s-otel-o11y</p>
 <span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-metrics-cluster-collector.dynatrace.svc.cluster.local:4318</span>
 </code></pre></div>
 <p>Command:
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/sed/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
 </code></pre></div>
 Sample output:</p>
 <blockquote>
