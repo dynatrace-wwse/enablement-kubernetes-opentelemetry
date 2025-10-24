@@ -4,7 +4,7 @@
 https://opentelemetry.io/docs/kubernetes/operator/
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: contrib-deployment

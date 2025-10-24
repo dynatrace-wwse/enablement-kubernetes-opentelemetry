@@ -1,5 +1,5 @@
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-metrics-node
@@ -14,7 +14,7 @@ spec:
         fieldRef:
           fieldPath: spec.nodeName
   mode: "daemonset"
-  image: "otel/opentelemetry-collector-contrib:0.103.0"
+  image: "ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:0.39.0"
   # podAnnotations:
       # metrics.dynatrace.com/scrape: 'true'
       # metrics.dynatrace.com/port: '8888'
@@ -24,7 +24,7 @@ spec:
   resources:
     limits:
       memory: 512Mi
-  config: |
+  config:
     receivers:
       otlp:
         protocols:
