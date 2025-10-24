@@ -24,13 +24,13 @@ default:
 
 Command:
 ```sh
-sed -i "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml
+sed "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml > astronomy-shop/sed/collector-values.yaml
 ```
 
 ### Update `astronomy-shop` OpenTelemetry Collector export endpoint via helm
 Command:
 ```sh
-helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
+helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/sed/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
 ```
 Sample output:
 > NAME: astronomy-shop\

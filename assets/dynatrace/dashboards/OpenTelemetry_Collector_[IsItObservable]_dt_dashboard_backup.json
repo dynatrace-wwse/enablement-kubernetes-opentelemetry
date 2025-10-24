@@ -1,26 +1,11 @@
 {
     "version": 15,
-    "variables": [
-        {
-            "key": "cluster",
-            "type": "query",
-            "visible": true,
-            "input": "timeseries avg(otelcol_process_uptime), by: {k8s.cluster.name}\n| fields k8s.cluster.name",
-            "multiple": true
-        },
-        {
-            "key": "collector",
-            "type": "query",
-            "visible": true,
-            "input": "timeseries avg(otelcol_process_uptime), by: {dynatrace.otel.collector}\n| filterOut isNull(dynatrace.otel.collector)\n| fields dynatrace.otel.collector\n",
-            "multiple": true
-        }
-    ],
+    "variables": [],
     "tiles": {
         "0": {
             "type": "data",
             "title": "Log records received",
-            "query": "timeseries total=sum(otelcol_receiver_accepted_log_records), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_receiver_accepted_log_records), by:{receiver}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -38,9 +23,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "receiver",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "receiver",
                         "valueAxis": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -50,8 +35,7 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "receiver"
                         ]
                     },
                     "legend": {
@@ -77,12 +61,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "receiver"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "receiver"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -108,7 +91,7 @@
         "1": {
             "type": "data",
             "title": "Metric records received",
-            "query": "timeseries total=sum(otelcol_receiver_accepted_metric_points), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_receiver_accepted_metric_points), by:{receiver}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -126,9 +109,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "receiver",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "receiver",
                         "valueAxisLabel": "interval"
                     },
                     "fieldMapping": {
@@ -137,8 +120,7 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "receiver"
                         ]
                     },
                     "hiddenLegendFields": [],
@@ -165,12 +147,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "receiver"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "receiver"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -196,7 +177,7 @@
         "2": {
             "type": "data",
             "title": "Log records refused",
-            "query": "timeseries total=sum(otelcol_receiver_refused_log_records), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_receiver_refused_log_records), by:{receiver}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -214,9 +195,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "receiver",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "receiver",
                         "valueAxisLabel": "interval"
                     },
                     "fieldMapping": {
@@ -225,9 +206,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "receiver"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -253,12 +235,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "receiver"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "receiver"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -284,7 +265,7 @@
         "3": {
             "type": "data",
             "title": "Metric records refused",
-            "query": "timeseries total=sum(otelcol_receiver_refused_metric_points), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_receiver_refused_metric_points), by:{receiver}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -302,9 +283,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "receiver",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "receiver",
                         "valueAxisLabel": "interval"
                     },
                     "fieldMapping": {
@@ -313,9 +294,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "receiver"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -341,12 +323,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "receiver"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "receiver"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -372,12 +353,12 @@
         "4": {
             "type": "markdown",
             "title": "",
-            "content": "##### Receivers"
+            "content": "**Receivers**"
         },
         "5": {
             "type": "data",
             "title": "Trace spans received",
-            "query": "timeseries total=sum(otelcol_receiver_accepted_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_receiver_accepted_spans), by:{receiver}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -395,9 +376,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "receiver",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "receiver",
                         "valueAxis": "interval"
                     },
                     "fieldMapping": {
@@ -406,9 +387,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "receiver"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -434,12 +416,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "receiver"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "receiver"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -465,7 +446,7 @@
         "6": {
             "type": "data",
             "title": "Trace spans refused",
-            "query": "timeseries total=sum(otelcol_receiver_refused_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_receiver_refused_spans), by:{receiver}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -483,9 +464,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "receiver",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "receiver",
                         "valueAxis": "interval"
                     },
                     "fieldMapping": {
@@ -494,9 +475,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "receiver"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -522,12 +504,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "receiver"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "receiver"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -553,12 +534,12 @@
         "7": {
             "type": "markdown",
             "title": "",
-            "content": "##### Processors"
+            "content": "**Processors**"
         },
         "8": {
             "type": "data",
             "title": "Log records accepted by processor",
-            "query": "timeseries total=sum(otelcol_processor_accepted_log_records), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_accepted_log_records), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -577,9 +558,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "processor",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "processor",
                         "valueAxis": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -589,8 +570,7 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "processor"
                         ]
                     },
                     "legend": {
@@ -616,11 +596,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "legend": {
                         "hidden": false,
@@ -649,7 +628,7 @@
         "9": {
             "type": "data",
             "title": "Metric points accepted by processor",
-            "query": "timeseries total=sum(otelcol_processor_accepted_metric_points), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_accepted_metric_points), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -668,9 +647,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "processor",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "processor",
                         "valueAxis": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -680,8 +659,7 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "processor"
                         ]
                     },
                     "legend": {
@@ -707,11 +685,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "legend": {
                         "hidden": false,
@@ -740,7 +717,7 @@
         "10": {
             "type": "data",
             "title": "Spans accepted by processor",
-            "query": "timeseries total=sum(otelcol_processor_accepted_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_accepted_spans), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -759,9 +736,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "processor",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "processor",
                         "valueAxis": "interval"
                     },
                     "fieldMapping": {
@@ -770,9 +747,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "processor"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -798,12 +776,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -828,7 +805,7 @@
         "11": {
             "type": "data",
             "title": "Log records dropped by processor",
-            "query": "timeseries total=sum(otelcol_processor_dropped_log_records), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_dropped_log_records), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -847,8 +824,8 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxis": "processor",
+                        "categoryAxisLabel": "processor",
                         "valueAxis": "interval",
                         "valueAxisLabel": "interval"
                     },
@@ -858,9 +835,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "processor"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -886,11 +864,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "legend": {
                         "hidden": false,
@@ -919,7 +896,7 @@
         "12": {
             "type": "data",
             "title": "Metric points dropped by processor",
-            "query": "timeseries total=sum(otelcol_processor_dropped_metric_points), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_dropped_metric_points), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -938,8 +915,8 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxis": "processor",
+                        "categoryAxisLabel": "processor",
                         "valueAxis": "interval",
                         "valueAxisLabel": "interval"
                     },
@@ -949,9 +926,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "processor"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -977,11 +955,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "legend": {
                         "hidden": false,
@@ -1010,7 +987,7 @@
         "13": {
             "type": "data",
             "title": "Spans dropped by processor",
-            "query": "timeseries total=sum(otelcol_processor_dropped_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_dropped_spans), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1029,9 +1006,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "processor",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "processor",
                         "valueAxis": "interval"
                     },
                     "fieldMapping": {
@@ -1040,9 +1017,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "processor"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -1068,12 +1046,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -1098,7 +1075,7 @@
         "14": {
             "type": "data",
             "title": "Processor Batch size",
-            "query": "timeseries total=sum(otelcol_processor_batch_batch_size_trigger_send), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_batch_batch_size_trigger_send), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1117,8 +1094,8 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxis": "processor",
+                        "categoryAxisLabel": "processor",
                         "valueAxis": "interval",
                         "valueAxisLabel": "interval"
                     },
@@ -1128,9 +1105,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "processor"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -1156,12 +1134,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -1186,7 +1163,7 @@
         "15": {
             "type": "data",
             "title": "Processor Batch timeout trigger",
-            "query": "timeseries total=sum(otelcol_processor_batch_timeout_trigger_send), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_processor_batch_timeout_trigger_send), by:{processor}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1205,8 +1182,8 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxis": "processor",
+                        "categoryAxisLabel": "processor",
                         "valueAxis": "interval",
                         "valueAxisLabel": "interval"
                     },
@@ -1216,9 +1193,10 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                            "processor"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -1244,12 +1222,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -1274,12 +1251,12 @@
         "16": {
             "type": "markdown",
             "title": "",
-            "content": "##### Exporters"
+            "content": "**Exporters**"
         },
         "17": {
             "type": "data",
             "title": "Log records sent by exporter",
-            "query": "timeseries total=sum(otelcol_exporter_sent_log_records), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_exporter_sent_log_records), by:{exporter, k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1303,14 +1280,13 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "exporter"
                         ]
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -1337,12 +1313,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "exporter"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "exporter"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -1367,7 +1342,7 @@
         "18": {
             "type": "data",
             "title": "Metric point sent by exporter",
-            "query": "timeseries total=sum(otelcol_exporter_sent_metric_points), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_exporter_sent_metric_points), by:{exporter, k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1391,14 +1366,13 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "exporter"
                         ]
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -1425,12 +1399,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "exporter"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "exporter"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -1455,7 +1428,7 @@
         "19": {
             "type": "data",
             "title": "Spans  sent by exporter",
-            "query": "timeseries total=sum(otelcol_exporter_sent_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
+            "query": "timeseries total=sum(otelcol_exporter_sent_spans), by:{exporter, k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1474,9 +1447,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval",
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval"
                     },
                     "fieldMapping": {
@@ -1485,8 +1458,7 @@
                             "totalpers"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "exporter"
                         ]
                     },
                     "hiddenLegendFields": [],
@@ -1513,12 +1485,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "exporter"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "exporter"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -1542,53 +1513,17 @@
         },
         "21": {
             "type": "data",
-            "title": "Collector instance availability (approx)",
-            "query": "timeseries uptime = sum(otelcol_process_uptime), by: {k8s.cluster.name,dynatrace.otel.collector,service_instance_id}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| parse service_instance_id, \"LD '-' LD '-' LD '-' LD '-' LD:instance\"\n| fieldsAdd uptime = toDuration(uptime[])\n| fieldsAdd ratio = uptime[]/interval*100000000000\n| summarize avail = avg(arrayAvg(ratio)), by: {k8s.cluster.name,dynatrace.otel.collector,instance}",
+            "title": "Queue Percentage per Exporter",
+            "query": "timeseries total=avg(otelcol_exporter_queue_size),capacity=avg(otelcol_exporter_queue_capacity), by:{service_name}\n| fieldsAdd ratio=(total[]/capacity[])*100\n| fieldsAdd ratiopermin=ratio[]/todouble(interval/1m)\n| fieldsRemove total,capacity,ratio",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
                     "isAvailable": true
                 }
             },
-            "visualization": "table",
+            "visualization": "barChart",
             "visualizationSettings": {
-                "thresholds": [
-                    {
-                        "id": 1,
-                        "field": "avail",
-                        "title": "",
-                        "isEnabled": true,
-                        "rules": [
-                            {
-                                "id": 0,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-ideal-default, #2f6863)"
-                                },
-                                "comparator": "≥",
-                                "label": "",
-                                "value": 95
-                            },
-                            {
-                                "id": 1,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-warning-default, #eca440)"
-                                },
-                                "comparator": "≥",
-                                "label": "",
-                                "value": 80
-                            },
-                            {
-                                "id": 2,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-critical-default, #c4233b)"
-                                },
-                                "comparator": "≥",
-                                "label": "",
-                                "value": 0
-                            }
-                        ]
-                    }
-                ],
+                "thresholds": [],
                 "chartSettings": {
                     "gapPolicy": "connect",
                     "circleChartSettings": {
@@ -1597,14 +1532,20 @@
                         "valueType": "relative"
                     },
                     "categoryOverrides": {},
+                    "fieldMapping": {
+                        "timestamp": "timeframe",
+                        "leftAxisValues": [
+                            "ratiopermin"
+                        ],
+                        "leftAxisDimensions": [
+                            "service_name"
+                        ]
+                    },
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
-                        "valueAxisLabel": "avail",
-                        "categoryAxis": "k8s.cluster.name",
-                        "valueAxis": "avail",
-                        "layout": "horizontal",
-                        "categoryAxisTickLayout": "horizontal",
-                        "colorPaletteMode": "multi-color"
+                        "categoryAxisLabel": "service_name",
+                        "valueAxisLabel": "interval",
+                        "categoryAxis": "service_name",
+                        "valueAxis": "interval"
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -1628,36 +1569,24 @@
                     "enableSparklines": false,
                     "hiddenColumns": [],
                     "lineWrapIds": [],
-                    "columnWidths": {},
-                    "colorThresholdTarget": "background"
+                    "columnWidths": {}
                 },
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "service_name"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "service_name"
                     ],
                     "colorMode": "color-palette",
-                    "colorPalette": "categorical",
-                    "customColors": [
-                        {
-                            "id": 0,
-                            "value": "",
-                            "comparator": "=",
-                            "color": {
-                                "Default": "var(--dt-colors-charts-categorical-color-01-default, #134fc9)"
-                            }
-                        }
-                    ]
+                    "colorPalette": "categorical"
                 },
                 "histogram": {
                     "dataMappings": [
                         {
-                            "valueAxis": "avail",
+                            "valueAxis": "interval",
                             "rangeAxis": ""
                         }
                     ]
@@ -1674,12 +1603,12 @@
         "22": {
             "type": "markdown",
             "title": "",
-            "content": "##### Collector process"
+            "content": "**Collector process**"
         },
         "23": {
             "type": "data",
             "title": "CPU per min",
-            "query": "timeseries total=avg(otelcol_process_cpu_seconds), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n",
+            "query": "timeseries total=avg(otelcol_process_cpu_seconds), by: {k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1702,15 +1631,12 @@
                         "leftAxisValues": [
                             "totalpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": []
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -1737,15 +1663,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "category": "k8s.pod.name",
+                        "value": "k8s.pod.name"
                     },
-                    "legend": "auto",
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "legend": "auto"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -1766,8 +1687,8 @@
         },
         "24": {
             "type": "data",
-            "title": "Heap size",
-            "query": "timeseries total=avg(otelcol_process_runtime_heap_alloc_bytes), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n\n",
+            "title": "Heap Size",
+            "query": "timeseries total=avg(otelcol_process_runtime_heap_alloc_bytes), by: {k8s.pod.name}\n\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1790,15 +1711,12 @@
                         "leftAxisValues": [
                             "total"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": []
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -1825,15 +1743,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "category": "k8s.pod.name",
+                        "value": "k8s.pod.name"
                     },
-                    "legend": "auto",
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "legend": "auto"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -1855,7 +1768,7 @@
         "25": {
             "type": "data",
             "title": "Total allocated bytes",
-            "query": "timeseries total=avg(otelcol_process_runtime_total_alloc_bytes), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n\n",
+            "query": "timeseries total=avg(otelcol_process_runtime_total_alloc_bytes), by: {k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1878,15 +1791,12 @@
                         "leftAxisValues": [
                             "totalpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": []
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -1913,15 +1823,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "category": "k8s.pod.name",
+                        "value": "k8s.pod.name"
                     },
-                    "legend": "auto",
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "legend": "auto"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -1943,7 +1848,7 @@
         "26": {
             "type": "data",
             "title": "System memory",
-            "query": "timeseries total=avg(otelcol_process_runtime_total_sys_memory_bytes), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n\n",
+            "query": "timeseries total=avg(otelcol_process_runtime_total_sys_memory_bytes), by: {k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -1966,15 +1871,12 @@
                         "leftAxisValues": [
                             "totalpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": []
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -2001,15 +1903,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "category": "k8s.pod.name",
+                        "value": "k8s.pod.name"
                     },
-                    "legend": "auto",
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "legend": "auto"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -2030,8 +1927,8 @@
         },
         "27": {
             "type": "data",
-            "title": "Memory allocated to process",
-            "query": "timeseries total=avg(otelcol_process_memory_rss), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n\n",
+            "title": "memory allocated to process",
+            "query": "timeseries total=avg(otelcol_process_memory_rss), by: {k8s.pod.name}\n| fieldsAdd totalpers=total[]/todouble(interval/1m)\n| fieldsRemove total\n\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -2054,15 +1951,12 @@
                         "leftAxisValues": [
                             "totalpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": []
                     },
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.pod.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.pod.name",
                         "valueAxisLabel": "interval"
                     },
                     "hiddenLegendFields": [],
@@ -2089,15 +1983,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "category": "k8s.pod.name",
+                        "value": "k8s.pod.name"
                     },
-                    "legend": "auto",
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "legend": "auto"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -2119,12 +2008,12 @@
         "28": {
             "type": "markdown",
             "title": "",
-            "content": "##### Resource utilization\n"
+            "content": "Ressource utilization\n"
         },
         "29": {
             "type": "data",
             "title": "Cpu usage in millicores",
-            "query": "timeseries cpu = avg(k8s.pod.cpu.utilization), by: {k8s.cluster.name,k8s.namespace.name,k8s.pod.name}\n| filter in(k8s.cluster.name,$cluster)\n| filter k8s.namespace.name == \"dynatrace\"",
+            "query": "timeseries cpu = avg(k8s.pod.cpu.usage), by:{k8s.namespace.name, k8s.pod.name}\n| filter k8s.namespace.name == \"dynatrace\"",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -2143,9 +2032,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
+                        "categoryAxis": "k8s.namespace.name",
                         "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxisLabel": "k8s.namespace.name",
                         "valueAxisLabel": "interval"
                     },
                     "fieldMapping": {
@@ -2154,7 +2043,6 @@
                             "cpu"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
                             "k8s.namespace.name",
                             "k8s.pod.name"
                         ]
@@ -2185,12 +2073,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
                         "value": "k8s.namespace.name"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "k8s.namespace.name"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -2214,8 +2101,8 @@
         },
         "30": {
             "type": "data",
-            "title": "Memory usage",
-            "query": "timeseries mem=avg(k8s.pod.memory.usage), by:{k8s.namespace.name,k8s.pod.name,k8s.cluster.name}\n| filter in(k8s.cluster.name,$cluster)\n| filter k8s.namespace.name == \"dynatrace\"\n",
+            "title": "Memory utilization",
+            "query": "timeseries mem=avg(k8s.pod.memory.usage), by:{k8s.namespace.name,k8s.pod.name}\n| filter k8s.namespace.name == \"dynatrace\"\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -2246,8 +2133,7 @@
                         ],
                         "leftAxisDimensions": [
                             "k8s.namespace.name",
-                            "k8s.pod.name",
-                            "k8s.cluster.name"
+                            "k8s.pod.name"
                         ]
                     },
                     "hiddenLegendFields": [
@@ -2276,8 +2162,7 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.namespace.name",
-                        "value": "k8s.pod.name"
+                        "value": "k8s.namespace.name"
                     },
                     "legend": "auto",
                     "displayedFields": [
@@ -2305,35 +2190,17 @@
         },
         "31": {
             "type": "data",
-            "title": "Log records ratio (out/in)",
-            "query": "timeseries total=sum(otelcol_receiver_accepted_log_records), sent=sum(otelcol_exporter_sent_log_records), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd ration=(sent[]/2)/total[] // 2 exporters: otlphttp/dt & debug\n| fieldsAdd rationpers=ration[]/todouble(interval/1m) * 100\n| fieldsRemove total,sent,ration",
+            "title": "Log records ration (out/in)",
+            "query": "timeseries total=sum(otelcol_receiver_accepted_log_records), sent=sum(otelcol_exporter_sent_log_records)\n| fieldsAdd ration=sent[]/total[]\n| fieldsAdd rationpers=ration[]/todouble(interval/1m) * 100\n| fieldsRemove total,sent, ration",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
                     "isAvailable": true
                 }
             },
-            "visualization": "lineChart",
+            "visualization": "areaChart",
             "visualizationSettings": {
-                "thresholds": [
-                    {
-                        "id": 1,
-                        "field": "",
-                        "title": "",
-                        "isEnabled": true,
-                        "rules": [
-                            {
-                                "id": 0,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-ideal-default, #2f6863)"
-                                },
-                                "comparator": "≥",
-                                "label": "",
-                                "value": 97
-                            }
-                        ]
-                    }
-                ],
+                "thresholds": [],
                 "chartSettings": {
                     "gapPolicy": "connect",
                     "circleChartSettings": {
@@ -2347,23 +2214,14 @@
                         "leftAxisValues": [
                             "rationpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": [],
+                        "fields": [],
+                        "values": []
                     },
-                    "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
-                        "valueAxisLabel": "interval"
-                    },
+                    "categoricalBarChartSettings": {},
                     "hiddenLegendFields": [],
                     "legend": {
                         "hidden": true
-                    },
-                    "leftYAxisSettings": {
-                        "max": 110
                     }
                 },
                 "singleValue": {
@@ -2372,8 +2230,7 @@
                     "prefixIcon": "",
                     "autoscale": true,
                     "alignment": "center",
-                    "colorThresholdTarget": "value",
-                    "recordField": "k8s.cluster.name"
+                    "colorThresholdTarget": "value"
                 },
                 "table": {
                     "rowDensity": "condensed",
@@ -2383,20 +2240,7 @@
                     "columnWidths": {}
                 },
                 "honeycomb": {
-                    "shape": "square",
-                    "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
-                    },
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "legend": {
-                        "hidden": false,
-                        "position": "auto"
-                    },
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "shape": "square"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -2417,35 +2261,17 @@
         },
         "32": {
             "type": "data",
-            "title": "Metric point ratio (out/in)",
-            "query": "timeseries total=sum(otelcol_receiver_accepted_metric_points), sent=sum(otelcol_exporter_sent_metric_points), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd ration=(sent[]/2)/total[] // 2 exporters: otlphttp/dt & debug\n| fieldsAdd rationpers=ration[]/todouble(interval/1m) * 100\n| fieldsRemove total,sent, ration",
+            "title": "Metric point ration (out/in)",
+            "query": "timeseries total=sum(otelcol_receiver_accepted_metric_points), sent=sum(otelcol_exporter_sent_metric_points)\n| fieldsAdd ration=sent[]/total[]\n| fieldsAdd rationpers=ration[]/todouble(interval/1m) * 100\n| fieldsRemove total,sent, ration",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
                     "isAvailable": true
                 }
             },
-            "visualization": "lineChart",
+            "visualization": "areaChart",
             "visualizationSettings": {
-                "thresholds": [
-                    {
-                        "id": 1,
-                        "field": "",
-                        "title": "",
-                        "isEnabled": true,
-                        "rules": [
-                            {
-                                "id": 0,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-ideal-default, #2f6863)"
-                                },
-                                "comparator": "≥",
-                                "label": "",
-                                "value": 97
-                            }
-                        ]
-                    }
-                ],
+                "thresholds": [],
                 "chartSettings": {
                     "gapPolicy": "connect",
                     "circleChartSettings": {
@@ -2459,23 +2285,14 @@
                         "leftAxisValues": [
                             "rationpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": [],
+                        "fields": [],
+                        "values": []
                     },
-                    "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
-                        "valueAxisLabel": "interval"
-                    },
+                    "categoricalBarChartSettings": {},
                     "hiddenLegendFields": [],
                     "legend": {
                         "hidden": true
-                    },
-                    "leftYAxisSettings": {
-                        "max": 110
                     }
                 },
                 "singleValue": {
@@ -2484,8 +2301,7 @@
                     "prefixIcon": "",
                     "autoscale": true,
                     "alignment": "center",
-                    "colorThresholdTarget": "value",
-                    "recordField": "k8s.cluster.name"
+                    "colorThresholdTarget": "value"
                 },
                 "table": {
                     "rowDensity": "condensed",
@@ -2495,20 +2311,7 @@
                     "columnWidths": {}
                 },
                 "honeycomb": {
-                    "shape": "square",
-                    "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
-                    },
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "legend": {
-                        "hidden": false,
-                        "position": "auto"
-                    },
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "shape": "square"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -2529,35 +2332,17 @@
         },
         "33": {
             "type": "data",
-            "title": "Trace records ratio (out/in)",
-            "query": "timeseries total=sum(otelcol_receiver_accepted_spans), sent=sum(otelcol_exporter_sent_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd ration=(sent[]/2)/total[] // 2 exporters: otlphttp/dt & debug\n| fieldsAdd rationpers=ration[]/todouble(interval/1m) * 100\n| fieldsRemove total,sent, ration",
+            "title": "Trace records ration (out/in)",
+            "query": "timeseries total=sum(otelcol_receiver_accepted_spans), sent=sum(otelcol_exporter_sent_spans)\n| fieldsAdd ration=sent[]/total[]\n| fieldsAdd rationpers=ration[]/todouble(interval/1m) * 100\n| fieldsRemove total,sent, ration",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
                     "isAvailable": true
                 }
             },
-            "visualization": "lineChart",
+            "visualization": "areaChart",
             "visualizationSettings": {
-                "thresholds": [
-                    {
-                        "id": 1,
-                        "field": "",
-                        "title": "",
-                        "isEnabled": true,
-                        "rules": [
-                            {
-                                "id": 0,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-ideal-default, #2f6863)"
-                                },
-                                "comparator": "≥",
-                                "label": "",
-                                "value": 97
-                            }
-                        ]
-                    }
-                ],
+                "thresholds": [],
                 "chartSettings": {
                     "gapPolicy": "connect",
                     "circleChartSettings": {
@@ -2571,23 +2356,14 @@
                         "leftAxisValues": [
                             "rationpers"
                         ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
+                        "leftAxisDimensions": [],
+                        "fields": [],
+                        "values": []
                     },
-                    "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
-                        "valueAxisLabel": "interval"
-                    },
+                    "categoricalBarChartSettings": {},
                     "hiddenLegendFields": [],
                     "legend": {
                         "hidden": true
-                    },
-                    "leftYAxisSettings": {
-                        "max": 110
                     }
                 },
                 "singleValue": {
@@ -2596,8 +2372,7 @@
                     "prefixIcon": "",
                     "autoscale": true,
                     "alignment": "center",
-                    "colorThresholdTarget": "value",
-                    "recordField": "k8s.cluster.name"
+                    "colorThresholdTarget": "value"
                 },
                 "table": {
                     "rowDensity": "condensed",
@@ -2607,20 +2382,7 @@
                     "columnWidths": {}
                 },
                 "honeycomb": {
-                    "shape": "square",
-                    "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
-                    },
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "legend": {
-                        "hidden": false,
-                        "position": "auto"
-                    },
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
+                    "shape": "square"
                 },
                 "histogram": {
                     "dataMappings": [
@@ -2642,12 +2404,12 @@
         "34": {
             "type": "markdown",
             "title": "",
-            "content": "##### Collector Overview"
+            "content": "**Collector Overview**"
         },
         "36": {
             "type": "data",
             "title": "K8s ip lookup miss",
-            "query": "timeseries ipmiss=sum(otelcol_otelsvc_k8s_ip_lookup_miss), default: 0, by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd ipmiss_pers=ipmiss[]/todouble(interval/1m)\n| fieldsRemove ipmiss",
+            "query": "timeseries ipmiss=sum(otelcol_otelsvc_k8s_ip_lookup_miss),by:{service_name}\n| fieldsAdd ipmiss_pers=ipmiss[]/todouble(interval/1m)\n| fieldsRemove ipmiss",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -2666,8 +2428,21 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxis": "service_name",
+                        "valueAxis": "interval",
+                        "categoryAxisLabel": "service_name",
                         "valueAxisLabel": "interval"
+                    },
+                    "fieldMapping": {
+                        "timestamp": "timeframe",
+                        "leftAxisValues": [
+                            "ipmiss_pers"
+                        ],
+                        "leftAxisDimensions": [
+                            "service_name"
+                        ],
+                        "fields": [],
+                        "values": []
                     },
                     "hiddenLegendFields": [],
                     "legend": {
@@ -2692,16 +2467,23 @@
                 },
                 "honeycomb": {
                     "shape": "square",
-                    "dataMappings": {},
+                    "dataMappings": {
+                        "value": "service_name"
+                    },
                     "legend": "auto",
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "service_name"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
                 },
                 "histogram": {
-                    "dataMappings": []
+                    "dataMappings": [
+                        {
+                            "valueAxis": "interval",
+                            "rangeAxis": ""
+                        }
+                    ]
                 }
             },
             "querySettings": {
@@ -2715,7 +2497,7 @@
         "37": {
             "type": "data",
             "title": "Type of collector deployment",
-            "query": "timeseries avg(otelcol_process_uptime), by: {k8s.cluster.name,dynatrace.otel.collector,service_name,service_instance_id}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| summarize Collectors = count(), by: {service_name}\n",
+            "query": "timeseries avg(otelcol_process_uptime), by: {service_name, service_instance_id}\n| summarize Collectors = count(), by: {service_name}\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -2764,8 +2546,7 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "service_name",
-                        "value": "Collectors"
+                        "value": "service_name"
                     },
                     "legend": "auto",
                     "displayedFields": [
@@ -2794,7 +2575,7 @@
         "38": {
             "type": "data",
             "title": "Number  of collectors",
-            "query": "timeseries avg(otelcol_process_uptime), by: {k8s.cluster.name,dynatrace.otel.collector,service_instance_id}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| summarize Collectors = count()",
+            "query": "timeseries avg(otelcol_process_uptime), by: {service_instance_id}\n| summarize Collectors = count()",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -2843,7 +2624,9 @@
                 },
                 "honeycomb": {
                     "shape": "square",
-                    "dataMappings": {},
+                    "dataMappings": {
+                        "value": "Collectors"
+                    },
                     "displayedFields": [
                         null
                     ],
@@ -2935,7 +2718,6 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "dt.ingest.channel",
                         "value": "dt.ingest.channel"
                     },
                     "displayedFields": [
@@ -2968,7 +2750,7 @@
         "40": {
             "type": "markdown",
             "title": "",
-            "content": "##### Dynatrace: data ingested\n"
+            "content": "**Dynatrace: data ingested**\n"
         },
         "41": {
             "type": "data",
@@ -3035,8 +2817,7 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "source",
-                        "value": "dt.ingest.channel"
+                        "value": "source"
                     },
                     "displayedFields": [
                         "source"
@@ -3065,10 +2846,15 @@
                 "enableSampling": false
             }
         },
+        "46": {
+            "type": "markdown",
+            "title": "",
+            "content": "**Pipeline latency**"
+        },
         "49": {
             "type": "data",
             "title": "Signals droped by Memory_limiter",
-            "query": "timeseries total_log=sum(otelcol_processor_refused_log_records),total_metrics=sum(otelcol_processor_refused_metric_points),total_span=sum(otelcol_processor_refused_spans), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd totalpers_log=total_log[]/todouble(interval/1m),totalpers_metric=total_metrics[]/todouble(interval/1m),totalpers_span=total_span[]/todouble(interval/1m)\n| fieldsRemove total_log,total_metrics,total_span",
+            "query": "timeseries total_log=sum(otelcol_processor_refused_log_records),total_metrics=sum(otelcol_processor_refused_metric_points),total_span=sum(otelcol_processor_refused_spans), by:{processor}\n| fieldsAdd totalpers_log=total_log[]/todouble(interval/1m),totalpers_metric=total_metrics[]/todouble(interval/1m),totalpers_span=total_span[]/todouble(interval/1m)\n| fieldsRemove total_log,total_metrics,total_span",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -3087,8 +2873,8 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "categoryAxisLabel": "k8s.cluster.name",
+                        "categoryAxis": "processor",
+                        "categoryAxisLabel": "processor",
                         "valueAxis": "interval",
                         "valueAxisLabel": "interval"
                     },
@@ -3100,8 +2886,7 @@
                             "totalpers_span"
                         ],
                         "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
+                            "processor"
                         ]
                     },
                     "hiddenLegendFields": [],
@@ -3128,11 +2913,10 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
+                        "value": "processor"
                     },
                     "displayedFields": [
-                        "k8s.cluster.name"
+                        "processor"
                     ],
                     "legend": {
                         "hidden": false,
@@ -3161,7 +2945,7 @@
         "50": {
             "type": "data",
             "title": "",
-            "query": "fetch logs \n| filter k8s.container.name == \"otc-container\"\n| filter telemetry.sdk.name == \"opentelemetry\"\n| filter in(k8s.cluster.name,$cluster)\n| filter in(app.label.name,$collector)\n| sort timestamp desc\n| limit 500\n| parse content, \"DATA JSON:jsonContent\"\n| filterOut isNull(jsonContent)\n| fieldsRemove content\n| fieldsAdd loglevel = upper(jsonContent[`level`])\n| fieldsFlatten jsonContent\n| filter `jsonContent.msg` == \"Partial success response\"\n| parse `jsonContent.message`, \"DATA 'OTLP' LD ':' DATA:message\"\n| limit 50\n| fields message",
+            "query": "fetch logs \n| filter k8s.container.name == \"otc-container\"\n| filter contains(content, \"Partial success response\")\n| parse content, \" BOS LD  SPACE+ LD 'Partial success response' LD 'data_type\\\":'  SPACE+ DQS:signal ',' LD 'message\\\":' SPACE+ DQS:error_message LD 'dropped' WORD '\\\":' SPACE+ INT:nbdropped  LD \"\n| filter nbdropped>0\n| parse error_message, \" LD ':'( SPACE+ LD:type ':' SPACE+ LD ':' SPACE+ SQS:name SPACE '-' SPACE 'Reason:' SPACE+ WORD:code )  \"\n| summarize count = count(), by:{name, type, code}\n| sort count desc\n| fields name, type, count, code",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -3179,7 +2963,9 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
+                        "categoryAxis": "name",
                         "categoryAxisLabel": "name",
+                        "valueAxis": "count",
                         "valueAxisLabel": "count"
                     }
                 },
@@ -3197,25 +2983,27 @@
                     "enableSparklines": false,
                     "hiddenColumns": [],
                     "lineWrapIds": [],
-                    "columnWidths": {
-                        "[\"message\"]": 910
-                    }
+                    "columnWidths": {}
                 },
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "message",
-                        "value": "message"
+                        "value": "name"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "message"
+                        "name"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
                 },
                 "histogram": {
-                    "dataMappings": []
+                    "dataMappings": [
+                        {
+                            "valueAxis": "count",
+                            "rangeAxis": ""
+                        }
+                    ]
                 }
             },
             "visualization": "table",
@@ -3230,12 +3018,12 @@
         "51": {
             "type": "markdown",
             "title": "",
-            "content": "##### Ingest errors"
+            "content": "**Ingest errors**"
         },
         "52": {
             "type": "data",
-            "title": "Number of records dropped by OTLP ingest API",
-            "query": "fetch logs \n| filter k8s.container.name == \"otc-container\"\n| filter telemetry.sdk.name == \"opentelemetry\"\n| filter in(k8s.cluster.name,$cluster)\n| filter in(app.label.name,$collector)\n| parse content, \"DATA JSON:jsonContent\"\n| filterOut isNull(jsonContent)\n| fieldsRemove content\n| fieldsAdd loglevel = upper(jsonContent[`level`])\n| fieldsFlatten jsonContent\n| filter `jsonContent.msg` == \"Partial success response\"\n| makeTimeseries drops = sum(`jsonContent.dropped_data_points`), by: {`jsonContent.data_type`}",
+            "title": "Number records dropped by OTLP ingest API",
+            "query": "fetch logs \n| filter k8s.container.name == \"otc-container\"\n| filter contains(content, \"Partial success response\")\n| parse content, \" BOS LD  SPACE+ LD 'Partial success response' LD 'data_type\\\":'  SPACE+ DQS:signal ',' LD 'message\\\":' SPACE+ DQS:error_message LD 'dropped' WORD '\\\":' SPACE+ INT:nbdropped  LD \"\n| summarize records_dropped=sum(nbdropped), by:{bin(timestamp, 30s),signal}",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
@@ -3254,26 +3042,25 @@
                     },
                     "categoryOverrides": {},
                     "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "jsonContent.data_type",
-                        "valueAxisLabel": "interval",
-                        "categoryAxis": "jsonContent.data_type",
-                        "valueAxis": "interval"
+                        "categoryAxis": "signal",
+                        "categoryAxisLabel": "signal",
+                        "valueAxis": "records_dropped",
+                        "valueAxisLabel": "records_dropped"
                     },
                     "fieldMapping": {
-                        "timestamp": "timeframe",
+                        "timestamp": "bin(timestamp, 30s)",
                         "leftAxisValues": [
-                            "drops"
+                            "records_dropped"
                         ],
                         "leftAxisDimensions": [
-                            "jsonContent.data_type"
+                            "signal"
                         ]
                     },
                     "hiddenLegendFields": [],
                     "legend": {
                         "position": "bottom",
                         "hidden": false
-                    },
-                    "seriesOverrides": []
+                    }
                 },
                 "singleValue": {
                     "showLabel": true,
@@ -3294,12 +3081,11 @@
                 "honeycomb": {
                     "shape": "square",
                     "dataMappings": {
-                        "category": "jsonContent.data_type",
-                        "value": "jsonContent.data_type"
+                        "value": "bin(timestamp, 30s)"
                     },
                     "legend": "auto",
                     "displayedFields": [
-                        "data_type"
+                        "signal"
                     ],
                     "colorMode": "color-palette",
                     "colorPalette": "categorical"
@@ -3307,7 +3093,7 @@
                 "histogram": {
                     "dataMappings": [
                         {
-                            "valueAxis": "interval",
+                            "valueAxis": "records_dropped",
                             "rangeAxis": ""
                         }
                     ]
@@ -3405,670 +3191,204 @@
                 "defaultSamplingRatio": 10,
                 "enableSampling": false
             }
-        },
-        "54": {
-            "type": "markdown",
-            "title": "",
-            "content": "##### Collector error logs\n"
-        },
-        "55": {
-            "type": "data",
-            "title": "Process uptime",
-            "query": "timeseries total=sum(otelcol_process_uptime), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n\n",
-            "davis": {
-                "enabled": false,
-                "davisVisualization": {
-                    "isAvailable": true
-                }
-            },
-            "visualization": "lineChart",
-            "visualizationSettings": {
-                "thresholds": [],
-                "chartSettings": {
-                    "gapPolicy": "connect",
-                    "circleChartSettings": {
-                        "groupingThresholdType": "relative",
-                        "groupingThresholdValue": 0,
-                        "valueType": "relative"
-                    },
-                    "categoryOverrides": {},
-                    "fieldMapping": {
-                        "timestamp": "timeframe",
-                        "leftAxisValues": [
-                            "total"
-                        ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
-                    },
-                    "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "valueAxis": "interval",
-                        "categoryAxisLabel": "k8s.cluster.name",
-                        "valueAxisLabel": "interval"
-                    },
-                    "hiddenLegendFields": [],
-                    "legend": {
-                        "hidden": true
-                    }
-                },
-                "singleValue": {
-                    "showLabel": true,
-                    "label": "",
-                    "prefixIcon": "",
-                    "autoscale": true,
-                    "alignment": "center",
-                    "colorThresholdTarget": "value",
-                    "recordField": "k8s.pod.name"
-                },
-                "table": {
-                    "rowDensity": "condensed",
-                    "enableSparklines": false,
-                    "hiddenColumns": [],
-                    "lineWrapIds": [],
-                    "columnWidths": {}
-                },
-                "honeycomb": {
-                    "shape": "square",
-                    "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
-                    },
-                    "legend": "auto",
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical"
-                },
-                "histogram": {
-                    "dataMappings": [
-                        {
-                            "valueAxis": "interval",
-                            "rangeAxis": ""
-                        }
-                    ]
-                },
-                "unitsOverrides": [
-                    {
-                        "identifier": "total",
-                        "unitCategory": "time",
-                        "baseUnit": "second",
-                        "displayUnit": null,
-                        "decimals": 0,
-                        "suffix": "",
-                        "delimiter": false,
-                        "added": 1720719998532
-                    }
-                ]
-            },
-            "querySettings": {
-                "maxResultRecords": 1000,
-                "defaultScanLimitGbytes": 500,
-                "maxResultMegaBytes": 100,
-                "defaultSamplingRatio": 10,
-                "enableSampling": false
-            }
-        },
-        "56": {
-            "type": "data",
-            "title": "",
-            "query": "fetch logs\n| filter k8s.namespace.name == \"dynatrace\" and k8s.container.name == \"otc-container\"\n| filter in(k8s.cluster.name,$cluster)\n| filter in(app.label.name,$collector)\n| parse content, \"DATA JSON:jsonContent\"\n| filterOut isNull(jsonContent)\n| fieldsRemove content\n| fieldsAdd loglevel = upper(jsonContent[`level`])\n| fieldsFlatten jsonContent, fields: {msg, kind, data_type, name, message}\n| filterOut in(loglevel,{\"INFO\",\"NONE\"})\n| limit 50\n| fields timestamp, msg, kind, data_type, name, message, cluster = k8s.cluster.name, collector = app.label.name",
-            "davis": {
-                "enabled": false,
-                "davisVisualization": {
-                    "isAvailable": true
-                }
-            },
-            "visualization": "table",
-            "visualizationSettings": {
-                "thresholds": [],
-                "chartSettings": {
-                    "gapPolicy": "connect",
-                    "circleChartSettings": {
-                        "groupingThresholdType": "relative",
-                        "groupingThresholdValue": 0,
-                        "valueType": "relative"
-                    },
-                    "categoryOverrides": {},
-                    "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "container.image.name",
-                        "valueAxisLabel": "LogsExporter_log_records"
-                    },
-                    "hiddenLegendFields": []
-                },
-                "singleValue": {
-                    "showLabel": true,
-                    "label": "",
-                    "prefixIcon": "",
-                    "recordField": "timestamp",
-                    "autoscale": true,
-                    "alignment": "center",
-                    "colorThresholdTarget": "value"
-                },
-                "table": {
-                    "rowDensity": "condensed",
-                    "enableSparklines": false,
-                    "hiddenColumns": [],
-                    "lineWrapIds": [],
-                    "columnWidths": {}
-                },
-                "honeycomb": {
-                    "shape": "hexagon",
-                    "legend": {
-                        "hidden": false,
-                        "position": "auto"
-                    },
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical",
-                    "dataMappings": {
-                        "category": "msg",
-                        "value": "timestamp"
-                    },
-                    "displayedFields": [
-                        "msg"
-                    ]
-                },
-                "histogram": {
-                    "dataMappings": []
-                }
-            },
-            "querySettings": {
-                "maxResultRecords": 1000,
-                "defaultScanLimitGbytes": 500,
-                "maxResultMegaBytes": 1,
-                "defaultSamplingRatio": 10,
-                "enableSampling": false
-            }
-        },
-        "57": {
-            "type": "data",
-            "title": "Exporter Queue Saturation",
-            "query": "timeseries total=avg(otelcol_exporter_queue_size),capacity=avg(otelcol_exporter_queue_capacity), by: {k8s.cluster.name,dynatrace.otel.collector}\n| filter in(k8s.cluster.name,$cluster)\n| filter in(dynatrace.otel.collector,$collector)\n| fieldsAdd ratio=(total[]/capacity[])*100\n| fieldsAdd ratiopermin=ratio[]/todouble(interval/1m)\n| fieldsRemove total,capacity,ratio",
-            "davis": {
-                "enabled": false,
-                "davisVisualization": {
-                    "isAvailable": true
-                }
-            },
-            "visualization": "lineChart",
-            "visualizationSettings": {
-                "thresholds": [
-                    {
-                        "id": 1,
-                        "field": "",
-                        "title": "",
-                        "isEnabled": true,
-                        "rules": [
-                            {
-                                "id": 0,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-ideal-default, #2f6863)"
-                                },
-                                "comparator": "<",
-                                "label": "",
-                                "value": 1
-                            },
-                            {
-                                "id": 1,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-warning-default, #eca440)"
-                                },
-                                "comparator": "≥",
-                                "label": ""
-                            },
-                            {
-                                "id": 2,
-                                "color": {
-                                    "Default": "var(--dt-colors-charts-status-critical-default, #c4233b)"
-                                },
-                                "comparator": "≥",
-                                "label": ""
-                            }
-                        ]
-                    }
-                ],
-                "chartSettings": {
-                    "gapPolicy": "connect",
-                    "circleChartSettings": {
-                        "groupingThresholdType": "relative",
-                        "groupingThresholdValue": 0,
-                        "valueType": "relative"
-                    },
-                    "categoryOverrides": {},
-                    "categoricalBarChartSettings": {
-                        "categoryAxis": "k8s.cluster.name",
-                        "categoryAxisLabel": "k8s.cluster.name",
-                        "valueAxis": "interval",
-                        "valueAxisLabel": "interval"
-                    },
-                    "hiddenLegendFields": [],
-                    "fieldMapping": {
-                        "timestamp": "timeframe",
-                        "leftAxisValues": [
-                            "ratiopermin"
-                        ],
-                        "leftAxisDimensions": [
-                            "k8s.cluster.name",
-                            "dynatrace.otel.collector"
-                        ]
-                    },
-                    "leftYAxisSettings": {
-                        "min": -1,
-                        "max": 5
-                    },
-                    "legend": {
-                        "hidden": true
-                    }
-                },
-                "singleValue": {
-                    "showLabel": true,
-                    "label": "",
-                    "prefixIcon": "",
-                    "recordField": "exporter",
-                    "autoscale": true,
-                    "alignment": "center",
-                    "colorThresholdTarget": "value"
-                },
-                "table": {
-                    "rowDensity": "condensed",
-                    "enableSparklines": false,
-                    "hiddenColumns": [],
-                    "lineWrapIds": [],
-                    "columnWidths": {}
-                },
-                "honeycomb": {
-                    "shape": "hexagon",
-                    "legend": {
-                        "hidden": false,
-                        "position": "auto"
-                    },
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical",
-                    "dataMappings": {
-                        "category": "k8s.cluster.name",
-                        "value": "dynatrace.otel.collector"
-                    },
-                    "displayedFields": [
-                        "k8s.cluster.name"
-                    ]
-                },
-                "histogram": {
-                    "dataMappings": [
-                        {
-                            "valueAxis": "interval",
-                            "rangeAxis": ""
-                        }
-                    ]
-                }
-            },
-            "querySettings": {
-                "maxResultRecords": 1000,
-                "defaultScanLimitGbytes": 500,
-                "maxResultMegaBytes": 1,
-                "defaultSamplingRatio": 10,
-                "enableSampling": false
-            }
-        },
-        "58": {
-            "type": "markdown",
-            "title": "",
-            "content": "##### Collector k8s events\n"
-        },
-        "59": {
-            "type": "data",
-            "title": "",
-            "query": "fetch logs\n| filter in(k8s.cluster.name,$cluster)\n| filter event.domain == \"k8s\" and k8s.resource.name == \"events\"\n| filter matchesPhrase(object.involvedobject.name,\"dynatrace\") OR matchesPhrase(object.involvedobject.name,\"contrib\")\n| filter object.metadata.namespace == \"dynatrace\"\n//| filter in(object.involvedobject.name,$collector)\n| sort timestamp desc\n| limit 50\n| fields timestamp, object = object.involvedobject.name, object.reason, object.message",
-            "davis": {
-                "enabled": false,
-                "davisVisualization": {
-                    "isAvailable": true
-                }
-            },
-            "visualization": "table",
-            "visualizationSettings": {
-                "thresholds": [],
-                "chartSettings": {
-                    "gapPolicy": "connect",
-                    "circleChartSettings": {
-                        "groupingThresholdType": "relative",
-                        "groupingThresholdValue": 0,
-                        "valueType": "relative"
-                    },
-                    "categoryOverrides": {},
-                    "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "container.image.name",
-                        "valueAxisLabel": "LogsExporter_log_records"
-                    },
-                    "hiddenLegendFields": []
-                },
-                "singleValue": {
-                    "showLabel": true,
-                    "label": "",
-                    "prefixIcon": "",
-                    "recordField": "timestamp",
-                    "autoscale": true,
-                    "alignment": "center",
-                    "colorThresholdTarget": "value"
-                },
-                "table": {
-                    "rowDensity": "condensed",
-                    "enableSparklines": false,
-                    "hiddenColumns": [],
-                    "lineWrapIds": [],
-                    "columnWidths": {
-                        "[\"object.message\"]": 569.25,
-                        "[\"collector\"]": 309.6000061035156
-                    }
-                },
-                "honeycomb": {
-                    "shape": "hexagon",
-                    "legend": {
-                        "hidden": false,
-                        "position": "auto"
-                    },
-                    "colorMode": "color-palette",
-                    "colorPalette": "categorical",
-                    "dataMappings": {
-                        "category": "object",
-                        "value": "timestamp"
-                    },
-                    "displayedFields": [
-                        "object"
-                    ]
-                },
-                "histogram": {
-                    "dataMappings": []
-                }
-            },
-            "querySettings": {
-                "maxResultRecords": 1000,
-                "defaultScanLimitGbytes": 500,
-                "maxResultMegaBytes": 1,
-                "defaultSamplingRatio": 10,
-                "enableSampling": false
-            },
-            "timeframe": {
-                "tileTimeframeEnabled": false,
-                "tileTimeframe": {
-                    "from": "now()-24h",
-                    "to": "now()"
-                }
-            }
-        },
-        "60": {
-            "type": "data",
-            "title": "Total Dropped Records",
-            "query": "fetch logs \n| filter k8s.container.name == \"otc-container\"\n| filter telemetry.sdk.name == \"opentelemetry\"\n| filter in(k8s.cluster.name,$cluster)\n| filter in(app.label.name,$collector)\n| parse content, \"DATA JSON:jsonContent\"\n| filterOut isNull(jsonContent)\n| fieldsRemove content\n| fieldsAdd loglevel = upper(jsonContent[`level`])\n| fieldsFlatten jsonContent\n| filter `jsonContent.msg` == \"Partial success response\"\n| summarize drops = sum(`jsonContent.dropped_data_points`)",
-            "davis": {
-                "enabled": false,
-                "davisVisualization": {
-                    "isAvailable": true
-                }
-            },
-            "visualization": "singleValue",
-            "visualizationSettings": {
-                "thresholds": [],
-                "chartSettings": {
-                    "gapPolicy": "connect",
-                    "circleChartSettings": {
-                        "groupingThresholdType": "relative",
-                        "groupingThresholdValue": 0,
-                        "valueType": "relative"
-                    },
-                    "categoryOverrides": {},
-                    "categoricalBarChartSettings": {
-                        "categoryAxisLabel": "data_type",
-                        "valueAxisLabel": "interval"
-                    },
-                    "hiddenLegendFields": [],
-                    "legend": {
-                        "position": "bottom",
-                        "hidden": false
-                    },
-                    "seriesOverrides": []
-                },
-                "singleValue": {
-                    "showLabel": false,
-                    "label": "",
-                    "prefixIcon": "ErrorIcon",
-                    "recordField": "drops",
-                    "autoscale": true,
-                    "alignment": "center",
-                    "colorThresholdTarget": "value"
-                },
-                "table": {
-                    "rowDensity": "condensed",
-                    "enableSparklines": false,
-                    "hiddenColumns": [],
-                    "lineWrapIds": [],
-                    "columnWidths": {}
-                },
-                "honeycomb": {
-                    "shape": "square",
-                    "dataMappings": {},
-                    "legend": "auto",
-                    "displayedFields": [
-                        null
-                    ],
-                    "colorMode": "color-palette",
-                    "colorPalette": "blue"
-                },
-                "histogram": {
-                    "dataMappings": [
-                        {
-                            "valueAxis": "drops",
-                            "rangeAxis": ""
-                        }
-                    ]
-                }
-            },
-            "querySettings": {
-                "maxResultRecords": 1000,
-                "defaultScanLimitGbytes": 500,
-                "maxResultMegaBytes": 100,
-                "defaultSamplingRatio": 10,
-                "enableSampling": false
-            }
         }
     },
     "layouts": {
         "0": {
             "x": 0,
-            "y": 25,
+            "y": 20,
             "w": 8,
             "h": 6
         },
         "1": {
             "x": 8,
-            "y": 25,
+            "y": 20,
             "w": 8,
             "h": 6
         },
         "2": {
             "x": 0,
-            "y": 31,
+            "y": 26,
             "w": 8,
             "h": 6
         },
         "3": {
             "x": 8,
-            "y": 31,
+            "y": 26,
             "w": 8,
             "h": 6
         },
         "4": {
             "x": 0,
-            "y": 24,
+            "y": 19,
             "w": 24,
             "h": 1
         },
         "5": {
             "x": 16,
-            "y": 25,
+            "y": 20,
             "w": 8,
             "h": 6
         },
         "6": {
             "x": 16,
-            "y": 31,
+            "y": 26,
             "w": 8,
             "h": 6
         },
         "7": {
             "x": 0,
-            "y": 37,
+            "y": 32,
             "w": 24,
             "h": 1
         },
         "8": {
             "x": 0,
-            "y": 38,
+            "y": 33,
             "w": 8,
             "h": 6
         },
         "9": {
             "x": 8,
-            "y": 38,
+            "y": 33,
             "w": 8,
             "h": 6
         },
         "10": {
             "x": 16,
-            "y": 38,
+            "y": 33,
             "w": 8,
             "h": 6
         },
         "11": {
             "x": 0,
-            "y": 44,
+            "y": 39,
             "w": 8,
             "h": 6
         },
         "12": {
             "x": 8,
-            "y": 44,
+            "y": 39,
             "w": 8,
             "h": 6
         },
         "13": {
             "x": 16,
-            "y": 44,
+            "y": 39,
             "w": 8,
             "h": 6
         },
         "14": {
             "x": 0,
-            "y": 50,
+            "y": 45,
             "w": 8,
             "h": 6
         },
         "15": {
             "x": 8,
-            "y": 50,
+            "y": 45,
             "w": 8,
             "h": 6
         },
         "16": {
             "x": 0,
-            "y": 56,
+            "y": 51,
             "w": 24,
             "h": 1
         },
         "17": {
             "x": 0,
-            "y": 57,
+            "y": 52,
             "w": 8,
             "h": 6
         },
         "18": {
             "x": 8,
-            "y": 57,
+            "y": 52,
             "w": 8,
             "h": 6
         },
         "19": {
             "x": 16,
-            "y": 57,
+            "y": 52,
             "w": 8,
             "h": 6
         },
         "21": {
             "x": 0,
             "y": 1,
-            "w": 12,
+            "w": 5,
             "h": 5
         },
         "22": {
             "x": 0,
-            "y": 75,
+            "y": 58,
             "w": 24,
             "h": 1
         },
         "23": {
             "x": 0,
-            "y": 76,
+            "y": 59,
             "w": 8,
             "h": 6
         },
         "24": {
             "x": 8,
-            "y": 76,
+            "y": 59,
             "w": 8,
             "h": 6
         },
         "25": {
             "x": 16,
-            "y": 76,
+            "y": 59,
             "w": 8,
             "h": 6
         },
         "26": {
             "x": 0,
-            "y": 82,
+            "y": 65,
             "w": 8,
             "h": 6
         },
         "27": {
             "x": 8,
-            "y": 82,
+            "y": 65,
             "w": 8,
             "h": 6
         },
         "28": {
             "x": 0,
-            "y": 88,
+            "y": 71,
             "w": 24,
             "h": 1
         },
         "29": {
             "x": 0,
-            "y": 89,
+            "y": 72,
             "w": 12,
             "h": 6
         },
         "30": {
             "x": 12,
-            "y": 89,
+            "y": 72,
             "w": 12,
             "h": 6
         },
         "31": {
             "x": 0,
-            "y": 63,
+            "y": 78,
             "w": 8,
             "h": 6
         },
         "32": {
             "x": 8,
-            "y": 63,
+            "y": 78,
             "w": 8,
             "h": 6
         },
         "33": {
             "x": 16,
-            "y": 63,
+            "y": 78,
             "w": 8,
             "h": 6
         },
@@ -4079,112 +3399,76 @@
             "h": 1
         },
         "36": {
-            "x": 12,
-            "y": 6,
-            "w": 12,
-            "h": 5
-        },
-        "37": {
-            "x": 17,
-            "y": 1,
-            "w": 7,
-            "h": 5
-        },
-        "38": {
-            "x": 12,
+            "x": 5,
             "y": 1,
             "w": 5,
             "h": 5
         },
+        "37": {
+            "x": 16,
+            "y": 1,
+            "w": 8,
+            "h": 5
+        },
+        "38": {
+            "x": 10,
+            "y": 1,
+            "w": 6,
+            "h": 5
+        },
         "39": {
             "x": 0,
-            "y": 70,
+            "y": 85,
             "w": 8,
             "h": 5
         },
         "40": {
             "x": 0,
-            "y": 69,
+            "y": 84,
             "w": 24,
             "h": 1
         },
         "41": {
             "x": 8,
-            "y": 70,
+            "y": 85,
             "w": 8,
             "h": 5
         },
+        "46": {
+            "x": 0,
+            "y": 90,
+            "w": 24,
+            "h": 1
+        },
         "49": {
             "x": 16,
-            "y": 50,
+            "y": 45,
             "w": 8,
             "h": 6
         },
         "50": {
             "x": 0,
-            "y": 18,
+            "y": 13,
             "w": 24,
             "h": 6
         },
         "51": {
             "x": 0,
-            "y": 11,
+            "y": 6,
             "w": 24,
             "h": 1
         },
         "52": {
             "x": 0,
-            "y": 12,
-            "w": 18,
+            "y": 7,
+            "w": 24,
             "h": 6
         },
         "53": {
             "x": 16,
-            "y": 70,
+            "y": 85,
             "w": 8,
             "h": 5
-        },
-        "54": {
-            "x": 0,
-            "y": 95,
-            "w": 24,
-            "h": 1
-        },
-        "55": {
-            "x": 16,
-            "y": 82,
-            "w": 8,
-            "h": 6
-        },
-        "56": {
-            "x": 0,
-            "y": 96,
-            "w": 24,
-            "h": 6
-        },
-        "57": {
-            "x": 0,
-            "y": 6,
-            "w": 12,
-            "h": 5
-        },
-        "58": {
-            "x": 0,
-            "y": 102,
-            "w": 24,
-            "h": 1
-        },
-        "59": {
-            "x": 0,
-            "y": 103,
-            "w": 24,
-            "h": 6
-        },
-        "60": {
-            "x": 18,
-            "y": 12,
-            "w": 6,
-            "h": 6
         }
     },
     "importedWithCode": false

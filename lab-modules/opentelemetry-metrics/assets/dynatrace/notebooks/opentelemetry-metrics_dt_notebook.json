@@ -1,0 +1,332 @@
+{
+    "version": "6",
+    "defaultTimeframe": {
+        "from": "now()-30m",
+        "to": "now()"
+    },
+    "sections": [
+        {
+            "id": "8a1ed45f-c9d9-491a-830c-a3b3a1670341",
+            "type": "markdown",
+            "markdown": "##### `kubeletstats` receiver\nhttps://opentelemetry.io/docs/kubernetes/collector/components/#kubeletstats-receiver\n```yaml\nconfig:\n    receivers:\n      kubeletstats:\n        collection_interval: 30s\n        auth_type: 'serviceAccount'\n        endpoint: '${env:K8S_NODE_NAME}:10250'\n        insecure_skip_verify: true\n        metric_groups:\n          - node\n          - pod\n          - container\n```\nDefault Metrics:\\\nhttps://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/kubeletstatsreceiver/documentation.md"
+        },
+        {
+            "id": "9a65c3a3-ef02-489b-bede-656d2b3941e2",
+            "type": "dql",
+            "showTitle": false,
+            "drilldownPath": [],
+            "state": {
+                "input": {
+                    "value": "timeseries node_cpu = avg(k8s.node.cpu.usage), by: {k8s.cluster.name, k8s.node.name}",
+                    "timeframe": {
+                        "from": "now()-30m",
+                        "to": "now()"
+                    }
+                },
+                "visualizationSettings": {
+                    "thresholds": [],
+                    "chartSettings": {
+                        "gapPolicy": "connect",
+                        "circleChartSettings": {
+                            "groupingThresholdType": "relative",
+                            "groupingThresholdValue": 0,
+                            "valueType": "relative"
+                        },
+                        "categoryOverrides": {}
+                    },
+                    "singleValue": {
+                        "showLabel": true,
+                        "label": "",
+                        "prefixIcon": "",
+                        "autoscale": true,
+                        "alignment": "center",
+                        "colorThresholdTarget": "value"
+                    },
+                    "table": {
+                        "rowDensity": "condensed",
+                        "enableSparklines": false,
+                        "hiddenColumns": [],
+                        "lineWrapIds": [],
+                        "firstVisibleRowIndex": 0,
+                        "columnWidths": {}
+                    },
+                    "honeycomb": {
+                        "shape": "hexagon",
+                        "legend": "auto"
+                    }
+                },
+                "state": "idle",
+                "querySettings": {
+                    "maxResultRecords": 1000,
+                    "defaultScanLimitGbytes": 500,
+                    "maxResultMegaBytes": 1,
+                    "defaultSamplingRatio": 10,
+                    "enableSampling": false
+                }
+            }
+        },
+        {
+            "id": "380cbeed-1acb-432c-89b1-4c8e69cb7cf8",
+            "type": "dql",
+            "drilldownPath": [],
+            "state": {
+                "input": {
+                    "value": "timeseries pod_cpu = avg(k8s.pod.cpu.usage), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }\n| filter k8s.namespace.name == \"astronomy-shop\" and k8s.deployment.name == \"astronomy-shop-productcatalogservice\"",
+                    "timeframe": {
+                        "from": "now()-30m",
+                        "to": "now()"
+                    }
+                },
+                "querySettings": {
+                    "maxResultRecords": 1000,
+                    "defaultScanLimitGbytes": 500,
+                    "maxResultMegaBytes": 1,
+                    "defaultSamplingRatio": 10,
+                    "enableSampling": false
+                },
+                "visualizationSettings": {
+                    "thresholds": [],
+                    "chartSettings": {
+                        "gapPolicy": "gap",
+                        "circleChartSettings": {
+                            "groupingThresholdType": "relative",
+                            "groupingThresholdValue": 0,
+                            "valueType": "relative"
+                        },
+                        "categoryOverrides": {},
+                        "curve": "linear",
+                        "pointsDisplay": "auto",
+                        "categoricalBarChartSettings": {
+                            "layout": "horizontal",
+                            "categoryAxisTickLayout": "horizontal",
+                            "scale": "absolute",
+                            "groupMode": "stacked",
+                            "colorPaletteMode": "multi-color"
+                        },
+                        "colorPalette": "categorical",
+                        "valueRepresentation": "absolute",
+                        "truncationMode": "middle"
+                    },
+                    "singleValue": {
+                        "showLabel": true,
+                        "label": "",
+                        "prefixIcon": "",
+                        "autoscale": true,
+                        "alignment": "center",
+                        "colorThresholdTarget": "value"
+                    },
+                    "table": {
+                        "rowDensity": "condensed",
+                        "enableSparklines": false,
+                        "hiddenColumns": [],
+                        "linewrapEnabled": false,
+                        "lineWrapIds": [],
+                        "monospacedFontEnabled": false,
+                        "monospacedFontColumns": [],
+                        "firstVisibleRowIndex": 0,
+                        "columnWidths": {},
+                        "columnTypeOverrides": []
+                    },
+                    "honeycomb": {
+                        "shape": "hexagon",
+                        "legend": {
+                            "hidden": false,
+                            "position": "auto"
+                        },
+                        "displayedFields": [],
+                        "dataMappings": {},
+                        "truncationMode": "middle",
+                        "colorMode": "color-palette",
+                        "colorPalette": "categorical"
+                    },
+                    "histogram": {
+                        "legend": "auto",
+                        "yAxis": {
+                            "label": "Frequency",
+                            "scale": "linear"
+                        },
+                        "colorPalette": "categorical",
+                        "dataMappings": [],
+                        "variant": "single",
+                        "truncationMode": "middle"
+                    }
+                }
+            }
+        },
+        {
+            "id": "abd9264c-448c-4acd-8508-16b0a9c1bff8",
+            "type": "markdown",
+            "markdown": "##### `k8s_cluster` receiver\nhttps://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver\n```yaml\nconfig:\n    receivers:\n      k8s_cluster:\n        collection_interval: 60s\n        node_conditions_to_report: [ \"Ready\", \"MemoryPressure\", \"DiskPressure\" ]\n        allocatable_types_to_report: [ \"cpu\",\"memory\" ]\n        metadata_collection_interval: 5m\n```\nDefault Metrics:\\\nhttps://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/k8sclusterreceiver/documentation.md"
+        },
+        {
+            "id": "57cd4c16-fd90-47d7-bdc2-ba8764cf6ead",
+            "type": "dql",
+            "showTitle": false,
+            "drilldownPath": [],
+            "state": {
+                "input": {
+                    "value": "timeseries pods_avail = min(k8s.deployment.available), by: {k8s.cluster.name, k8s.deployment.name}, filter: {k8s.namespace.name == \"astronomy-shop\"}",
+                    "timeframe": {
+                        "from": "now()-30m",
+                        "to": "now()"
+                    }
+                },
+                "visualizationSettings": {
+                    "thresholds": [],
+                    "chartSettings": {
+                        "gapPolicy": "connect",
+                        "circleChartSettings": {
+                            "groupingThresholdType": "relative",
+                            "groupingThresholdValue": 0,
+                            "valueType": "relative"
+                        },
+                        "categoryOverrides": {}
+                    },
+                    "singleValue": {
+                        "showLabel": true,
+                        "label": "",
+                        "prefixIcon": "",
+                        "autoscale": true,
+                        "alignment": "center",
+                        "colorThresholdTarget": "value"
+                    },
+                    "table": {
+                        "rowDensity": "condensed",
+                        "enableSparklines": false,
+                        "hiddenColumns": [],
+                        "lineWrapIds": [],
+                        "firstVisibleRowIndex": 0,
+                        "columnWidths": {}
+                    },
+                    "honeycomb": {
+                        "shape": "hexagon",
+                        "legend": "auto"
+                    }
+                },
+                "state": "idle",
+                "querySettings": {
+                    "maxResultRecords": 1000,
+                    "defaultScanLimitGbytes": 500,
+                    "maxResultMegaBytes": 1,
+                    "defaultSamplingRatio": 10,
+                    "enableSampling": false
+                }
+            }
+        },
+        {
+            "id": "80d94c44-f948-4271-94a1-d5a54f5a2462",
+            "type": "markdown",
+            "markdown": "#### Astronomy Shop Metrics from SDKs\nOpenTelemetry Metrics: select services are instrumented using OpenTelemetry available instrumentation libraries. More will be added as the relevant SDKs are released.\n- https://opentelemetry.io/docs/concepts/signals/metrics/\n- https://opentelemetry.io/docs/demo/services/ad/#metrics\n- https://opentelemetry.io/blog/2022/instrument-kafka-clients/"
+        },
+        {
+            "id": "3101d86e-058b-4e0d-8658-3eba41da78a8",
+            "type": "dql",
+            "showTitle": false,
+            "drilldownPath": [],
+            "state": {
+                "input": {
+                    "value": "timeseries jvm_mem_used = avg(jvm.memory.used), by: {service.name, k8s.cluster.name}, filter: {k8s.namespace.name == \"astronomy-shop\"}",
+                    "timeframe": {
+                        "from": "now()-30m",
+                        "to": "now()"
+                    }
+                },
+                "visualizationSettings": {
+                    "thresholds": [],
+                    "chartSettings": {
+                        "gapPolicy": "connect",
+                        "circleChartSettings": {
+                            "groupingThresholdType": "relative",
+                            "groupingThresholdValue": 0,
+                            "valueType": "relative"
+                        },
+                        "categoryOverrides": {}
+                    },
+                    "singleValue": {
+                        "showLabel": true,
+                        "label": "",
+                        "prefixIcon": "",
+                        "autoscale": true,
+                        "alignment": "center",
+                        "colorThresholdTarget": "value"
+                    },
+                    "table": {
+                        "rowDensity": "condensed",
+                        "enableSparklines": false,
+                        "hiddenColumns": [],
+                        "lineWrapIds": [],
+                        "firstVisibleRowIndex": 0,
+                        "columnWidths": {}
+                    },
+                    "honeycomb": {
+                        "shape": "hexagon",
+                        "legend": "auto"
+                    }
+                },
+                "state": "idle",
+                "querySettings": {
+                    "maxResultRecords": 1000,
+                    "defaultScanLimitGbytes": 500,
+                    "maxResultMegaBytes": 1,
+                    "defaultSamplingRatio": 10,
+                    "enableSampling": false
+                }
+            }
+        },
+        {
+            "id": "17b88295-e9c8-41ec-86d8-adb6da92f012",
+            "type": "dql",
+            "showTitle": false,
+            "drilldownPath": [],
+            "state": {
+                "input": {
+                    "value": "timeseries avg(kafka.consumer.request_rate), by: {service.name, k8s.cluster.name}, filter: {k8s.namespace.name == \"astronomy-shop\"}",
+                    "timeframe": {
+                        "from": "now()-30m",
+                        "to": "now()"
+                    }
+                },
+                "visualizationSettings": {
+                    "thresholds": [],
+                    "chartSettings": {
+                        "gapPolicy": "connect",
+                        "circleChartSettings": {
+                            "groupingThresholdType": "relative",
+                            "groupingThresholdValue": 0,
+                            "valueType": "relative"
+                        },
+                        "categoryOverrides": {}
+                    },
+                    "singleValue": {
+                        "showLabel": true,
+                        "label": "",
+                        "prefixIcon": "",
+                        "autoscale": true,
+                        "alignment": "center",
+                        "colorThresholdTarget": "value"
+                    },
+                    "table": {
+                        "rowDensity": "condensed",
+                        "enableSparklines": false,
+                        "hiddenColumns": [],
+                        "lineWrapIds": [],
+                        "firstVisibleRowIndex": 0,
+                        "columnWidths": {}
+                    },
+                    "honeycomb": {
+                        "shape": "hexagon",
+                        "legend": "auto"
+                    }
+                },
+                "state": "idle",
+                "querySettings": {
+                    "maxResultRecords": 1000,
+                    "defaultScanLimitGbytes": 500,
+                    "maxResultMegaBytes": 1,
+                    "defaultSamplingRatio": 10,
+                    "enableSampling": false
+                }
+            }
+        }
+    ]
+}

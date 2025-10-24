@@ -220,7 +220,7 @@ Pod (and container) logs are written to the filesystem of the Node where the pod
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-logs
@@ -257,7 +257,7 @@ The Filelog Receiver tails and parses logs from files. Although it’s not a Kub
 The Filelog Receiver is composed of Operators that are chained together to process a log. Each Operator performs a simple responsibility, such as parsing a timestamp or JSON. Configuring a Filelog Receiver is not trivial.  Refer to the documentation for details.
 
 ```yaml
-config: |
+config:
     receivers:
       filelog:
         ...
@@ -273,7 +273,7 @@ config: |
 DQL:
 ```sql
 fetch logs
-| filter isNotNull(log.file.path) and isNotNull(log)
+| filter isNotNull(log.file.path)
 | sort timestamp desc
 | limit 100
 | fields timestamp, loglevel, status, k8s.namespace.name, k8s.pod.name, k8s.container.name, content, log.file.path
@@ -537,7 +537,7 @@ https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otl
 
 Adding the `otlp` receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
 ```yaml
-config: |
+config:
     receivers:
       otlp:
         protocols:
@@ -595,7 +595,7 @@ default:
 
 Command:
 ```sh
-sed -i "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml
+sed "s,NAME_TO_REPLACE,$NAME," astronomy-shop/collector-values.yaml > astronomy-shop/sed/collector-values.yaml
 ```
 
 #### Update `astronomy-shop` OpenTelemetry Collector export endpoint via helm
@@ -615,7 +615,7 @@ exporters:
 
 Command:
 ```sh
-helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
+helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values astronomy-shop/sed/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
 ```
 Sample output:
 > NAME: astronomy-shop\
@@ -709,7 +709,7 @@ Since the receiver gathers telemetry for the cluster as a whole, only one instan
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-events

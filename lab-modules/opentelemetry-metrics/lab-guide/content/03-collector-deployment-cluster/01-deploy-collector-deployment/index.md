@@ -13,7 +13,7 @@ Since the receiver gathers telemetry for the cluster as a whole, only one instan
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-metrics-cluster
@@ -45,7 +45,7 @@ Sample output:
 ### `k8s_cluster` receiver
 https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver
 ```yaml
-config: |
+config:
     receivers:
       k8s_cluster:
         collection_interval: 60s
