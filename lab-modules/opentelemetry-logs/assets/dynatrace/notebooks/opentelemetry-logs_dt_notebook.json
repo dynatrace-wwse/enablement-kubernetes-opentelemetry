@@ -13,7 +13,7 @@
         {
             "id": "ae334c44-4132-4561-98a4-eede47a53c98",
             "type": "markdown",
-            "markdown": "##### `filelog` receiver\nhttps://opentelemetry.io/docs/kubernetes/collector/components/#filelog-receiver\n```yaml\nconfig: |\n    receivers:\n      filelog:\n        ...\n    service:\n      pipelines:\n        logs:\n          receivers: [filelog]\n          processors: [batch]\n          exporters: [otlphttp/dynatrace]\n```"
+            "markdown": "##### `filelog` receiver\nhttps://opentelemetry.io/docs/kubernetes/collector/components/#filelog-receiver\n```yaml\nconfig:\n    receivers:\n      filelog:\n        ...\n    service:\n      pipelines:\n        logs:\n          receivers: [filelog]\n          processors: [batch]\n          exporters: [otlphttp/dynatrace]\n```"
         },
         {
             "id": "9399d698-08d6-4056-9aa0-292dd76a3a3f",

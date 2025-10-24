@@ -2124,7 +2124,7 @@
         "29": {
             "type": "data",
             "title": "Cpu usage in millicores",
-            "query": "timeseries cpu = avg(k8s.pod.cpu.utilization), by: {k8s.cluster.name,k8s.namespace.name,k8s.pod.name}\n| filter in(k8s.cluster.name,$cluster)\n| filter k8s.namespace.name == \"dynatrace\"",
+            "query": "timeseries cpu = avg(k8s.pod.cpu.usage), by: {k8s.cluster.name,k8s.namespace.name,k8s.pod.name}\n| filter in(k8s.cluster.name,$cluster)\n| filter k8s.namespace.name == \"dynatrace\"",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {

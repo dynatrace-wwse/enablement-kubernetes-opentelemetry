@@ -68,7 +68,7 @@ Sample output:
 ### Query Pod metrics in Dynatrace
 DQL:
 ```sql
-timeseries avg(k8s.pod.cpu.utilization), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
+timeseries avg(k8s.pod.cpu.usage), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
 | filter k8s.namespace.name == "astronomy-shop" and k8s.deployment.name == "astronomy-shop-productcatalogservice"
 ```
 Result:

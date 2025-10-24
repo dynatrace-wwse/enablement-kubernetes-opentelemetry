@@ -49,9 +49,7 @@ Each Kubernetes Node runs a kubelet that includes an API server. The `kubeletsta
 
 ### Deploy OpenTelemetry Collector 
 
-**Contrib Distro - Daemonset (Node Agent)**
-
-The `kubeletstats` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
+**Dynatrace Distro - Daemonset (Node Agent)**
 
 ```yaml
 ---
@@ -159,7 +157,7 @@ Sample output:
 By default, metrics will be collected for pods and nodes, but you can configure the receiver to collect container and volume metrics as well. The receiver also allows configuring how often the metrics are collected:
 
 ```yaml
-config: |
+config:
     receivers:
       kubeletstats:
         collection_interval: 30s
@@ -188,7 +186,7 @@ resource/kind:
 
 DQL:
 ```sql
-timeseries node_cpu = avg(k8s.node.cpu.utilization), by: {k8s.cluster.name, k8s.node.name}
+timeseries node_cpu = avg(k8s.node.cpu.usage), by: {k8s.cluster.name, k8s.node.name}
 ```
 Result:
 
@@ -269,7 +267,7 @@ Sample output:
 
 DQL:
 ```sql
-timeseries pod_cpu = avg(k8s.pod.cpu.utilization), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
+timeseries pod_cpu = avg(k8s.pod.cpu.usage), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
 | filter k8s.namespace.name == "astronomy-shop" and k8s.deployment.name == "astronomy-shop-productcatalogservice"
 ```
 
@@ -283,11 +281,9 @@ The Kubernetes Cluster Receiver collects metrics and entity events about the clu
 
 ### Deploy OpenTelemetry Collector
 
-**Contrib Distro - Deployment (Gateway)**
+**Dynatrace Distro - Deployment (Gateway)**
 
 [OpenTelemetry Documentation](https://github.com/open-telemetry/opentelemetry-operator){target="_blank"}
-
-The `k8s_cluster` receiver is only available on the Contrib Distro of the OpenTelemetry Collector.  Therefore we must deploy a new Collector using the `contrib` image.
 
 Since the receiver gathers telemetry for the cluster as a whole, only one instance of the receiver is needed across the cluster in order to collect all the data.  The Collector will be deployed as a Deployment (Gateway).
 
@@ -330,7 +326,7 @@ Sample output:
 [OpenTelemetry Documentation](https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver){target="_blank"}
 
 ```yaml
-config: |
+config:
     receivers:
       k8s_cluster:
         collection_interval: 60s
@@ -361,7 +357,7 @@ The `astronomy-shop` demo application has the OpenTelemetry agents and SDKs alre
 Adding the `otlp` receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
 
 ```yaml
-config: |
+config:
     receivers:
       otlp:
         protocols:
@@ -377,7 +373,7 @@ config: |
           exporters: [otlphttp/dynatrace]
 ```
 
-**Export OpenTelemetry data from `astronomy-shop` to OpenTelemetry Collector - Contrib Distro**
+**Export OpenTelemetry data from `astronomy-shop` to OpenTelemetry Collector - Dynatrace Distro**
 
 **Customize astronomy-shop helm values**
 
@@ -452,6 +448,7 @@ Result:
 ![dql_sdk_kafka_request_rate](./img/metrics-dql_sdk_kafka_request_rate.png)
 
 **Browse available metrics in Dynatrace**
+<!-- TODO: Update to Grail query in Notebook, remove classic screen -->
 
 You can browse all available metrics from OpenTelemetry sources in the Metrics Browser.  Filter on `Dimension:otel.scope.name` to find relevant metrics.
 
@@ -465,10 +462,10 @@ You can browse all available metrics from OpenTelemetry sources in the Metrics B
 
 By completing this lab, you've successfully deployed the OpenTelemetry Collector to collect metrics, enrich metric attributes for better context, and ship those metrics to Dynatrace for analysis.
 
-- One Community Contrib Distro OpenTelemetry Collector was deployed as a DaemonSet, behaving as an Agent running on each Node
+- One Dynatrace Distro OpenTelemetry Collector was deployed as a DaemonSet, behaving as an Agent running on each Node
     * The `kubeletstats` receiver scrapes metrics from the local kubelet on the Node
     * The `k8sattributes` processor enriches the metrics with Kubernetes attributes that may be missing without it
-- A second Community Contrib Distro OpenTelemetry Collector was deployed as a Deployment, behaving as a Gateway
+- A second Dynatrace Distro OpenTelemetry Collector was deployed as a Deployment, behaving as a Gateway
     * The `k8s_cluster` receiver queries the Kubernetes cluster API to retrieve metrics
     * The `k8sattributes` processor enriches the metrics with Kubernetes attributes that may be missing without it
     * The `otlp` receiver receives signals that are exported from agents, SDKs, and other Collectors

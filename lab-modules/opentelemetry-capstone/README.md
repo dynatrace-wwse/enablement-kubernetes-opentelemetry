@@ -584,7 +584,7 @@ spec:
         fieldRef:
           apiVersion: v1
           fieldPath: status.podIP
-  config: |
+  config:
     receivers:
 
     processors:
@@ -604,7 +604,7 @@ kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
 spec:
-  config: |
+  config:
     receivers:
       prometheus:
         config:

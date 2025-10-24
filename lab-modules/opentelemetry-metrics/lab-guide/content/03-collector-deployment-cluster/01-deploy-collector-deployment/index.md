@@ -45,7 +45,7 @@ Sample output:
 ### `k8s_cluster` receiver
 https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver
 ```yaml
-config: |
+config:
     receivers:
       k8s_cluster:
         collection_interval: 60s

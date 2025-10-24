@@ -314,7 +314,7 @@ https://opentelemetry.io/docs/kubernetes/collector/components/#kubeletstats-rece
 By default, metrics will be collected for pods and nodes, but you can configure the receiver to collect container and volume metrics as well. The receiver also allows configuring how often the metrics are collected:
 
 ```yaml
-config: |
+config:
     receivers:
       kubeletstats:
         collection_interval: 30s
@@ -342,7 +342,7 @@ resource/kind:
 ##### Query Node metrics in Dynatrace
 DQL:
 ```sql
-timeseries node_cpu = avg(k8s.node.cpu.utilization), by: {k8s.cluster.name, k8s.node.name}
+timeseries node_cpu = avg(k8s.node.cpu.usage), by: {k8s.cluster.name, k8s.node.name}
 ```
 Result:
 
@@ -418,7 +418,7 @@ Sample output:
 ##### Query Pod metrics in Dynatrace
 DQL:
 ```sql
-timeseries pod_cpu = avg(k8s.pod.cpu.utilization), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
+timeseries pod_cpu = avg(k8s.pod.cpu.usage), by: { k8s.pod.name, k8s.node.name, k8s.namespace.name, k8s.deployment.name, k8s.cluster.name, k8s.pod.uid }
 | filter k8s.namespace.name == "astronomy-shop" and k8s.deployment.name == "astronomy-shop-productcatalogservice"
 ```
 Result:
@@ -470,7 +470,7 @@ Sample output:
 ##### `k8s_cluster` receiver
 https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-cluster-receiver
 ```yaml
-config: |
+config:
     receivers:
       k8s_cluster:
         collection_interval: 60s
@@ -498,7 +498,7 @@ https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otl
 
 Adding the `otlp` receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
 ```yaml
-config: |
+config:
     receivers:
       otlp:
         protocols:

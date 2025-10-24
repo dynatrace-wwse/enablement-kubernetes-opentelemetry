@@ -8,7 +8,7 @@ https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otl
 
 Adding the `otlp` receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
 ```yaml
-config: |
+config:
     receivers:
       otlp:
         protocols:

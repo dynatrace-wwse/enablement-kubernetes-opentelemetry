@@ -44,7 +44,7 @@ The Filelog Receiver tails and parses logs from files. Although it’s not a Kub
 The Filelog Receiver is composed of Operators that are chained together to process a log. Each Operator performs a simple responsibility, such as parsing a timestamp or JSON. Configuring a Filelog Receiver is not trivial.  Refer to the documentation for details.
 
 ```yaml
-config: |
+config:
     receivers:
       filelog:
         ...

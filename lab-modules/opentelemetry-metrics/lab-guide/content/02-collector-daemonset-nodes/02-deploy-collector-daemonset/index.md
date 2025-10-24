@@ -107,7 +107,7 @@ https://opentelemetry.io/docs/kubernetes/collector/components/#kubeletstats-rece
 By default, metrics will be collected for pods and nodes, but you can configure the receiver to collect container and volume metrics as well. The receiver also allows configuring how often the metrics are collected:
 
 ```yaml
-config: |
+config:
     receivers:
       kubeletstats:
         collection_interval: 30s
@@ -135,7 +135,7 @@ resource/kind:
 ### Query Node metrics in Dynatrace
 DQL:
 ```sql
-timeseries node_cpu = avg(k8s.node.cpu.utilization), by: {k8s.cluster.name, k8s.node.name}
+timeseries node_cpu = avg(k8s.node.cpu.usage), by: {k8s.cluster.name, k8s.node.name}
 ```
 Result:
 

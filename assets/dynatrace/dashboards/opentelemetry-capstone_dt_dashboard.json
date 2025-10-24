@@ -330,7 +330,7 @@
         "4": {
             "type": "data",
             "title": "k8s Cluster Resource Utilization",
-            "query": "timeseries {cpu = avg(k8s.node.cpu.utilization), mem = avg(k8s.node.memory.usage)}, by: {k8s.cluster.name, k8s.node.name}\n",
+            "query": "timeseries {cpu = avg(k8s.node.cpu.usage), mem = avg(k8s.node.memory.usage)}, by: {k8s.cluster.name, k8s.node.name}\n",
             "davis": {
                 "enabled": false,
                 "davisVisualization": {
