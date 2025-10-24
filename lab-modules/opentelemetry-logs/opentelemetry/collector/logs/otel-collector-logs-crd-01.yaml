@@ -2,36 +2,54 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: dynatrace-metrics-node
+  name: dynatrace-logs
   namespace: dynatrace
 spec:
   envFrom:
   - secretRef:
       name: dynatrace-otelcol-dt-api-credentials
-  env:
-    - name: K8S_NODE_NAME
-      valueFrom:
-        fieldRef:
-          fieldPath: spec.nodeName
   mode: "daemonset"
   image: "ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:0.39.0"
-  # podAnnotations:
-      # metrics.dynatrace.com/scrape: 'true'
-      # metrics.dynatrace.com/port: '8888'
   observability:
     metrics:
       enableMetrics: true
   resources:
     limits:
-      memory: 512Mi
+      memory: 1024Mi
+  # mount host log directories to the otel collector container(s)
+  volumes:
+    - name: varlogpods
+      hostPath:
+        path: /var/log/pods
+    - name: varlogcontainers
+      hostPath:
+        path: /var/log/containers
+  volumeMounts:
+    - name: varlogpods
+      mountPath: /var/log/pods
+      readOnly: true
+    - name: varlogcontainers
+      mountPath: /var/log/containers
+      readOnly: true
+  # 
   config:
     receivers:
-      otlp:
-        protocols:
-          grpc:
-            endpoint: 0.0.0.0:4317
-          http:
-            endpoint: 0.0.0.0:4318
+      filelog:
+        include:
+          # Include only astronomy-shop namespace logs
+          - /var/log/pods/astronomy-shop_*/*/*.log
+          # Include only dynatrace namespace logs
+          - /var/log/pods/dynatrace_*/*/*.log
+          #- /var/log/pods/*/*/*.log
+          #- /var/log/containers/*.log
+        exclude: []
+        start_at: end
+        include_file_path: true
+        include_file_name: false
+        operators:
+          # parse container logs
+          - type: container
+            id: container-parser
       kubeletstats:
         collection_interval: 30s
         auth_type: 'serviceAccount'
@@ -47,11 +65,6 @@ spec:
         send_batch_max_size: 1000
         timeout: 30s
         send_batch_size: 800
-      resource/kind:
-        attributes:
-        - key: k8s.cluster.name
-          value: dt-k8s-o11y-kind
-          action: insert
 
     exporters:
       otlphttp/dynatrace:
@@ -70,7 +83,7 @@ spec:
         metrics:
           level: "detailed"
       pipelines:
-        metrics:
-          receivers: [otlp,kubeletstats]
-          processors: [resource/kind,batch]
+        logs:
+          receivers: [filelog]
+          processors: [batch]
           exporters: [otlphttp/dynatrace,debug]

@@ -55,7 +55,7 @@ The `kubeletstats` receiver is only available on the Contrib Distro of the OpenT
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-metrics-node
@@ -70,7 +70,7 @@ spec:
         fieldRef:
           fieldPath: spec.nodeName
   mode: "daemonset"
-  image: "otel/opentelemetry-collector-contrib:0.103.0"
+  image: "ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest"
 ```
 Command:
 ```sh
@@ -293,7 +293,7 @@ Since the receiver gathers telemetry for the cluster as a whole, only one instan
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-metrics-cluster
@@ -303,7 +303,7 @@ spec:
   - secretRef:
       name: dynatrace-otelcol-dt-api-credentials
   mode: "deployment"
-  image: "otel/opentelemetry-collector-contrib:0.103.0"
+  image: "ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest"
 ```
 Command:
 ```sh

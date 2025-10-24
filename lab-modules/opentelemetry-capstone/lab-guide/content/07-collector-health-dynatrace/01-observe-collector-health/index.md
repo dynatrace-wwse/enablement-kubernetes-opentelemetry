@@ -13,7 +13,7 @@ https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/getting-started/m
 Enable metric generation for Collector CRD:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -26,7 +26,7 @@ spec:
 Enable publishing of metric generation to Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -53,7 +53,7 @@ spec:
 Enable scraping of metrics from Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace

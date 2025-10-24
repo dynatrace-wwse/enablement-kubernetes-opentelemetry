@@ -13,7 +13,7 @@ Since the receiver gathers telemetry for the cluster as a whole, only one instan
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-metrics-cluster

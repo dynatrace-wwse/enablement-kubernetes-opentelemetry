@@ -76,7 +76,7 @@ The gateway collector deployment pattern consists of applications (or other coll
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-traces

@@ -7,7 +7,7 @@ Pod (and container) logs are written to the filesystem of the Node where the pod
 
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-logs

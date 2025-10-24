@@ -287,7 +287,7 @@ Receivers:
 https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--gateway
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-deployment
@@ -335,7 +335,7 @@ Receivers:
 https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--agent
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: dynatrace-daemonset
@@ -383,7 +383,7 @@ Receivers:
 https://opentelemetry.io/docs/kubernetes/operator/
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: contrib-deployment
@@ -431,7 +431,7 @@ Receivers:
 https://opentelemetry.io/docs/kubernetes/operator/
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: contrib-daemonset
@@ -561,7 +561,7 @@ https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/getting-started/m
 Enable metric generation for Collector CRD:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -573,7 +573,7 @@ spec:
 Enable publishing of metric generation to Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
@@ -599,7 +599,7 @@ spec:
 Enable scraping of metrics from Prometheus endpoint:
 ```yaml
 ---
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   namespace: dynatrace
