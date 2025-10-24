@@ -22,10 +22,10 @@ In this lab module we'll utilize multiple OpenTelemetry Collectors to collect ap
 **Import Dashboards into Dynatrace**
 
 ![astronomy-shop dashboard](./img/capstone-dt_astronomy_shop_dashboard.png)
-[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-capstone/opentelemetry-capstone_dt_dashboard.json){target="_blank"}
+[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-capstone_dt_dashboard.json){target="_blank"}
 
 ![collector health dashboard](./img/capstone-dt_collector_health_dashboard.png)
-[collector health dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-capstone/OpenTelemetry_Collector_%5BIsItObservable%5D_dt_dashboard.json){target="_blank"}
+[collector health dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/OpenTelemetry_Collector_%5BIsItObservable%5D_dt_dashboard.json){target="_blank"}
 
 **Define workshop user variables**
 In your Github Codespaces Terminal set the environment variables:
@@ -390,7 +390,7 @@ Sample output:
 **Analyze metrics, traces, and logs in Dynatrace dashboard**
 
 ![astronomy-shop dashboard](./img/capstone-dt_astronomy_shop_dashboard.png)
-[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-capstone/opentelemetry-capstone_dt_dashboard.json){target="_blank"}
+[astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-capstone_dt_dashboard.json){target="_blank"}
 
 ## OpenTelemetry Collector Health
 

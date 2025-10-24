@@ -19,7 +19,7 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Daemo
 
 **Import Notebook into Dynatrace**
 
-[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-metrics/opentelemetry-metrics_dt_notebook.json){target="_blank"}
+[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/notebooks/opentelemetry-metrics_dt_notebook.json){target="_blank"}
 
 **Define workshop user variables**
 

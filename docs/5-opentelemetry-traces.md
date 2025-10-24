@@ -20,7 +20,7 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deplo
 
 **Import Dashboard into Dynatrace**
 
-[Dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/lab-modules/opentelemetry-traces/opentelemetry-traces_dt_dashboard.json){target="_blank"}
+[Dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_dashboard.json){target="_blank"}
 
 **Define workshop user variables**
 
