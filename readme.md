@@ -46,7 +46,7 @@ During this hands-on training, we’ll learn how to capture logs, traces, and me
 
 4. OpenTelemetry Capstone
 
-    - Deploy 4 OpenTelemetry Collectors
+    - Deploy 2 OpenTelemetry Collectors (DaemonSet + Deployment)
     - Configure OpenTelemetry Collector service pipeline for data enrichment
     - Analyze metrics, traces, and logs in Dynatrace
     - Observe OpenTelemetry Collector health in Dynatrace

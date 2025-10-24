@@ -32,12 +32,11 @@ During this hands-on training, we’ll learn how to capture logs, traces, and me
 
 4. OpenTelemetry Capstone
 
-    - Deploy 4 OpenTelemetry Collectors
+    - Deploy 2 OpenTelemetry Collectors (DaemonSet + Deployment)
     - Configure OpenTelemetry Collector service pipeline for data enrichment
     - Analyze metrics, traces, and logs in Dynatrace
     - Observe OpenTelemetry Collector health in Dynatrace
 
-<!--TODO: Update tech spec of lab components -->
 ## Technical Specification
 
 ### Technologies Used
@@ -45,13 +44,18 @@ During this hands-on training, we’ll learn how to capture logs, traces, and me
 - [Kubernetes Kind](https://kind.sigs.k8s.io/){target=_blank}
     - tested on Kind tag 0.27.0
 - [Cert Manager](https://cert-manager.io/){target=_blank} - *prerequisite for OpenTelemetry Operator
-    - tested on cert-manager v1.15.3
-- [Dynatrace Operator](https://github.com/Dynatrace/dynatrace-operator){target=_blank}
-    - tested on v1.4.2 (April 2025)
-- Dynatrace OneAgent
-    - tested on v1.309 (April 2025)
+    - tested on v1.19.1 (October 2025)
+- [OpenTelemetry Operator](https://github.com/open-telemetry/opentelemetry-operator){target=_blank}
+    - tested on v0.136.0 (October 2025)
+- [Dynatrace Distro OpenTelemetry Collector](https://github.com/Dynatrace/dynatrace-otel-collector){target=_blank}
+    - tested on v0.36.0 (October 2025)
+- [OpenTelemetry AstronomyShop Helm Chart](https://opentelemetry.io/docs/platforms/kubernetes/helm/demo/){target=_blank}
+    - tested on v0.31.0 (June 2024)
 
 ### Reference Architecture
+![Reference Architecture](img/lab_reference_architecture.png)
+
+[OpenTelemetry Astronomy Shop Demo Architecture](https://opentelemetry.io/docs/demo/architecture/){target=_blank}
 
 ## Continue
 
