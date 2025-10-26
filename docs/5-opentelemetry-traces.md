@@ -9,9 +9,8 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deplo
 2. Configure OpenTelemetry Collector service pipeline for span enrichment
 3. Analyze application reliability via traces in Dynatrace
 
-<!-- TODO: Remove classic screens -->
-![dynatrace otel service overview](./img/traces-dt_otel_service_overview.png)
-![dynatrace otel service traces](./img/traces-dt_otel_service_traces.png)
+![dynatrace distributed traces](./img/traces-dt_distributed_traces_filter_paymentservice.png)
+![dynatrace trace analysis](./img/traces-dt_distributed_traces_analyze_paymentservice.png)
 
 <div class="grid cards" markdown>
 - [Learn More:octicons-arrow-right-24:](https://docs.dynatrace.com/docs/ingest-from/opentelemetry){target="_blank"}
@@ -19,7 +18,10 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deplo
 
 ## Prerequisites
 
-<!-- TODO: Add trace/span query Notebook -->
+**Import Notebook into Dynatrace**
+
+[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_notebook.json){target="_blank"}
+
 **Import Dashboard into Dynatrace**
 
 [Dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_dashboard.json){target="_blank"}
@@ -169,23 +171,58 @@ Sample output:
 > REVISION: 2
 
 ### Analyze OpenTelemetry Traces in Dynatrace
+
+Open the **opentelemetry-traces_dt_notebook** Notebook.
+
+**Query spans in Dynatrace**
+
+DQL:
+
+```
+fetch spans
+| filter isNotNull(service.name) and isNotNull(service.namespace) and isNotNull(otel.scope.name)
+| sort start_time desc
+| limit 100
+| fields start_time, end_time, service.name, service.namespace, trace.id, span.id, duration
+```
+
 Result:
 
-Open the Distributed Traces Classic App to view the traces in Dynatrace (you can use the new Distributed Traces App if available as well).
+![OpenTelemetry Traces and Spans](./img/traces-dt_query_spans_otlp_receiver.png)
 
-![dt distributed traces](./img/traces-dt_distributed_traces.png)
+### PaymentService Spans
 
-Locate a trace from the `checkoutservice` service with a trace/request name of `oteldemo.CheckoutService/PlaceOrder`.  This is a nice end-to-end trace.
+Now that you've confirmed OpenTelemetry spans are successfully ingested into Dynatrace, it's time to narrow your focus to a specific business-critical function: payment processing. In this next step, you'll refine your DQL query to isolate traces and spans related to the `paymentservice` workload and the `charge` operation. This targeted analysis allows you to observe how Dynatrace captures and contextualizes telemetry data for a key service, helping you validate instrumentation, understand service behavior, and identify potential performance bottlenecks in the payment flow.
 
-![dt trace waterfall](./img/traces-dt_trace_waterfall.png)
+**Query spans in Dynatrace**
 
-Click on a span to see the various attributes that are attached to the span.
+DQL:
 
-![dt trace attributes](./img/traces-dt_trace_attributes.png)
+```
+fetch spans
+| filter isNotNull(service.name) and isNotNull(service.namespace) and isNotNull(otel.scope.name)
+| filter matchesValue(service.name,"paymentservice") and matchesValue(endpoint.name,"oteldemo.PaymentService.Charge")
+| sort start_time desc
+| limit 10
+| fields start_time, end_time, service.name, service.namespace, trace.id, span.id, duration, app.payment.amount
+```
+
+Result:
+
+![PaymentService Traces and Spans](./img/traces-dt_query_spans_paymentservice_charges.png)
+
+With a filtered view of spans related to the `paymentservice` and its `charge` operation, you're now ready to dive deeper into the behavior of individual traces. Next, you'll select one of the trace IDs from your query results and open it in the **Distributed Tracing** App. This will allow you to explore the full trace waterfall, visualize the end-to-end flow of the payment processing transaction, and analyze how the Charge span fits into the broader service interaction. This hands-on inspection is key to understanding latency contributors, service dependencies, and the overall health of your instrumented application.
+
+![Open Trace With](./img/traces-dt_query_spans_paymentservice_charges_openwith.png)
+![Distributed Tracing](./img/traces-dt_query_spans_paymentservice_charges_distributedtracing.png)
+
+Take some time to analyze the distributed trace containing the `paymentservice` span.  Review the captured metadata, detailed timings, logs, exceptions, and topology context.
+
+[Refer to the Dynatrace documentation for more details](https://docs.dynatrace.com/docs/analyze-explore-automate/distributed-tracing/distributed-tracing-app#single-trace-perspective){target="_blank"}
+
+![Analyze Distributed Trace](./img/traces-dt_analyze_span_paymentservice_charge.png)
 
 These attributes are good, but we can add more to provide better Kubernetes context to these transactions.
-
-[Refer to the Dynatrace documentation for more details](https://docs.dynatrace.com/docs/observe-and-explore/distributed-traces/analysis/get-started){target="_blank"}
 
 ## k8sattributes Processor
 
@@ -317,19 +354,27 @@ Sample output:
 
 **OpenTelemetry Traces in Dynatrace with Kubernetes Attributes**
 
-Dynatrace utilizes the `service.name`, `k8s.workload.name` and `k8s.namespace.name` to generate the unified service.
+DQL:
 
-[Dynatrace Documentation](https://docs.dynatrace.com/docs/platform-modules/applications-and-microservices/services/service-detection-and-naming/service-types/unified-service#service-detection){target="_blank"}
+```
+fetch spans
+| filter isNotNull(service.name) and isNotNull(service.namespace) and isNotNull(otel.scope.name)
+| filter matchesValue(service.name,"paymentservice") and matchesValue(endpoint.name,"oteldemo.PaymentService.Charge")
+| filter isNotNull(app.label.component)
+| sort start_time desc
+| limit 10
+| fields start_time, end_time, service.name, service.namespace, trace.id, span.id, duration, app.payment.amount, app.label.component
+```
 
 Result:
 
-With the additional Kubernetes attributes attached to the spans, Dynatrace will detect new unified services.
+![Query Spans k8sattributes](./img/traces-dt_query_spans_paymentservice_charges_k8sattributes.png)
 
-![dt unified service detection](./img/traces-dt_otel_unified_service_namespace.png)
+The spans are enriched with the additional Kubernetes metadata, including the attribute `app.label.component` which is obtained from the Kubernetes pod label `app.kubernetes.io/component`.
 
-Locate a new trace from the new `checkoutservice` service with a trace/request name of `oteldemo.CheckoutService/PlaceOrder`.  Click on a span to see the new resource attributes that have been added to the span.
+Analyze a distributed trace and review the additional metadata.
 
-![dt otel k8sattributes processor](./img/traces-dt_otel_k8sattributes_processor.png)
+![Analyze Trace k8sattributes](./img/traces-dt_analyze_span_paymentservice_charge_k8sattributes.png)
 
 ## resourcedetection Processor
 
@@ -383,12 +428,27 @@ Sample output:
 
 **OpenTelemetry Traces in Dynatrace with Cloud Attributes**
 
+DQL:
+
+```
+fetch spans
+| filter isNotNull(service.name) and isNotNull(service.namespace) and isNotNull(otel.scope.name)
+| filter matchesValue(service.name,"paymentservice") and matchesValue(endpoint.name,"oteldemo.PaymentService.Charge")
+| filter isNotNull(app.label.component) and isNotNull(cloud.account.id)
+| sort start_time desc
+| limit 10
+| fields start_time, end_time, service.name, service.namespace, trace.id, span.id, duration, app.payment.amount, app.label.component, cloud.account.id, k8s.cluster.name
+```
+
 Result:
 
-Locate a new trace from the new `checkoutservice` service with a trace/request name of `oteldemo.CheckoutService/PlaceOrder`.  Click on a span to see the new resource attributes that have been added to the span.
+![Query Spans resourcedetection](./img/traces-dt_query_spans_paymentservice_charges_resourcedetection.png)
 
-![dt otel resourcedetection processor](./img/traces-dt_otel_resourcedetection_processor.png)
-** In a real world scenario, `cloud.account.id` may be considered sensitive data; blurred for this reason.
+The spans now have the additional metadata, `cloud.account.id` and `k8s.cluster.name`.
+
+Analyze a distributed trace and review the additional metadata.
+
+![Analyze Trace resourcedetection](./img/traces-dt_analyze_span_paymentservice_charge_resourcedetection.png)
 
 ## resource Processor
 
@@ -444,17 +504,49 @@ Sample output:
 
 **OpenTelemetry Traces in Dynatrace with Custom Resource Attributes**
 
+DQL:
+
+```
+fetch spans
+| filter isNotNull(service.name) and isNotNull(service.namespace) and isNotNull(otel.scope.name)
+| filter matchesValue(service.name,"paymentservice") and matchesValue(endpoint.name,"oteldemo.PaymentService.Charge")
+| filter isNotNull(app.label.component) and isNotNull(cloud.account.id) and isNotNull(dynatrace.otel.collector)
+| sort start_time desc
+| limit 10
+| fields start_time, end_time, service.name, service.namespace, trace.id, span.id, duration, app.payment.amount, app.label.component, cloud.account.id, k8s.cluster.name, dynatrace.otel.collector
+```
+
 Result:
 
-Locate a new trace from the new `checkoutservice` service with a trace/request name of `oteldemo.CheckoutService/PlaceOrder`.  Click on a span to see the new resource attributes that have been added to the span.
+![Query spans resource](./img/traces-dt_query_spans_paymentservice_charges_resource.png)
 
-![dt otel resource processor](./img/traces-dt_otel_resource_processor.png)
+The spans now have the additional metadata, including `dynatrace.otel.collector`.
+
+Analyze a distributed trace and review the additional metadata.
+
+![Analyze Trace resourcedetection](./img/traces-dt_analyze_span_paymentservice_charge_resource.png)
 
 ## Dynatrace Dashboard with Unified Services from OpenTelemetry
 
 Open the Dashboard that you imported to view the throughput, response time, and failure metrics for the `astronomy-shop` application services.
 
 ![dashboard](./img/traces-dt_traces_dashboard.png)
+
+## Distributed Tracing App
+
+The Distributed Tracing App provides a powerful interface for analyzing end-to-end traces across your services. Once you've identified a trace of interest—such as one containing the `PaymentService.Charge` span, you can use the app to drill into its full execution path.
+
+The app offers multiple ways to locate relevant traces quickly:
+
+* Filter bar: Use this to apply precise filters such as `service.name`, `span.kind`, or custom attributes like `app.payment.amount`.
+* Segments: These predefined filters help you zero in on common trace patterns or service-specific activity.
+* Facets: Dynamically generated from your trace data, facets allow you to pivot your search based on attributes like HTTP status codes, error flags, or user-defined tags.
+
+![Search Traces](./img/traces-dt_distributed_traces_filter_paymentservice.png)
+
+Once you've applied your filters, the trace list updates in real time. From there, you can select a trace to view its waterfall visualization, which shows the sequence and timing of spans across services. This makes it easy to identify latency contributors, understand service interactions, and validate that your OpenTelemetry instrumentation is capturing the right context.
+
+![Analyze Trace](./img/traces-dt_distributed_traces_analyze_paymentservice.png)
 
 ## Wrap Up
 
