@@ -20,7 +20,7 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deplo
 
 **Import Notebook into Dynatrace**
 
-[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/notebook/opentelemetry-traces_dt_notebook.json){target="_blank"}
+[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/notebooks/opentelemetry-traces_dt_notebook.json){target="_blank"}
 
 **Import Dashboard into Dynatrace**
 
