@@ -152,3 +152,7 @@ deployOpenTelemetryCapstone() {
   # Complete
   printInfoSection "Capstone deployment complete!"
 }
+
+setBaseDir() {
+  export BASE_DIR=$REPO_PATH
+}
