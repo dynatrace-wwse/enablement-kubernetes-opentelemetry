@@ -907,7 +907,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
 <p><strong>Import Notebook into Dynatrace</strong></p>
-<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_notebook.json" target="_blank">Notebook</a></p>
+<p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/notebook/opentelemetry-traces_dt_notebook.json" target="_blank">Notebook</a></p>
 <p><strong>Import Dashboard into Dynatrace</strong></p>
 <p><a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_dashboard.json" target="_blank">Dashboard</a></p>
 <p><strong>Define workshop user variables</strong></p>
@@ -1284,12 +1284,16 @@ Sample output:</p>
 <h3 id="add-resource-processor">Add <code>resource</code> Processor<a class="headerlink" href="#add-resource-processor" title="Permanent link">#</a></h3>
 <p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/resourceprocessor" target="_blank">OpenTelemetry Documentation</a></p>
 <p>The <code>resource</code> processor allows us to directly add, remove, or change resource attributes on the telemetry.  View the documentation for more details.</p>
-<p>We will use this processor to make the follow changes to our telemetry:
-* <code>k8s.pod.ip</code> values in our data are either the same or invalid; delete the useless attribute
-* <code>telemetry.sdk.name</code> set to <code>opentelemetry</code> will allow us to easily identify data captured through OpenTelemetry
-* <code>dynatrace.otel.collector</code> is a non-standardized attribute that we made up to help us identify which Collector captured this data
-* <code>dt.security_context</code> is a Dynatrace specific attribute that we use to manage user permissions to the telemetry
-    * This could also be set using OpenPipeline, but this puts control of this attribute's value at the app/infra layer (optionally)</p>
+<p>We will use this processor to make the follow changes to our telemetry:</p>
+<ul>
+<li><code>k8s.pod.ip</code> values in our data are either the same or invalid; delete the useless attribute</li>
+<li><code>telemetry.sdk.name</code> set to <code>opentelemetry</code> will allow us to easily identify data captured through OpenTelemetry</li>
+<li><code>dynatrace.otel.collector</code> is a non-standardized attribute that we made up to help us identify which Collector captured this data</li>
+<li><code>dt.security_context</code> is a Dynatrace specific attribute that we use to manage user permissions to the telemetry<ul>
+<li>This could also be set using OpenPipeline, but this puts control of this attribute's value at the app/infra layer (optionally)</li>
+</ul>
+</li>
+</ul>
 <p><div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
