@@ -20,7 +20,7 @@ In this lab module we'll utilize the OpenTelemetry Collector deployed as a Deplo
 
 **Import Notebook into Dynatrace**
 
-[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-traces_dt_notebook.json){target="_blank"}
+[Notebook](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/notebook/opentelemetry-traces_dt_notebook.json){target="_blank"}
 
 **Import Dashboard into Dynatrace**
 
@@ -459,6 +459,7 @@ Analyze a distributed trace and review the additional metadata.
 The `resource` processor allows us to directly add, remove, or change resource attributes on the telemetry.  View the documentation for more details.
 
 We will use this processor to make the follow changes to our telemetry:
+
 * `k8s.pod.ip` values in our data are either the same or invalid; delete the useless attribute
 * `telemetry.sdk.name` set to `opentelemetry` will allow us to easily identify data captured through OpenTelemetry
 * `dynatrace.otel.collector` is a non-standardized attribute that we made up to help us identify which Collector captured this data
