@@ -459,6 +459,7 @@ Analyze a distributed trace and review the additional metadata.
 The `resource` processor allows us to directly add, remove, or change resource attributes on the telemetry.  View the documentation for more details.
 
 We will use this processor to make the follow changes to our telemetry:
+
 * `k8s.pod.ip` values in our data are either the same or invalid; delete the useless attribute
 * `telemetry.sdk.name` set to `opentelemetry` will allow us to easily identify data captured through OpenTelemetry
 * `dynatrace.otel.collector` is a non-standardized attribute that we made up to help us identify which Collector captured this data
