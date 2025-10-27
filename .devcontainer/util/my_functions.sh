@@ -128,12 +128,6 @@ deployOpenTelemetryCapstone() {
   # OpenTelemetry Collector - Dynatrace Distro (Daemonset)
   kubectl apply -f $CAPSTONE_DIR/opentelemetry/collector/dynatrace/otel-collector-dynatrace-daemonset-crd.yaml
 
-  # OpenTelemetry Collector - Contrib Distro (Deployment)
-  kubectl apply -f $CAPSTONE_DIR/opentelemetry/collector/contrib/otel-collector-contrib-deployment-crd.yaml
-
-  # OpenTelemetry Collector - Contrib Distro (Daemonset)
-  kubectl apply -f $CAPSTONE_DIR/opentelemetry/collector/contrib/otel-collector-contrib-daemonset-crd.yaml
-
   # Wait for ready pods
   waitForAllReadyPods dynatrace
 
