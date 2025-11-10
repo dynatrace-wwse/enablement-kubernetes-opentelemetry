@@ -116,7 +116,7 @@ export NAME=<INITIALS>-k8s-otel-o11y
 
 Command:
 ```sh
-cd $BASE_DIR
+cd $REPO_PATH
 pwd
 ```
 Sample output:
