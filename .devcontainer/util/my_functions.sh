@@ -134,11 +134,10 @@ deployOpenTelemetryCapstone() {
   ### Astronomy Shop
 
   # Customize astronomy-shop helm values
-  sed "s,NAME_TO_REPLACE,$NAME," $CAPSTONE_DIR/astronomy-shop/collector-values.yaml > $CAPSTONE_DIR/astronomy-shop/collector-values.yaml.tmp
-  mv $CAPSTONE_DIR/astronomy-shop/collector-values.yaml.tmp $CAPSTONE_DIR/astronomy-shop/collector-values.yaml
+  sed "s,NAME_TO_REPLACE,$NAME," $CAPSTONE_DIR/astronomy-shop/collector-values.yaml > $CAPSTONE_DIR/astronomy-shop/sed/collector-values.yaml
 
   # Update astronomy-shop OpenTelemetry Collector export endpoint via helm
-  helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values $CAPSTONE_DIR/astronomy-shop/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
+  helm upgrade astronomy-shop open-telemetry/opentelemetry-demo --values $CAPSTONE_DIR/astronomy-shop/sed/collector-values.yaml --namespace astronomy-shop --version "0.31.0"
 
   # Wait for ready pods
   waitForAllReadyPods astronomy-shop
@@ -147,6 +146,14 @@ deployOpenTelemetryCapstone() {
   printInfoSection "Capstone deployment complete!"
 }
 
-setBaseDir() {
-  export BASE_DIR=$REPO_PATH
+paymentServiceFailureEnable() {
+
+  kubectl apply -f $REPO_PATH/cluster-manifests/astronomy-shop/flagd-enable-paymentservicefailure.yaml
+
+}
+
+paymentServiceFailureDisable() {
+
+  kubectl apply -f $REPO_PATH/cluster-manifests/astronomy-shop/flagd-disable-paymentservicefailure.yaml
+  
 }
