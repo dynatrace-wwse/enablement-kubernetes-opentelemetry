@@ -199,5 +199,5 @@ spec:
           exporters: [otlphttp/dynatrace,debug]
         logs:
           receivers: [filelog]
-          processors: [memory_limiter,resourcedetection/gcp,resource/kind,resource,k8sattributes,batch]
+          processors: [memory_limiter,k8sattributes,resourcedetection/gcp,resource/kind,resource,batch]
           exporters: [otlphttp/dynatrace,debug]
