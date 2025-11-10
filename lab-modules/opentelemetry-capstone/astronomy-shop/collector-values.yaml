@@ -155,6 +155,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "accountingservice"
     env:
       - name: KAFKA_SERVICE_ADDR
         value: '{{ include "otel-demo.name" . }}-kafka:9092'
@@ -172,6 +175,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "adservice"
     service:
       port: 8080
     env:
@@ -193,6 +199,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "cartservice"
     service:
       port: 8080
     env:
@@ -220,6 +229,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "checkoutservice"
     service:
       port: 8080
     env:
@@ -257,6 +269,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "currencyservice"
     service:
       port: 8080
     env:
@@ -274,6 +289,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "emailservice"
     service:
       port: 8080
     env:
@@ -291,6 +309,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "frauddetectionservice"
     env:
       - name: KAFKA_SERVICE_ADDR
         value: '{{ include "otel-demo.name" . }}-kafka:9092'
@@ -312,6 +333,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "frontend"
     service:
       port: 8080
     env:
@@ -357,6 +381,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "frontendproxy"
     service:
       port: 8080
     env:
@@ -404,6 +431,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "imageprovider"
     service:
       port: 8081
     env:
@@ -421,6 +451,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "loadgenerator"
     service:
       port: 8089
     env:
@@ -454,6 +487,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "paymentservice"
     service:
       port: 8080
     env:
@@ -477,6 +513,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "productcatalogservice"
     service:
       port: 8080
     env:
@@ -496,6 +535,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "quoteservice"
     service:
       port: 8080
     env:
@@ -517,6 +559,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "recommendationservice"
     service:
       port: 8080
     env:
@@ -542,6 +587,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "shippingservice"
     service:
       port: 8080
     env:
@@ -562,6 +610,9 @@ components:
       tag: "v0.10.1"
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "flagd"
     replicas: 1
     service:
       port: 8013
@@ -587,6 +638,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "kafka"
     replicas: 1
     ports:
       - name: plaintext
@@ -612,6 +666,9 @@ components:
     enabled: true
     useDefault:
       env: true
+    podAnnotations:
+      instrumentation.opentelemetry.io/service.namespace: "NAME_TO_REPLACE"
+      instrumentation.opentelemetry.io/service.name: "redis"
     imageOverride:
       repository: "redis"
       tag: "7.2-alpine"
