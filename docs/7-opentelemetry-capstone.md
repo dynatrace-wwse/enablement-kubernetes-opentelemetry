@@ -43,7 +43,7 @@ export NAME=<INITIALS>-k8s-otel-o11y
 
 Command:
 ```sh
-cd $BASE_DIR/lab-modules/opentelemetry-capstonestone
+cd $REPO_PATH/lab-modules/opentelemetry-capstone
 ```
 
 **Clean Up Previous Deployments**
