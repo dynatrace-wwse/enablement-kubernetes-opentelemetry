@@ -102,7 +102,7 @@ The Astronomy Shop demo application provides several feature flags that you can 
 
 ### PaymentServiceFailure
 
-Payment transaction failures that result in the inability for orders to be placed, can be turned on using the `paymentServiceFailure` feature flag.  There is a helper function to enable the flag and an additional helper function to disable the flag.
+Payment transaction failures that result in the inability for orders to be placed, can be turned on using the `paymentServiceFailure` feature flag.  There is a helper function to enable the flag and an additional helper function to disable the flag.  Ignore any warnings from `kubectl` about missing annotations.
 
 Enable function:
 ```sh
