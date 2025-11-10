@@ -458,6 +458,30 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#problem-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Problem Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paymentservicefailure" class="md-nav__link">
+    <span class="md-ellipsis">
+      PaymentServiceFailure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#finish-codespace-setup" class="md-nav__link">
     <span class="md-ellipsis">
       Finish Codespace Setup
@@ -746,6 +770,30 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#problem-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Problem Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paymentservicefailure" class="md-nav__link">
+    <span class="md-ellipsis">
+      PaymentServiceFailure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#finish-codespace-setup" class="md-nav__link">
     <span class="md-ellipsis">
       Finish Codespace Setup
@@ -897,6 +945,16 @@ kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w">
 <p>Verify service:
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>astronomy-shop-frontendproxy<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
 </code></pre></div></p>
+<h2 id="problem-patterns">Problem Patterns<a class="headerlink" href="#problem-patterns" title="Permanent link">#</a></h2>
+<p>The Astronomy Shop demo application provides several feature flags that you can use to simulate different scenarios. These flags are managed by flagd, a simple feature flag service that supports OpenFeature.  However, this release of Astronomy Shop does not include the flagd-ui component, so feature flags must be set by updating the flagd ConfigMap.</p>
+<h3 id="paymentservicefailure">PaymentServiceFailure<a class="headerlink" href="#paymentservicefailure" title="Permanent link">#</a></h3>
+<p>Payment transaction failures that result in the inability for orders to be placed, can be turned on using the <code>paymentServiceFailure</code> feature flag.  There is a helper function to enable the flag and an additional helper function to disable the flag.  Ignore any warnings from <code>kubectl</code> about missing annotations.</p>
+<p>Enable function:
+<div class="highlight"><pre><span></span><code>paymentServiceFailureEnable
+</code></pre></div></p>
+<p>Disable function:
+<div class="highlight"><pre><span></span><code>paymentServiceFailureDisable
+</code></pre></div></p>
 <h2 id="finish-codespace-setup">Finish Codespace Setup<a class="headerlink" href="#finish-codespace-setup" title="Permanent link">#</a></h2>
 <h3 id="define-workshop-user-variables">Define workshop user variables<a class="headerlink" href="#define-workshop-user-variables" title="Permanent link">#</a></h3>
 <p>In your Github Codespaces Terminal set the environment variables:</p>
@@ -911,7 +969,7 @@ export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
 <h3 id="deploy-opentelemetry-operator">Deploy OpenTelemetry Operator<a class="headerlink" href="#deploy-opentelemetry-operator" title="Permanent link">#</a></h3>
 <p><strong>Move to the base directory</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="nv">$BASE_DIR</span>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="nv">$REPO_PATH</span>
 <span class="nb">pwd</span>
 </code></pre></div>
 Sample output:</p>
