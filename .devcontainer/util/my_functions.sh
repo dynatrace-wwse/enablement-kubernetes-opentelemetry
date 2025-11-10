@@ -146,6 +146,14 @@ deployOpenTelemetryCapstone() {
   printInfoSection "Capstone deployment complete!"
 }
 
-setBaseDir() {
-  export BASE_DIR=$REPO_PATH
+paymentServiceFailureEnable() {
+
+  kubectl apply -f $REPO_PATH/cluster-manifests/astronomy-shop/flagd-enable-paymentservicefailure.yaml
+
+}
+
+paymentServiceFailureDisable() {
+
+  kubectl apply -f $REPO_PATH/cluster-manifests/astronomy-shop/flagd-disable-paymentservicefailure.yaml
+  
 }

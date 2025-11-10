@@ -96,6 +96,24 @@ Verify service:
 kubectl get svc astronomy-shop-frontendproxy -n astronomy-shop
 ```
 
+## Problem Patterns
+
+The Astronomy Shop demo application provides several feature flags that you can use to simulate different scenarios. These flags are managed by flagd, a simple feature flag service that supports OpenFeature.  However, this release of Astronomy Shop does not include the flagd-ui component, so feature flags must be set by updating the flagd ConfigMap.
+
+### PaymentServiceFailure
+
+Payment transaction failures that result in the inability for orders to be placed, can be turned on using the `paymentServiceFailure` feature flag.  There is a helper function to enable the flag and an additional helper function to disable the flag.
+
+Enable function:
+```sh
+paymentServiceFailureEnable
+```
+
+Disable function:
+```sh
+paymentServiceFailureDisable
+```
+
 ## Finish Codespace Setup
 
 ### Define workshop user variables
