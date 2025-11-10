@@ -104,6 +104,12 @@ spec:
         - key: dt.security_context
           from_attribute: k8s.cluster.name
           action: insert
+        - key: service.name
+          from_attribute: app.annotation.service.name
+          action: insert
+        - key: service.namespace
+          from_attribute: app.annotation.service.namespace
+          action: insert
       resourcedetection/gcp:
         # detectors: [env, gcp]
         detectors: [env]
@@ -147,6 +153,13 @@ spec:
               from: pod
             - tag_name: app.label.name
               key: app.kubernetes.io/name
+              from: pod
+          annotations:
+            - tag_name: app.annotation.service.namespace
+              key: instrumentation.opentelemetry.io/service.namespace
+              from: pod
+            - tag_name: app.annotation.service.name
+              key: instrumentation.opentelemetry.io/service.name
               from: pod
         pod_association:
           - sources:
