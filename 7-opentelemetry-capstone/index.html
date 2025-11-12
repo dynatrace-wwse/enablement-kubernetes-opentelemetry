@@ -745,11 +745,12 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
-<p><strong>Import Dashboards into Dynatrace</strong></p>
+<p><strong>Import Dashboard into Dynatrace</strong></p>
 <p><img alt="astronomy-shop dashboard" src="../img/capstone-dt_astronomy_shop_dashboard.png" />
 <a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-capstone_dt_dashboard.json" target="_blank">astronomy-shop dashboard</a></p>
-<p><img alt="collector health dashboard" src="../img/capstone-dt_collector_health_dashboard.png" />
-<a href="https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/OpenTelemetry_Collector_%5BIsItObservable%5D_dt_dashboard.json" target="_blank">collector health dashboard</a></p>
+<p><strong>Add OpenTelemetry Dashboards from Hub</strong></p>
+<p>Locate the OpenTelemetry Dashboards App in the Hub.  Install the App to have OpenTelemetry Collector self-monitoring and Kubernetes monitoring dashboards added to your environment.</p>
+<p><img alt="opentelemetry dashboards hub" src="../img/capstone-dt_opentelemetry_dashboards_hub.png" /></p>
 <p><strong>Define workshop user variables</strong>
 In your Github Codespaces Terminal set the environment variables:</p>
 <div class="admonition tip">
@@ -1180,112 +1181,36 @@ REVISION: 2</p>
 <p>By default, the metric attribute <code>dynatrace.otel.collector</code> is dropped by Dynatrace.  Add it to the allow list in your Dynatrace tenant:</p>
 <p><a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/getting-started/metrics/configuration" target="_blank">Dynatrace Documentation</a>
 <img alt="dt otel metrics add collector attribute" src="../img/capstone-dt_otelmetrics_add_collector_attribute.png" /></p>
-<p><strong>Enable OpenTelemetry Collector health metrics (Prometheus)</strong></p>
-<p>Enable metric generation for Collector CRD:
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">observability</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">enableMetrics</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</code></pre></div></p>
-<p>Enable publishing of metric generation to Prometheus endpoint:
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MY_POD_IP</span>
-<span class="w">      </span><span class="nt">valueFrom</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">fieldRef</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">          </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">status.podIP</span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">processors</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">exporters</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+<p><strong>Enable OpenTelemetry Collector self-monitoring telemetry</strong></p>
+<p>Add telemetry service to Collector config:
+<div class="highlight"><pre><span></span><code><span class="nt">service</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">telemetry</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;info&quot;</span>
+<span class="w">          </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;json&quot;</span>
 <span class="w">        </span><span class="nt">metrics</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;normal&quot;</span>
+<span class="w">          </span><span class="c1"># set up OTLP exporter to self OTLP receiver</span>
+<span class="w">          </span><span class="nt">readers</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">periodic</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="w">                </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+<span class="w">                </span><span class="nt">exporter</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">                    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http/protobuf</span>
+<span class="w">                    </span><span class="nt">temporality_preference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delta</span>
+<span class="w">                    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://${env:MY_POD_IP}:4318/v1/metrics&quot;</span>
 </code></pre></div></p>
-<p>Enable scraping of metrics from Prometheus endpoint:
-<div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">prometheus</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">scrape_configs</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry-collector</span>
-<span class="w">            </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
-<span class="w">            </span><span class="nt">static_configs</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${MY_POD_IP}:8888</span>
-
-<span class="w">    </span><span class="nt">processors</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">batch</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">exporters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">otlphttp/dynatrace</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">prometheus</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div></p>
-<p><strong>Modify OpenTelemetry Collector health metrics for Dynatrace support</strong></p>
-<p>Specific metric types are supported by Dynatrace:</p>
-<p><a href="https://docs.dynatrace.com/docs/platform-modules/infrastructure-monitoring/container-platform-monitoring/kubernetes-monitoring/monitor-prometheus-metrics#usage" target="_blank">Dynatrace Documentation</a></p>
-<p>Convert unsupported cumulative sum metric types to delta type for Dynatrace support:
-<div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">cumulativetodelta</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="nt">service</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">pipelines</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">prometheus</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cumulativetodelta</span><span class="p p-Indicator">,</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div></p>
-<div class="admonition tip">
-<p class="admonition-title">Histogram Metric Support</p>
-</div>
-<p>In a recent update, Dynatrace added support for histogram metrics.  This configuration is no longer required.  However, it may still be useful to see how this can be accomplished.</p>
-<p>Filter out (remove) unsupported histogram metric types for Dynatrace support:
-<div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">filter/histogram</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">error_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span>
-<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">metric</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;type</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">METRIC_DATA_TYPE_HISTOGRAM&#39;</span>
-
-<span class="nt">service</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">pipelines</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">prometheus</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">filter/histogram</span><span class="p p-Indicator">,</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div></p>
-<p><strong>View OpenTelemetry Collector health metrics in Dynatrace</strong></p>
-<p>Prometheus metrics from the OpenTelemetry Collector have the <code>otelcol_</code> prefix and can be found in the Dynatrace metric browser:
+<p>For more details and the latest information, see the <a href="https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/self-monitoring" target="_blank">Dynatrace Documentation</a> for Collector self-monitoring.</p>
+<p><strong>View OpenTelemetry Collector self-mon health metrics in Dynatrace</strong></p>
+<p>OpenTelemetry Collector self-mon metrics have the <code>otelcol_</code> prefix and can be found in the Dynatrace metric browser:
 <img alt="dt_otelcol_metric_list" src="../img/capstone-dt_otelcol_metric_list.png" /></p>
-<p>Example dashboard for OpenTelemetry Collector health has been created by the <code>IsItObservable</code> team:
-<img alt="dt_collector_health_dashboard_short" src="../img/capstone-dt_collector_health_dashboard_short.png" /></p>
-<p><a href="https://youtu.be/Qxt3XAMJNhA?si=LY_37zRJC8hCTpjX&amp;t=2630" target="_blank">YouTube Video</a></p>
+<p>You can also query the metric series (metric key + dimensions) using DQL:
+<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">metric</span><span class="p">.</span><span class="n">series</span>
+<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">startsWith</span><span class="p">(</span><span class="n">metric</span><span class="p">.</span><span class="k">key</span><span class="p">,</span><span class="ss">&quot;otelcol&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Use the read-made dashboards from OpenTelemetry Dashboards to view and analyze the OpenTelemetry Collector health.</p>
+<p><img alt="OpenTelemetry Collector Ready Made Dashboards" src="../img/capstone-dt_opentelemetry_dashboards_readymade.png" /></p>
 <h2 id="wrap-up">Wrap Up<a class="headerlink" href="#wrap-up" title="Permanent link">#</a></h2>
 <h3 id="what-you-learned-today">What You Learned Today<a class="headerlink" href="#what-you-learned-today" title="Permanent link">#</a></h3>
 <p>By completing this lab, you've successfully deployed the OpenTelemetry Collector to collect metrics, traces, and logs from Kubernetes and ship them to Dynatrace for analysis.</p>
