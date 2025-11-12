@@ -401,9 +401,8 @@ Sample output:
 [OpenTelemetry Documentation](https://opentelemetry.io/docs/collector/internal-telemetry/){target="_blank"}
 
 * Add `dynatrace.otel.collector` to Dynatrace's metric attribute allow list
-* Enable OpenTelemetry Collector health metrics (Prometheus)
-* Modify OpenTelemetry Collector health metrics for Dynatrace support
-* View OpenTelemetry Collector health metrics in Dynatrace
+* Enable OpenTelemetry Collector self-monitoring telemetry
+* View OpenTelemetry Collector self-mon health metrics in Dynatrace
 
 **Add `dynatrace.otel.collector` to Dynatrace's metric attribute allow list**
 
@@ -417,22 +416,22 @@ By default, the metric attribute `dynatrace.otel.collector` is dropped by Dynatr
 Add telemetry service to Collector config:
 ```yaml
 service:
-      telemetry:
-        logs:
-          level: "info"
-          encoding: "json"
-        metrics:
-          level: "normal"
-          # set up OTLP exporter to self OTLP receiver
-          readers:
-            - periodic:
-                interval: 10000
-                timeout: 5000
-                exporter:
-                  otlp:
-                    protocol: http/protobuf
-                    temporality_preference: delta
-                    endpoint: "http://${env:MY_POD_IP}:4318/v1/metrics"
+  telemetry:
+    logs:
+      level: "info"
+      encoding: "json"
+    metrics:
+      level: "normal"
+      # set up OTLP exporter to self OTLP receiver
+      readers:
+        - periodic:
+            interval: 10000
+            timeout: 5000
+            exporter:
+              otlp:
+                protocol: http/protobuf
+                temporality_preference: delta
+                endpoint: "http://${env:MY_POD_IP}:4318/v1/metrics"
 ```
 
 For more details and the latest information, see the [Dynatrace Documentation](https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/self-monitoring){target="_blank"} for Collector self-monitoring.
@@ -445,10 +444,10 @@ OpenTelemetry Collector self-mon metrics have the `otelcol_` prefix and can be f
 You can also query the metric series (metric key + dimensions) using DQL:
 ```sql
 fetch metric.series
-| filter startsWith(metric.key,"otelcol")
+| filter startsWith(metric.key,"otelcol_")
 ```
 
-Use the read-made dashboards from OpenTelemetry Dashboards to view and analyze the OpenTelemetry Collector health.
+Use the ready-made dashboards from OpenTelemetry Dashboards to view and analyze the OpenTelemetry Collector health.
 
 ![OpenTelemetry Collector Ready Made Dashboards](./img/capstone-dt_opentelemetry_dashboards_readymade.png)
 
@@ -467,7 +466,7 @@ By completing this lab, you've successfully deployed the OpenTelemetry Collector
     - The `k8sobjects` receiver watches for Kubernetes events (and other resources) on the cluster
 - Dynatrace allows you to perform powerful queries and analysis of the telemetry data
 - Observing the health of the OpenTelemetry Collectors and data pipeline is critical
-    - The OpenTelemetry Collector exposes self-monitoring metrics in Prometheus format
+    - The OpenTelemetry Collector exposes self-monitoring metrics and emits logs
 
 ## Continue
 
