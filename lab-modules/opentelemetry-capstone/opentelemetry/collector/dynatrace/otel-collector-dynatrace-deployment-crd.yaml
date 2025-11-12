@@ -42,9 +42,13 @@ spec:
       otlp:
         protocols:
           grpc:
-            endpoint: 0.0.0.0:4317
+            endpoint: ${env:MY_POD_IP}:4317
           http:
-            endpoint: 0.0.0.0:4318
+            cors:
+              allowed_origins:
+                - http://*
+                - https://*
+            endpoint: ${env:MY_POD_IP}:4318
       k8s_cluster:
         collection_interval: 60s
         node_conditions_to_report: [ "Ready", "MemoryPressure", "DiskPressure" ]
@@ -172,10 +176,20 @@ spec:
           encoding: "json"
         metrics:
           level: "normal"
+        # set up OTLP exporter to self OTLP receiver
+          readers:
+            - periodic:
+                interval: 10000
+                timeout: 5000
+                exporter:
+                  otlp:
+                    protocol: http/protobuf
+                    temporality_preference: delta
+                    endpoint: "http://${env:MY_POD_IP}:4318/v1/metrics"
 
       pipelines:
         metrics:
-          receivers: [prometheus,otlp,k8s_cluster]
+          receivers: [otlp,k8s_cluster]
           processors: [memory_limiter,filter/histogram,k8sattributes,resourcedetection/gcp,resource/kind,resource,cumulativetodelta,batch]
           exporters: [otlphttp/dynatrace,debug]
         traces:
