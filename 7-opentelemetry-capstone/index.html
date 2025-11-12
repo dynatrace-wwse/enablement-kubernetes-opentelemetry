@@ -1173,9 +1173,8 @@ REVISION: 2</p>
 <p><a href="https://opentelemetry.io/docs/collector/internal-telemetry/" target="_blank">OpenTelemetry Documentation</a></p>
 <ul>
 <li>Add <code>dynatrace.otel.collector</code> to Dynatrace's metric attribute allow list</li>
-<li>Enable OpenTelemetry Collector health metrics (Prometheus)</li>
-<li>Modify OpenTelemetry Collector health metrics for Dynatrace support</li>
-<li>View OpenTelemetry Collector health metrics in Dynatrace</li>
+<li>Enable OpenTelemetry Collector self-monitoring telemetry</li>
+<li>View OpenTelemetry Collector self-mon health metrics in Dynatrace</li>
 </ul>
 <p><strong>Add <code>dynatrace.otel.collector</code> to Dynatrace's metric attribute allow list</strong></p>
 <p>By default, the metric attribute <code>dynatrace.otel.collector</code> is dropped by Dynatrace.  Add it to the allow list in your Dynatrace tenant:</p>
@@ -1184,22 +1183,22 @@ REVISION: 2</p>
 <p><strong>Enable OpenTelemetry Collector self-monitoring telemetry</strong></p>
 <p>Add telemetry service to Collector config:
 <div class="highlight"><pre><span></span><code><span class="nt">service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">telemetry</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;info&quot;</span>
-<span class="w">          </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;json&quot;</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;normal&quot;</span>
-<span class="w">          </span><span class="c1"># set up OTLP exporter to self OTLP receiver</span>
-<span class="w">          </span><span class="nt">readers</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">periodic</span><span class="p">:</span>
-<span class="w">                </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span>
-<span class="w">                </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
-<span class="w">                </span><span class="nt">exporter</span><span class="p">:</span>
-<span class="w">                  </span><span class="nt">otlp</span><span class="p">:</span>
-<span class="w">                    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http/protobuf</span>
-<span class="w">                    </span><span class="nt">temporality_preference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delta</span>
-<span class="w">                    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://${env:MY_POD_IP}:4318/v1/metrics&quot;</span>
+<span class="w">  </span><span class="nt">telemetry</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;info&quot;</span>
+<span class="w">      </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;json&quot;</span>
+<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;normal&quot;</span>
+<span class="w">      </span><span class="c1"># set up OTLP exporter to self OTLP receiver</span>
+<span class="w">      </span><span class="nt">readers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">periodic</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="w">            </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+<span class="w">            </span><span class="nt">exporter</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http/protobuf</span>
+<span class="w">                </span><span class="nt">temporality_preference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delta</span>
+<span class="w">                </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://${env:MY_POD_IP}:4318/v1/metrics&quot;</span>
 </code></pre></div></p>
 <p>For more details and the latest information, see the <a href="https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/self-monitoring" target="_blank">Dynatrace Documentation</a> for Collector self-monitoring.</p>
 <p><strong>View OpenTelemetry Collector self-mon health metrics in Dynatrace</strong></p>
@@ -1207,9 +1206,9 @@ REVISION: 2</p>
 <img alt="dt_otelcol_metric_list" src="../img/capstone-dt_otelcol_metric_list.png" /></p>
 <p>You can also query the metric series (metric key + dimensions) using DQL:
 <div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">metric</span><span class="p">.</span><span class="n">series</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">startsWith</span><span class="p">(</span><span class="n">metric</span><span class="p">.</span><span class="k">key</span><span class="p">,</span><span class="ss">&quot;otelcol&quot;</span><span class="p">)</span>
+<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">startsWith</span><span class="p">(</span><span class="n">metric</span><span class="p">.</span><span class="k">key</span><span class="p">,</span><span class="ss">&quot;otelcol_&quot;</span><span class="p">)</span>
 </code></pre></div></p>
-<p>Use the read-made dashboards from OpenTelemetry Dashboards to view and analyze the OpenTelemetry Collector health.</p>
+<p>Use the ready-made dashboards from OpenTelemetry Dashboards to view and analyze the OpenTelemetry Collector health.</p>
 <p><img alt="OpenTelemetry Collector Ready Made Dashboards" src="../img/capstone-dt_opentelemetry_dashboards_readymade.png" /></p>
 <h2 id="wrap-up">Wrap Up<a class="headerlink" href="#wrap-up" title="Permanent link">#</a></h2>
 <h3 id="what-you-learned-today">What You Learned Today<a class="headerlink" href="#what-you-learned-today" title="Permanent link">#</a></h3>
@@ -1226,7 +1225,7 @@ REVISION: 2</p>
 </li>
 <li>Dynatrace allows you to perform powerful queries and analysis of the telemetry data</li>
 <li>Observing the health of the OpenTelemetry Collectors and data pipeline is critical<ul>
-<li>The OpenTelemetry Collector exposes self-monitoring metrics in Prometheus format</li>
+<li>The OpenTelemetry Collector exposes self-monitoring metrics and emits logs</li>
 </ul>
 </li>
 </ul>
