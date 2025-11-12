@@ -19,13 +19,16 @@ In this lab module we'll utilize multiple OpenTelemetry Collectors to collect ap
 
 ## Prerequisites
 
-**Import Dashboards into Dynatrace**
+**Import Dashboard into Dynatrace**
 
 ![astronomy-shop dashboard](./img/capstone-dt_astronomy_shop_dashboard.png)
 [astronomy-shop dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/opentelemetry-capstone_dt_dashboard.json){target="_blank"}
 
-![collector health dashboard](./img/capstone-dt_collector_health_dashboard.png)
-[collector health dashboard](https://github.com/dynatrace-wwse/enablement-kubernetes-opentelemetry/blob/main/assets/dynatrace/dashboards/OpenTelemetry_Collector_%5BIsItObservable%5D_dt_dashboard.json){target="_blank"}
+**Add OpenTelemetry Dashboards from Hub**
+
+Locate the OpenTelemetry Dashboards App in the Hub.  Install the App to have OpenTelemetry Collector self-monitoring and Kubernetes monitoring dashboards added to your environment.
+
+![opentelemetry dashboards hub](./img/capstone-dt_opentelemetry_dashboards_hub.png)
 
 **Define workshop user variables**
 In your Github Codespaces Terminal set the environment variables:
@@ -409,128 +412,45 @@ By default, the metric attribute `dynatrace.otel.collector` is dropped by Dynatr
 [Dynatrace Documentation](https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/getting-started/metrics/configuration){target="_blank"}
 ![dt otel metrics add collector attribute](./img/capstone-dt_otelmetrics_add_collector_attribute.png)
 
-**Enable OpenTelemetry Collector health metrics (Prometheus)**
+**Enable OpenTelemetry Collector self-monitoring telemetry**
 
-Enable metric generation for Collector CRD:
+Add telemetry service to Collector config:
 ```yaml
----
-apiVersion: opentelemetry.io/v1beta1
-kind: OpenTelemetryCollector
-metadata:
-  namespace: dynatrace
-spec:
-  observability:
-    metrics:
-      enableMetrics: true
-```
-
-Enable publishing of metric generation to Prometheus endpoint:
-```yaml
----
-apiVersion: opentelemetry.io/v1beta1
-kind: OpenTelemetryCollector
-metadata:
-  namespace: dynatrace
-spec:
-  env:
-    - name: MY_POD_IP
-      valueFrom:
-        fieldRef:
-          apiVersion: v1
-          fieldPath: status.podIP
-  config:
-    receivers:
-
-    processors:
-
-    exporters:
-
-    service:
+service:
       telemetry:
+        logs:
+          level: "info"
+          encoding: "json"
         metrics:
           level: "normal"
+          # set up OTLP exporter to self OTLP receiver
+          readers:
+            - periodic:
+                interval: 10000
+                timeout: 5000
+                exporter:
+                  otlp:
+                    protocol: http/protobuf
+                    temporality_preference: delta
+                    endpoint: "http://${env:MY_POD_IP}:4318/v1/metrics"
 ```
 
-Enable scraping of metrics from Prometheus endpoint:
-```yaml
----
-apiVersion: opentelemetry.io/v1beta1
-kind: OpenTelemetryCollector
-metadata:
-  namespace: dynatrace
-spec:
-  config:
-    receivers:
-      prometheus:
-        config:
-          scrape_configs:
-          - job_name: opentelemetry-collector
-            scrape_interval: 30s
-            static_configs:
-            - targets:
-              - ${MY_POD_IP}:8888
+For more details and the latest information, see the [Dynatrace Documentation](https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/self-monitoring){target="_blank"} for Collector self-monitoring.
 
-    processors:
-      batch:
+**View OpenTelemetry Collector self-mon health metrics in Dynatrace**
 
-    exporters:
-      otlphttp/dynatrace:
-
-    service:
-      pipelines:
-        metrics:
-          receivers: [prometheus]
-          processors: [batch]
-          exporters: [otlphttp/dynatrace]
-```
-
-**Modify OpenTelemetry Collector health metrics for Dynatrace support**
-
-Specific metric types are supported by Dynatrace:
-
-[Dynatrace Documentation](https://docs.dynatrace.com/docs/platform-modules/infrastructure-monitoring/container-platform-monitoring/kubernetes-monitoring/monitor-prometheus-metrics#usage){target="_blank"}
-
-Convert unsupported cumulative sum metric types to delta type for Dynatrace support:
-```yaml
-processors:
-  cumulativetodelta: {}
-service:
-  pipelines:
-  metrics:
-    receivers: [prometheus]
-    processors: [cumulativetodelta,batch]
-    exporters: [otlphttp/dynatrace]
-```
-
-!!! tip "Histogram Metric Support"
-  In a recent update, Dynatrace added support for histogram metrics.  This configuration is no longer required.  However, it may still be useful to see how this can be accomplished.
-
-Filter out (remove) unsupported histogram metric types for Dynatrace support:
-```yaml
-processors:
-  filter/histogram:
-    error_mode: ignore
-    metrics:
-      metric:
-      - 'type == METRIC_DATA_TYPE_HISTOGRAM'
-
-service:
-  pipelines:
-  metrics:
-    receivers: [prometheus]
-    processors: [filter/histogram,batch]
-    exporters: [otlphttp/dynatrace]
-```
-
-**View OpenTelemetry Collector health metrics in Dynatrace**
-
-Prometheus metrics from the OpenTelemetry Collector have the `otelcol_` prefix and can be found in the Dynatrace metric browser:
+OpenTelemetry Collector self-mon metrics have the `otelcol_` prefix and can be found in the Dynatrace metric browser:
 ![dt_otelcol_metric_list](./img/capstone-dt_otelcol_metric_list.png)
 
-Example dashboard for OpenTelemetry Collector health has been created by the `IsItObservable` team:
-![dt_collector_health_dashboard_short](./img/capstone-dt_collector_health_dashboard_short.png)
+You can also query the metric series (metric key + dimensions) using DQL:
+```sql
+fetch metric.series
+| filter startsWith(metric.key,"otelcol")
+```
 
-[YouTube Video](https://youtu.be/Qxt3XAMJNhA?si=LY_37zRJC8hCTpjX&t=2630){target="_blank"}
+Use the read-made dashboards from OpenTelemetry Dashboards to view and analyze the OpenTelemetry Collector health.
+
+![OpenTelemetry Collector Ready Made Dashboards](./img/capstone-dt_opentelemetry_dashboards_readymade.png)
 
 ## Wrap Up
 

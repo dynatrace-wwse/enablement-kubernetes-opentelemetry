@@ -47,6 +47,16 @@ spec:
   # 
   config:
     receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: ${env:MY_POD_IP}:4317
+          http:
+            cors:
+              allowed_origins:
+                - http://*
+                - https://*
+            endpoint: ${env:MY_POD_IP}:4318
       prometheus:
         config:
           scrape_configs:
@@ -191,10 +201,20 @@ spec:
           encoding: "json"
         metrics:
           level: "normal"
+          # set up OTLP exporter to self OTLP receiver
+          readers:
+            - periodic:
+                interval: 10000
+                timeout: 5000
+                exporter:
+                  otlp:
+                    protocol: http/protobuf
+                    temporality_preference: delta
+                    endpoint: "http://${env:MY_POD_IP}:4318/v1/metrics"
 
       pipelines:
         metrics:
-          receivers: [prometheus,kubeletstats]
+          receivers: [otlp,kubeletstats]
           processors: [memory_limiter,k8sattributes,resourcedetection/gcp,resource/kind,resource,cumulativetodelta,batch]
           exporters: [otlphttp/dynatrace,debug]
         logs:
