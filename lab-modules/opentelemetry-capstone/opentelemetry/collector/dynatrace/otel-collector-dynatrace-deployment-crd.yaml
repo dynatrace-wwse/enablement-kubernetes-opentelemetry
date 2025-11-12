@@ -31,14 +31,6 @@ spec:
       memory: 512Mi
   config:
     receivers:
-      prometheus:
-        config:
-          scrape_configs:
-          - job_name: opentelemetry-collector
-            scrape_interval: 30s
-            static_configs:
-            - targets:
-              - ${MY_POD_IP}:8888
       otlp:
         protocols:
           grpc:
