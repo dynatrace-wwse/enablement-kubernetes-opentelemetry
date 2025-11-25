@@ -203,5 +203,5 @@ dist-ssr
 .env
 .dt-app
 
-# sed swaps
-*/sed/*.yaml
+# Omit run file
+synchronizer/run.sh
