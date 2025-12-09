@@ -1204,11 +1204,12 @@ Result:</p>
 Result:</p>
 <p><img alt="dql_sdk_kafka_request_rate" src="../img/metrics-dql_sdk_kafka_request_rate.png" /></p>
 <p><strong>Browse available metrics in Dynatrace</strong></p>
-<!-- TODO: Update to Grail query in Notebook, remove classic screen -->
-
-<p>You can browse all available metrics from OpenTelemetry sources in the Metrics Browser.  Filter on <code>Dimension:otel.scope.name</code> to find relevant metrics.</p>
-<p><a href="https://docs.dynatrace.com/docs/observe-and-explore/dashboards-classic/metrics-browser" target="_blank">Dynatrace Documentation</a></p>
-<p><img alt="dt_otel_scope_metrics" src="../img/metrics-dt_otel_scope_metrics.png" /></p>
+<p>Use the DQL command <code>fetch metric.series</code> to query metrics and their unique dimensions (series) in Grail.</p>
+<ul>
+<li>Filter on <code>dt.metrics.source == "opentelemetry"</code> -&gt; a dimension added by Dynatrace on ingest to identify the metric source</li>
+<li>Filter on <code>otel.scope.name</code> -&gt; a dimension added by OpenTelemetry (SDK, Agent or Collector) through telemetry collection</li>
+</ul>
+<p><img alt="dt_otel_scope_metrics" src="../img/metrics-dql_otel_metric_series.png" /></p>
 <h2 id="wrap-up">Wrap Up<a class="headerlink" href="#wrap-up" title="Permanent link">#</a></h2>
 <h3 id="what-you-learned-today">What You Learned Today<a class="headerlink" href="#what-you-learned-today" title="Permanent link">#</a></h3>
 <p>By completing this lab, you've successfully deployed the OpenTelemetry Collector to collect metrics, enrich metric attributes for better context, and ship those metrics to Dynatrace for analysis.</p>
@@ -1226,6 +1227,7 @@ Result:</p>
 </li>
 <li>Metrics produced by the OpenTelemetry SDKs and Agents are exported to the <code>otlp</code> receiver</li>
 <li>Dynatrace DQL (via Notebooks) allows you to perform powerful queries and analysis of the metric data</li>
+<li>Use the DQL command <code>fetch metric.series</code> to query metrics and their unique dimensions (series) in Grail.</li>
 </ul>
 <h2 id="continue">Continue<a class="headerlink" href="#continue" title="Permanent link">#</a></h2>
 <p>In the next section, we'll integrate and apply what we have learned in the OpenTelemetry Capstone.</p>
