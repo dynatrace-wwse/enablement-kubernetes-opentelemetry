@@ -327,6 +327,41 @@
                     "enableSampling": false
                 }
             }
+        },
+        {
+            "id": "08f6e248-10b2-4f11-95ad-c97d239fa39e",
+            "type": "markdown",
+            "markdown": "#### Browse OpenTelemetry Metrics\nUse the DQL command `fetch metric.series` to query metrics and their unique dimensions (series) in Grail.\n* Filter on `dt.metrics.source == \"opentelemetry\"` -> a dimension added by Dynatrace on ingest to identify the metric source\n* Filter on `otel.scope.name` -> a dimension added by OpenTelemetry (SDK, Agent or Collector) through telemetry collection"
+        },
+        {
+            "id": "34cc7c64-2946-45f4-a3a0-89e53a2cf510",
+            "type": "dql",
+            "filterSegments": [],
+            "drilldownPath": [],
+            "previousFilterSegments": [],
+            "state": {
+                "input": {
+                    "timeframe": {
+                        "from": "now()-30m",
+                        "to": "now()"
+                    },
+                    "value": "fetch metric.series\n| filter dt.metrics.source == \"opentelemetry\" or isNotNull(otel.scope.name)\n| summarize series = count(), by: {metric.key, otel.scope.name}\n| sort metric.key asc"
+                },
+                "visualizationSettings": {},
+                "querySettings": {
+                    "maxResultRecords": 1000,
+                    "defaultScanLimitGbytes": 500,
+                    "maxResultMegaBytes": 1,
+                    "defaultSamplingRatio": 10,
+                    "enableSampling": false
+                },
+                "davis": {
+                    "includeLogs": true,
+                    "davisVisualization": {
+                        "isAvailable": true
+                    }
+                }
+            }
         }
     ]
 }

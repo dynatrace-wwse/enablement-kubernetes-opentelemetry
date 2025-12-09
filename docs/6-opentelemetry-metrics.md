@@ -448,13 +448,13 @@ Result:
 ![dql_sdk_kafka_request_rate](./img/metrics-dql_sdk_kafka_request_rate.png)
 
 **Browse available metrics in Dynatrace**
-<!-- TODO: Update to Grail query in Notebook, remove classic screen -->
 
-You can browse all available metrics from OpenTelemetry sources in the Metrics Browser.  Filter on `Dimension:otel.scope.name` to find relevant metrics.
+Use the DQL command `fetch metric.series` to query metrics and their unique dimensions (series) in Grail.
 
-[Dynatrace Documentation](https://docs.dynatrace.com/docs/observe-and-explore/dashboards-classic/metrics-browser){target="_blank"}
+* Filter on `dt.metrics.source == "opentelemetry"` -> a dimension added by Dynatrace on ingest to identify the metric source
+* Filter on `otel.scope.name` -> a dimension added by OpenTelemetry (SDK, Agent or Collector) through telemetry collection
 
-![dt_otel_scope_metrics](./img/metrics-dt_otel_scope_metrics.png)
+![dt_otel_scope_metrics](./img/metrics-dql_otel_metric_series.png)
 
 ## Wrap Up
 
@@ -471,6 +471,7 @@ By completing this lab, you've successfully deployed the OpenTelemetry Collector
     * The `otlp` receiver receives signals that are exported from agents, SDKs, and other Collectors
 - Metrics produced by the OpenTelemetry SDKs and Agents are exported to the `otlp` receiver
 - Dynatrace DQL (via Notebooks) allows you to perform powerful queries and analysis of the metric data
+- Use the DQL command `fetch metric.series` to query metrics and their unique dimensions (series) in Grail.
 
 ## Continue
 
