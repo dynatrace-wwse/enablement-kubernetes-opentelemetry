@@ -69,6 +69,77 @@ exposeAstronomyShop() {
 
 }
 
+deployOpenTelemetryOperator() {
+  
+  printInfoSection "Deploy OpenTelemetry Operator"
+
+  ### OpenTelemetry Operator with Cert Manager
+
+  # Deploy cert-manager, pre-requisite for opentelemetry-operator
+  kubectl apply -f $CAPSTONE_DIR/opentelemetry/cert-manager.yaml
+
+  # Wait for ready pods
+  waitForAllReadyPods cert-manager
+
+  # Deploy opentelemetry-operator
+  kubectl apply -f $CAPSTONE_DIR/opentelemetry/opentelemetry-operator.yaml
+
+  # Wait for ready pods
+  waitForAllReadyPods opentelemetry-operator-system
+
+  # Complete
+  printInfoSection "OpenTelemetry Operator Deployment Complete!"
+}
+
+createDynatraceOTLPSecret() {
+
+  printInfoSection "Create Dynatrace OTLP Secret"
+
+  ### Preflight Check
+
+  # Check if DT_ENDPOINT is set
+  if [ -z "$DT_ENDPOINT" ]; then
+    printError "Error: DT_ENDPOINT is not set."
+    exit 1
+  fi
+
+  # Check if DT_API_TOKEN is set
+  if [ -z "$DT_API_TOKEN" ]; then
+    printError "Error: DT_API_TOKEN is not set."
+    exit 1
+  fi
+
+  # Check if NAME is set
+  if [ -z "$NAME" ]; then
+    printError "Error: NAME is not set."
+    exit 1
+  fi
+
+  export CAPSTONE_DIR=$REPO_PATH/lab-modules/opentelemetry-capstone
+
+  printInfo "All required variables are set."
+
+  ### Dynatrace Namespace and Secret
+
+  # Run the kubectl delete namespace command and capture the output
+  output=$(kubectl delete namespace dynatrace 2>&1)
+
+  # Check if the output contains "not found"
+  if echo "$output" | grep -q "not found"; then
+    echo "Namespace 'dynatrace' was not found."
+  else
+    echo "Namespace 'dynatrace' was found and deleted."
+  fi
+
+  # Create the dynatrace namespace
+  kubectl create namespace dynatrace
+
+  # Create dynatrace-otelcol-dt-api-credentials secret
+  kubectl create secret generic dynatrace-otelcol-dt-api-credentials --from-literal=DT_ENDPOINT=$DT_ENDPOINT --from-literal=DT_API_TOKEN=$DT_API_TOKEN -n dynatrace
+
+  printInfo "Created Dynatrace namespace and OTLP secret 'dynatrace-otelcol-dt-api-credentials'."
+}
+
 deployOpenTelemetryCapstone() {
   
   printInfoSection "Deploy OpenTelemetry Capstone"
