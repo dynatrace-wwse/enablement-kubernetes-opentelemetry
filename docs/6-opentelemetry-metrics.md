@@ -447,6 +447,8 @@ Result:
 
 ![dql_sdk_kafka_request_rate](./img/metrics-dql_sdk_kafka_request_rate.png)
 
+## Browse Metrics
+
 **Browse available metrics in Dynatrace**
 
 Use the DQL command `fetch metric.series` to query metrics and their unique dimensions (series) in Grail.
