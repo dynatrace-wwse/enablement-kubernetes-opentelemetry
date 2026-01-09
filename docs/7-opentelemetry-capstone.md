@@ -421,7 +421,7 @@ service:
       level: "info"
       encoding: "json"
     metrics:
-      level: "normal"
+      level: "detailed"
       # set up OTLP exporter to self OTLP receiver
       readers:
         - periodic:

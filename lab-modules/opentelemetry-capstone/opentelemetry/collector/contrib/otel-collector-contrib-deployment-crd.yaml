@@ -153,7 +153,7 @@ spec:
           level: "info"
           encoding: "json"
         metrics:
-          level: "normal"
+          level: "detailed"
 
       pipelines:
         metrics:
