@@ -47,7 +47,7 @@ spec:
     service:
       telemetry:
         metrics:
-          level: "normal"
+          level: "detailed"
 ```
 
 Enable scraping of metrics from Prometheus endpoint:
