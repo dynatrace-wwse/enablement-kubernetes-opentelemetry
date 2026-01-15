@@ -468,7 +468,7 @@
         {
             "id": "5ad196e7-0748-4149-8044-fd1b004ea1fe",
             "type": "markdown",
-            "markdown": "## The business operates in USD, can you convert it to USD using an exchange rate of 1CAD = 0.75USD?"
+            "markdown": "## The business operates in USD, can you convert it to USD using an exchange rate of $1 for any other currency = $0.75USD?"
         },
         {
             "id": "b70ec1d0-e6e6-4f67-b63d-8dbcec24de04",
@@ -482,7 +482,7 @@
                         "from": "now()-2h",
                         "to": "now()"
                     },
-                    "value": "fetch bizevents\n| filter event.type == \"astroshop.paymentservice.transaction.complete\"\n| fieldsAdd Converted = if(payment.currencycode == \"USD\", payment.amount, else:if(payment.currencycode == \"CAD\", payment.amount * 0.75))\n| fields payment.currencycode, payment.amount, Converted"
+                    "value": "fetch bizevents\n| filter event.type == \"astroshop.paymentservice.transaction.complete\"\n| fieldsAdd Converted = if(payment.currencycode == \"USD\", payment.amount, else:if(payment.currencycode != \"USD\", payment.amount * 0.75))\n| fields payment.currencycode, payment.amount, Converted"
                 },
                 "visualizationSettings": {
                     "chartSettings": {}
@@ -519,7 +519,7 @@
                         "from": "now()-2h",
                         "to": "now()"
                     },
-                    "value": "fetch bizevents\n| filter event.type == \"astroshop.paymentservice.transaction.complete\"\n| fieldsAdd Converted = if(payment.currencycode == \"USD\", payment.amount, else:if(payment.currencycode == \"CAD\", payment.amount * 0.75))\n| fields payment.currencycode, payment.amount, Converted\n| summarize total = sum(Converted)"
+                    "value": "fetch bizevents\n| filter event.type == \"astroshop.paymentservice.transaction.complete\"\n| fieldsAdd Converted = if(payment.currencycode == \"USD\", payment.amount, else:if(payment.currencycode != \"USD\", payment.amount * 0.75))\n| fields payment.currencycode, payment.amount, Converted\n| summarize total = sum(Converted)"
                 },
                 "visualizationSettings": {
                     "chartSettings": {}
