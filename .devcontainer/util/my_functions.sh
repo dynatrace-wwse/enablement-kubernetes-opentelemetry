@@ -13,6 +13,7 @@ customFunction(){
 
 }
 
+#FIXME: The app does not need certmanager anymore, we should either use the latest via helm or adapt it to deployAstroshop coming from demo.live and used in most workshops 
 # deployAstronomyShopOpenTelemetry
 # Deploys the OpenTelemetry community distribution of Astronomy Shop using Helm
 deployAstronomyShopOpenTelemetry() {
@@ -25,7 +26,7 @@ deployAstronomyShopOpenTelemetry() {
   fi
 
   # Generate new values file from default-values
-  sed "s,NAME_TO_REPLACE,$NAME," $REPO_PATH/cluster-manifests/astronomy-shop/default-values.yaml > $REPO_PATH/.devcontainer/yaml/gen/default-values.yaml
+  sed "s,NAME_TO_REPLACE,$NAME," $REPO_PATH/cluster-manifests/astronomy-shop/default-values.yaml > $REPO_PATH/cluster-manifests/astronomy-shop/gen-default-values.yaml
   
   # add the opentelemetry charts to helm
   helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
@@ -34,7 +35,7 @@ deployAstronomyShopOpenTelemetry() {
   kubectl create namespace astronomy-shop
   
   # use helm to deploy the opentelemetry demo app astronomy-shop
-  helm install astronomy-shop open-telemetry/opentelemetry-demo --values $REPO_PATH/.devcontainer/yaml/gen/default-values.yaml --namespace astronomy-shop --version "0.31.0"
+  helm install astronomy-shop open-telemetry/opentelemetry-demo --values $REPO_PATH/cluster-manifests/astronomy-shop/gen-default-values.yaml --namespace astronomy-shop --version "0.31.0"
   
   # Wait for ready pods
   waitForAllReadyPods astronomy-shop
