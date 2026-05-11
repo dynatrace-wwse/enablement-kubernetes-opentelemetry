@@ -40,34 +40,14 @@ deployAstronomyShopOpenTelemetry() {
   # Wait for ready pods
   waitForAllReadyPods astronomy-shop
 
-  printInfoSection "Exposing Astronomy Shop via NodePort 30100"
+  registerAstroshopIngress "astronomy-shop"
 
-  printInfo "Change astroshop-frontendproxy service from LoadBalancer to NodePort"
-  kubectl patch service astronomy-shop-frontendproxy --namespace=astronomy-shop  --patch='{"spec": {"type": "NodePort"}}'
-
-  printInfo "Define the NodePort to expose the app from the Cluster"
-  kubectl patch service astronomy-shop-frontendproxy --namespace=astronomy-shop --type='json' --patch='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value":30100}]'
-
-  waitAppCanHandleRequests 30100
-
-  printInfo "Astroshop deployed succesfully"
+  printInfo "Astroshop deployed and registered successfully"
 
 }
 
 exposeAstronomyShop() {
-
-  printInfoSection "Exposing Astronomy Shop via NodePort 30100"
-
-  printInfo "Change astroshop-frontendproxy service from LoadBalancer to NodePort"
-  kubectl patch service astronomy-shop-frontendproxy --namespace=astronomy-shop  --patch='{"spec": {"type": "NodePort"}}'
-
-  printInfo "Define the NodePort to expose the app from the Cluster"
-  kubectl patch service astronomy-shop-frontendproxy --namespace=astronomy-shop --type='json' --patch='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value":30100}]'
-
-  waitAppCanHandleRequests 30100
-
-  printInfo "AstronomyShop exposed succesfully"
-
+  registerAstroshopIngress "astronomy-shop"
 }
 
 deployOpenTelemetryOperator() {

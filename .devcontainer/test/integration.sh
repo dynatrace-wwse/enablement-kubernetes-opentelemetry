@@ -10,4 +10,4 @@ assertRunningPod astronomy-shop astronomy-shop-frontend
 
 assertRunningPod astronomy-shop astronomy-shop-frontendproxy 
 
-assertRunningApp 30100
+assertRunningApp astroshop
