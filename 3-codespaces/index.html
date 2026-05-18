@@ -171,6 +171,11 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -910,8 +915,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 id="validate-astronomy-shop">Validate Astronomy Shop<a class="headerlink" href="#validate-astronomy-shop" title="Permanent link">#</a></h3>
 <p>When the Codespace instance is idle, validate the <code>astronomy-shop</code> pods are running.</p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
+</span></code></pre></div></p>
 <p><img alt="github codespace ready" src="../img/prereq-github_codespace_ready.png" /></p>
 <h2 id="tips-tricks">Tips &amp; Tricks<a class="headerlink" href="#tips-tricks" title="Permanent link">#</a></h2>
 <p>We want to boost your learning and try to make your experience as smooth as possible with Dynatrace trainings. Your Codespaces have a couple of convenience features added. </p>
@@ -925,34 +930,34 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 id="astronomy-shop">Astronomy Shop<a class="headerlink" href="#astronomy-shop" title="Permanent link">#</a></h3>
 <p>If you encounter problems with the Astronomy Shop app deployed in the <code>astronomy-shop</code> namespace, you can easily recycle the pods.</p>
 <p>Recycle pods:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>pods<span class="w"> </span>--all<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>delete<span class="w"> </span>pods<span class="w"> </span>--all<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
+</span></code></pre></div></p>
 <p>But before doing so, if you want to see what is happening we recommend the following: </p>
 <p>Verify all astronomy-shop pods
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
+</span></code></pre></div></p>
 <p>Check for events in the astronomy-shop namespace
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
+</span></code></pre></div></p>
 <p>Check for system and cluster events 
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>kube-system
-kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>default
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>kube-system
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>default
+</span></code></pre></div></p>
 <h3 id="app-exposure">App exposure<a class="headerlink" href="#app-exposure" title="Permanent link">#</a></h3>
 <p>The astronomy-shop application is accessible via the nginx ingress controller. The URL is shown in the greeting — run <code>printGreeting</code> to display it.</p>
 <p>Verify service:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>astronomy-shop-frontendproxy<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>astronomy-shop-frontendproxy<span class="w"> </span>-n<span class="w"> </span>astronomy-shop
+</span></code></pre></div></p>
 <h2 id="problem-patterns">Problem Patterns<a class="headerlink" href="#problem-patterns" title="Permanent link">#</a></h2>
 <p>The Astronomy Shop demo application provides several feature flags that you can use to simulate different scenarios. These flags are managed by flagd, a simple feature flag service that supports OpenFeature.  However, this release of Astronomy Shop does not include the flagd-ui component, so feature flags must be set by updating the flagd ConfigMap.</p>
 <h3 id="paymentservicefailure">PaymentServiceFailure<a class="headerlink" href="#paymentservicefailure" title="Permanent link">#</a></h3>
 <p>Payment transaction failures that result in the inability for orders to be placed, can be turned on using the <code>paymentServiceFailure</code> feature flag.  There is a helper function to enable the flag and an additional helper function to disable the flag.  Ignore any warnings from <code>kubectl</code> about missing annotations.</p>
 <p>Enable function:
-<div class="highlight"><pre><span></span><code>paymentServiceFailureEnable
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>paymentServiceFailureEnable
+</span></code></pre></div></p>
 <p>Disable function:
-<div class="highlight"><pre><span></span><code>paymentServiceFailureDisable
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>paymentServiceFailureDisable
+</span></code></pre></div></p>
 <h2 id="finish-codespace-setup">Finish Codespace Setup<a class="headerlink" href="#finish-codespace-setup" title="Permanent link">#</a></h2>
 <h3 id="define-workshop-user-variables">Define workshop user variables<a class="headerlink" href="#define-workshop-user-variables" title="Permanent link">#</a></h3>
 <p>In your Github Codespaces Terminal set the environment variables:</p>
@@ -960,16 +965,16 @@ kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w">
 <p class="admonition-title">Sprint Environment</p>
 <p>Are you using a Sprint environment for your Dynatrace tenant?  If so, then use <code>export DT_ENDPOINT=https://{your-environment-id}.sprint.dynatracelabs.com/api/v2/otlp</code> instead of the <code>live</code> version below.</p>
 </div>
-<div class="highlight"><pre><span></span><code>export DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
-export DT_API_TOKEN={your-api-token}
-export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
-</code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>export DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>export DT_API_TOKEN={your-api-token}
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
+</span></code></pre></div>
 <h3 id="deploy-opentelemetry-operator">Deploy OpenTelemetry Operator<a class="headerlink" href="#deploy-opentelemetry-operator" title="Permanent link">#</a></h3>
 <p><strong>Move to the base directory</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="nv">$REPO_PATH</span>
-<span class="nb">pwd</span>
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">cd</span><span class="w"> </span><span class="nv">$REPO_PATH</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">pwd</span>
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>/workspaces/enablement-kubernetes-opentelemetry</p>
@@ -978,24 +983,24 @@ Sample output:</p>
 <p><strong>Create <code>dynatrace</code> namespace</strong></p>
 <p>Create the <code>dynatrace</code> namespace.  This is where we'll deploy the OpenTelemetry Collectors.</p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>dynatrace
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>dynatrace
+</span></code></pre></div></p>
 <p>Sample output:
-<div class="highlight"><pre><span></span><code>&gt;<span class="w"> </span>namespace/dynatrace<span class="w"> </span>created
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>&gt;<span class="w"> </span>namespace/dynatrace<span class="w"> </span>created
+</span></code></pre></div></p>
 <p><strong>Create <code>dynatrace-otelcol-dt-api-credentials</code> secret</strong></p>
 <p>The secret holds the API endpoint and API token that OpenTelemetry data will be sent to.</p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>dynatrace-otelcol-dt-api-credentials<span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">DT_ENDPOINT</span><span class="o">=</span><span class="nv">$DT_ENDPOINT</span><span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">DT_API_TOKEN</span><span class="o">=</span><span class="nv">$DT_API_TOKEN</span><span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>dynatrace-otelcol-dt-api-credentials<span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">DT_ENDPOINT</span><span class="o">=</span><span class="nv">$DT_ENDPOINT</span><span class="w"> </span>--from-literal<span class="o">=</span><span class="nv">DT_API_TOKEN</span><span class="o">=</span><span class="nv">$DT_API_TOKEN</span><span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div>
 Sample output:</p>
-<div class="highlight"><pre><span></span><code>&gt;<span class="w"> </span>secret/dynatrace-otelcol-dt-api-credentials<span class="w"> </span>created
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>&gt;<span class="w"> </span>secret/dynatrace-otelcol-dt-api-credentials<span class="w"> </span>created
+</span></code></pre></div>
 <p><strong>Deploy <code>cert-manager</code>, pre-requisite for <code>opentelemetry-operator</code></strong></p>
 <p><a href="https://cert-manager.io/docs/installation/" target="_blank">Cert-Manager Documentation</a></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cluster-manifests/cert-manager.yaml
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cluster-manifests/cert-manager.yaml
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <blockquote>
 <p>namespace/cert-manager created\
@@ -1008,8 +1013,8 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/cert-manager-webhook
 <p><strong>Deploy <code>opentelemetry-operator</code></strong></p>
 <p>The OpenTelemetry Operator will deploy and manage the custom resource <code>OpenTelemetryCollector</code> deployed on the cluster.</p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cluster-manifests/opentelemetry-operator.yaml
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cluster-manifests/opentelemetry-operator.yaml
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <blockquote>
 <p>namespace/opentelemetry-operator-system created\
@@ -1021,8 +1026,8 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/opentelemetry-operat
 <p>Wait 30-60 seconds for opentelemetry-operator-controller-manager to finish initializing before continuing.</p>
 <p>Validate that the OpenTelemetry Operator components are running.</p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>opentelemetry-operator-system
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>opentelemetry-operator-system
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <table>
 <thead>
@@ -1068,6 +1073,8 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/opentelemetry-operat
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1080,6 +1087,46 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/opentelemetry-operat
       </main>
       
         <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../2-getting-started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 2. Getting started">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                2. Getting started
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../4-opentelemetry-logs/" class="md-footer__link md-footer__link--next" aria-label="Next: 4. OpenTelemetry Logs">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                4. OpenTelemetry Logs
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1103,7 +1150,7 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/opentelemetry-operat
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "navigation.instant", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.footer", "toc.follow", "search.highlight", "search.suggest", "search.share"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>

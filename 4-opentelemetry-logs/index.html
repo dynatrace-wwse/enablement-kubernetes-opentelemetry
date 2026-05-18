@@ -171,6 +171,11 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -970,44 +975,44 @@ document.addEventListener('DOMContentLoaded', function() {
 <p class="admonition-title">Sprint Environment</p>
 <p>Are you using a Sprint environment for your Dynatrace tenant?  If so, then use <code>export DT_ENDPOINT=https://{your-environment-id}.sprint.dynatracelabs.com/api/v2/otlp</code> instead of the <code>live</code> version below.</p>
 </div>
-<div class="highlight"><pre><span></span><code>export DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
-export DT_API_TOKEN={your-api-token}
-export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
-</code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>export DT_ENDPOINT=https://{your-environment-id}.live.dynatrace.com/api/v2/otlp
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>export DT_API_TOKEN={your-api-token}
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>export NAME=&lt;INITIALS&gt;-k8s-otel-o11y
+</span></code></pre></div>
 <p><strong>Move into the logs module directory</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="nv">$REPO_PATH</span>/lab-modules/opentelemetry-logs
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span><span class="nv">$REPO_PATH</span>/lab-modules/opentelemetry-logs
+</span></code></pre></div></p>
 <h2 id="opentelemetry-collector-for-logs">OpenTelemetry Collector for Logs<a class="headerlink" href="#opentelemetry-collector-for-logs" title="Permanent link">#</a></h2>
 <p><a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment" target="_blank">Dynatrace Documentation</a></p>
 <h3 id="deploy-opentelemetry-collector">Deploy OpenTelemetry Collector<a class="headerlink" href="#deploy-opentelemetry-collector" title="Permanent link">#</a></h3>
 <p><strong>Dynatrace Distro - Daemonset (Node Agent)</strong>
 <a href="https://docs.dynatrace.com/docs/extend-dynatrace/opentelemetry/collector/deployment#tabgroup--dynatrace-docs--agent" target="_blank">Dynatrace Documentation</a></p>
 <p>Pod (and container) logs are written to the filesystem of the Node where the pod is running.  Therefore the Collector must be deployed as a Daemonset to read the log files on the local Node.</p>
-<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">envFrom</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-otelcol-dt-api-credentials</span>
-<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;daemonset&quot;</span>
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest&quot;</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">envFrom</span><span class="p">:</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-otelcol-dt-api-credentials</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;daemonset&quot;</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest&quot;</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-01.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-01.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>opentelemetrycollector.opentelemetry.io/dynatrace-logs created</p>
 </blockquote>
 <p><strong>Validate running pod(s)</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <table>
 <thead>
@@ -1033,25 +1038,25 @@ Sample output:</p>
 <p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#filelog-receiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>The Filelog Receiver tails and parses logs from files. Although it’s not a Kubernetes-specific receiver, it is still the de facto solution for collecting any logs from Kubernetes.  Logs from the Kubernetes Node's filesystem will be read from the Collector running on that Node.  This is why the Collector is deployed as a Daemonset and not a Deployment (or Sidecar).</p>
 <p>The Filelog Receiver is composed of Operators that are chained together to process a log. Each Operator performs a simple responsibility, such as parsing a timestamp or JSON. Configuring a Filelog Receiver is not trivial.  Refer to the documentation for details.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">filelog</span><span class="p">:</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">filelog</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">config</span><span class="p">:</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">      </span><span class="nt">filelog</span><span class="p">:</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">filelog</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
-<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
-<span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
-<span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span>
-</code></pre></div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">log</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">path</span>
+</span></code></pre></div>
 Result:</p>
 <p><img alt="dql_filelog_receiver" src="../img/logs-dql_filelog_receiver.png" /></p>
 <h2 id="k8sattributes-processor">k8sattributes Processor<a class="headerlink" href="#k8sattributes-processor" title="Permanent link">#</a></h2>
@@ -1061,47 +1066,47 @@ Result:</p>
 <h3 id="configure-kubernetes-rbac">Configure Kubernetes RBAC<a class="headerlink" href="#configure-kubernetes-rbac" title="Permanent link">#</a></h3>
 <p><strong>Create <code>clusterrole</code> with read access to Kubernetes objects</strong></p>
 <p>Since the processor uses the Kubernetes API, it needs the correct permission to work correctly. For most use cases, you should give the service account running the collector the following permissions via a ClusterRole.</p>
-<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-logs</span>
-<span class="nt">rules</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;pods&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;namespaces&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;nodes&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">]</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;apps&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;replicasets&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">]</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;extensions&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;replicasets&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">]</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nn">---</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-logs</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;pods&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;namespaces&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;nodes&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;apps&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;replicasets&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;extensions&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;replicasets&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-logs.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-logs.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-logs created</p>
 </blockquote>
 <p><strong>Create <code>clusterrolebinding</code> for OpenTelemetry Collector service account</strong></p>
-<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-logs-crb</span>
-<span class="nt">subjects</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs-collector</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">roleRef</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-logs</span>
-<span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nn">---</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-logs-crb</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs-collector</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-logs</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-logs-crb.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-logs-crb.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-logs-crb created</p>
@@ -1109,55 +1114,55 @@ Sample output:</p>
 <h3 id="add-k8sattributes-processor">Add <code>k8sattributes</code> Processor<a class="headerlink" href="#add-k8sattributes-processor" title="Permanent link">#</a></h3>
 <p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-attributes-processor" target="_blank">OpenTelemetry Documentation</a></p>
 <p>The <code>k8sattributes</code> processor will query metadata from the cluster about the k8s objects.  The Collector will then marry this metadata to the telemetry.</p>
-<p><div class="highlight"><pre><span></span><code><span class="nt">k8sattributes</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serviceAccount&quot;</span>
-<span class="w">    </span><span class="nt">passthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">filter</span><span class="p p-Indicator">:</span>
-<span class="w">        </span><span class="nt">node_from_env_var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KUBE_NODE_NAME</span>
-<span class="w">    </span><span class="nt">extract</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.namespace.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.deployment.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.daemonset.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.job.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cronjob.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.replicaset.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.statefulset.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.uid</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.node.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.container.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.id</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.image.name</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.image.tag</span>
-<span class="w">        </span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tag_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.label.component</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.kubernetes.io/component</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">from</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pod</span>
-<span class="w">    </span><span class="nt">pod_association</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
-<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.uid</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
-<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.name</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
-<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.ip</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connection</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">k8sattributes</span><span class="p">:</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;serviceAccount&quot;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">passthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">filter</span><span class="p p-Indicator">:</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">        </span><span class="nt">node_from_env_var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KUBE_NODE_NAME</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="nt">extract</span><span class="p">:</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.namespace.name</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.deployment.name</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.daemonset.name</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.job.name</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cronjob.name</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.replicaset.name</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.statefulset.name</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.name</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.uid</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.node.name</span>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.container.name</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.id</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.image.name</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.image.tag</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">        </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tag_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.label.component</span>
+</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.kubernetes.io/component</span>
+</span><span id="__span-11-25"><a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">from</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pod</span>
+</span><span id="__span-11-26"><a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span><span class="nt">pod_association</span><span class="p">:</span>
+</span><span id="__span-11-27"><a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+</span><span id="__span-11-28"><a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
+</span><span id="__span-11-29"><a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.uid</span>
+</span><span id="__span-11-30"><a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+</span><span id="__span-11-31"><a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
+</span><span id="__span-11-32"><a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.name</span>
+</span><span id="__span-11-33"><a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+</span><span id="__span-11-34"><a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resource_attribute</span>
+</span><span id="__span-11-35"><a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.ip</span>
+</span><span id="__span-11-36"><a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">sources</span><span class="p">:</span>
+</span><span id="__span-11-37"><a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connection</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-02.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-02.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>opentelemetrycollector.opentelemetry.io/dynatrace-logs configured</p>
 </blockquote>
 <p><strong>Validate running pod(s)</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <table>
 <thead>
@@ -1181,12 +1186,12 @@ Sample output:</p>
 </table>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
-<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
-<span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
-<span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">app</span><span class="p">.</span><span class="n">label</span><span class="p">.</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">content</span>
-</code></pre></div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">container</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">app</span><span class="p">.</span><span class="n">label</span><span class="p">.</span><span class="n">component</span><span class="p">,</span><span class="w"> </span><span class="n">content</span>
+</span></code></pre></div>
 Result:</p>
 <p><img alt="dql_k8sattributes_processor" src="../img/logs-dql_k8sattributes_processor.png" /></p>
 <h2 id="resourcedetection-processor">resourcedetection Processor<a class="headerlink" href="#resourcedetection-processor" title="Permanent link">#</a></h2>
@@ -1194,33 +1199,33 @@ Result:</p>
 <p>This processor is a great plugin for adding attributes such as <code>cloud.account.id</code> and <code>k8s.cluster.name</code> to the telemetry.</p>
 <h3 id="add-resourcedetection-processor">Add <code>resourcedetection</code> Processor<a class="headerlink" href="#add-resourcedetection-processor" title="Permanent link">#</a></h3>
 <p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourcedetectionprocessor/README.md#gcp-metadata" target="_blank">OpenTelemetry Documentation</a></p>
-<div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">resourcedetection/gcp</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">detectors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">env</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gcp</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2s</span>
-<span class="w">    </span><span class="nt">override</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">processors</span><span class="p">:</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">resourcedetection/gcp</span><span class="p">:</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nt">detectors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">env</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gcp</span><span class="p p-Indicator">]</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2s</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nt">override</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span></code></pre></div>
 <p><strong>note:</strong> for this lab, the Kind cluster does not have cloud metadata to collect.  These values will be spoofed for the purposes of this lab.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">resource/kind</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">attributes</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.account.id</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt-k8s-o11y-account</span>
-<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cluster.name</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt-k8s-o11y-kind</span>
-<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">resource/kind</span><span class="p">:</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">attributes</span><span class="p">:</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.account.id</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt-k8s-o11y-account</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cluster.name</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt-k8s-o11y-kind</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</span></code></pre></div>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-03.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-03.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>opentelemetrycollector.opentelemetry.io/dynatrace-logs configured</p>
 </blockquote>
 <p><strong>Validate running pod(s)</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <table>
 <thead>
@@ -1244,13 +1249,13 @@ Sample output:</p>
 </table>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
-<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
-<span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
-<span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span>
-</code></pre></div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span>
+</span></code></pre></div>
 Result:</p>
 <p><img alt="dql_resourcedetection_processor" src="../img/logs-dql_resourcedetection_processor.png" /></p>
 <h2 id="resource-processor">resource Processor<a class="headerlink" href="#resource-processor" title="Permanent link">#</a></h2>
@@ -1267,32 +1272,32 @@ Result:</p>
 </ul>
 </li>
 </ul>
-<p><div class="highlight"><pre><span></span><code><span class="nt">processors</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.ip</span>
-<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.sdk.name</span>
-<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry</span>
-<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace.otel.collector</span>
-<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs</span>
-<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt.security_context</span>
-<span class="w">          </span><span class="nt">from_attribute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cluster.name</span>
-<span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">processors</span><span class="p">:</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="nt">resource</span><span class="p">:</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.pod.ip</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.sdk.name</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace.otel.collector</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-logs</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dt.security_context</span>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="w">          </span><span class="nt">from_attribute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s.cluster.name</span>
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">insert</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-04.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-04.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>opentelemetrycollector.opentelemetry.io/dynatrace-logs configured</p>
 </blockquote>
 <p><strong>Validate running pod(s)</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div>
 Sample output:</p>
 <table>
 <thead>
@@ -1316,46 +1321,46 @@ Sample output:</p>
 </table>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
-<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">dt</span><span class="p">.</span><span class="n">security_context</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
-<span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
-<span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">.</span><span class="n">security_context</span><span class="p">,</span><span class="w"> </span><span class="n">dynatrace</span><span class="p">.</span><span class="n">otel</span><span class="p">.</span><span class="n">collector</span><span class="p">,</span><span class="w"> </span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span>
-</code></pre></div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">dt</span><span class="p">.</span><span class="n">security_context</span><span class="p">)</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">loglevel</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">.</span><span class="n">security_context</span><span class="p">,</span><span class="w"> </span><span class="n">dynatrace</span><span class="p">.</span><span class="n">otel</span><span class="p">.</span><span class="n">collector</span><span class="p">,</span><span class="w"> </span><span class="n">cloud</span><span class="p">.</span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">deployment</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">content</span>
+</span></code></pre></div>
 Result:</p>
 <p><img alt="dql_resource_processor" src="../img/logs-dql_resource_processor.png" /></p>
 <h2 id="otlp-exporter">OTLP Exporter<a class="headerlink" href="#otlp-exporter" title="Permanent link">#</a></h2>
 <p>The <code>astronomy-shop</code> demo application has the OpenTelemetry agents and SDKs already instrumented.  These agents and SDKs are generating logs (traces and metrics too) that are being exported to a Collector running within the <code>astronomy-shop</code> namespace bundled into the application deployment.  We want these logs to be shipped to Dynatrace as well.</p>
 <p><a href="https://github.com/open-telemetry/opentelemetry-collector/tree/main/receiver/otlpreceiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>Adding the <code>otlp</code> receiver allows us to receive telemetry from otel exporters, such as agents and other collectors.
-<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">otlp</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">protocols</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">grpc</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
-<span class="w">          </span><span class="nt">http</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4318</span>
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">config</span><span class="p">:</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="nt">receivers</span><span class="p">:</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">      </span><span class="nt">otlp</span><span class="p">:</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">        </span><span class="nt">protocols</span><span class="p">:</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">          </span><span class="nt">grpc</span><span class="p">:</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">          </span><span class="nt">http</span><span class="p">:</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4318</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">      </span><span class="nt">pipelines</span><span class="p">:</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">        </span><span class="nt">logs</span><span class="p">:</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">          </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="w">          </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">          </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlphttp/dynatrace</span><span class="p p-Indicator">]</span>
+</span></code></pre></div></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-05.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/logs/otel-collector-logs-crd-05.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>opentelemetrycollector.opentelemetry.io/dynatrace-logs configured</p>
 </blockquote>
 <p><strong>Validate running pod(s)</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <table>
 <thead>
@@ -1379,42 +1384,42 @@ Sample output:</p>
 </table>
 <h3 id="customize-astronomy-shop-helm-values">Customize astronomy-shop helm values<a class="headerlink" href="#customize-astronomy-shop-helm-values" title="Permanent link">#</a></h3>
 <p>OpenTelemetry data created by agents and SDKs should include <code>service.name</code> and <code>service.namespace</code> attributes.  We will make the <code>service.namespace</code> unique to our deployment using our <code>NAME</code> environment variable declared earlier, using a <code>sed</code> command on the Helm chart's <code>values.yaml</code> file.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">default</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># List of environment variables applied to all components</span>
-<span class="w">  </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_SERVICE_NAME</span>
-<span class="w">      </span><span class="nt">valueFrom</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">fieldRef</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="w">          </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;metadata.labels[&#39;app.kubernetes.io/component&#39;]&quot;</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_COLLECTOR_NAME</span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">include</span><span class="nv"> </span><span class="s">&quot;otel-demo.name&quot;</span><span class="nv"> </span><span class="s">.</span><span class="nv"> </span><span class="s">}}-otelcol&#39;</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE</span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cumulative</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_RESOURCE_ATTRIBUTES</span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;service.name=$(OTEL_SERVICE_NAME),service.namespace=NAME_TO_REPLACE,service.version={{</span><span class="nv"> </span><span class="s">.Chart.AppVersion</span><span class="nv"> </span><span class="s">}}&#39;</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nt">default</span><span class="p">:</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span><span class="c1"># List of environment variables applied to all components</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_SERVICE_NAME</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">      </span><span class="nt">valueFrom</span><span class="p">:</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">        </span><span class="nt">fieldRef</span><span class="p">:</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">          </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">          </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;metadata.labels[&#39;app.kubernetes.io/component&#39;]&quot;</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_COLLECTOR_NAME</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">include</span><span class="nv"> </span><span class="s">&quot;otel-demo.name&quot;</span><span class="nv"> </span><span class="s">.</span><span class="nv"> </span><span class="s">}}-otelcol&#39;</span>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE</span>
+</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cumulative</span>
+</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OTEL_RESOURCE_ATTRIBUTES</span>
+</span><span id="__span-27-14"><a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a><span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;service.name=$(OTEL_SERVICE_NAME),service.namespace=NAME_TO_REPLACE,service.version={{</span><span class="nv"> </span><span class="s">.Chart.AppVersion</span><span class="nv"> </span><span class="s">}}&#39;</span>
+</span></code></pre></div>
 <blockquote>
 <p>service.namespace=NAME_TO_REPLACE\
 service.namespace=INITIALS-k8s-otel-o11y</p>
 </blockquote>
 <p>Command:
-<div class="highlight"><pre><span></span><code>sed<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>&gt;<span class="w"> </span>astronomy-shop/sed/collector-values.yaml
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>sed<span class="w"> </span><span class="s2">&quot;s,NAME_TO_REPLACE,</span><span class="nv">$NAME</span><span class="s2">,&quot;</span><span class="w"> </span>astronomy-shop/collector-values.yaml<span class="w"> </span>&gt;<span class="w"> </span>astronomy-shop/sed/collector-values.yaml
+</span></code></pre></div></p>
 <p><strong>Update <code>astronomy-shop</code> OpenTelemetry Collector export endpoint via helm</strong></p>
 <p>Our <code>collector-values.yaml</code> contains new configurations for the application so that the <code>astronomy-shop</code> Collector includes exporters that ship to the Collectors deployed in the <code>dynatrace</code> namespace.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">exporters</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># Dynatrace OTel Collectors</span>
-<span class="w">  </span><span class="nt">otlphttp/dttraces</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-traces-collector.dynatrace.svc.cluster.local:4318</span>
-<span class="w">  </span><span class="nt">otlphttp/dtlogs</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-logs-collector.dynatrace.svc.cluster.local:4318</span>
-<span class="w">  </span><span class="nt">otlphttp/dtmetrics</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-metrics-cluster-collector.dynatrace.svc.cluster.local:4318</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nt">exporters</span><span class="p">:</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">  </span><span class="c1"># Dynatrace OTel Collectors</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">  </span><span class="nt">otlphttp/dttraces</span><span class="p">:</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-traces-collector.dynatrace.svc.cluster.local:4318</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">  </span><span class="nt">otlphttp/dtlogs</span><span class="p">:</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-logs-collector.dynatrace.svc.cluster.local:4318</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">  </span><span class="nt">otlphttp/dtmetrics</span><span class="p">:</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://dynatrace-metrics-cluster-collector.dynatrace.svc.cluster.local:4318</span>
+</span></code></pre></div>
 <p>Command:</p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/sed/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>helm<span class="w"> </span>upgrade<span class="w"> </span>astronomy-shop<span class="w"> </span>open-telemetry/opentelemetry-demo<span class="w"> </span>--values<span class="w"> </span>astronomy-shop/sed/collector-values.yaml<span class="w"> </span>--namespace<span class="w"> </span>astronomy-shop<span class="w"> </span>--version<span class="w"> </span><span class="s2">&quot;0.31.0&quot;</span>
+</span></code></pre></div>
 <p>Sample output:</p>
 <blockquote>
 <p>NAME: astronomy-shop\
@@ -1425,12 +1430,12 @@ REVISION: 2</p>
 </blockquote>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
-<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
-<span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
-<span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
-<span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">service</span><span class="p">.</span><span class="n">namespace</span><span class="p">,</span><span class="w"> </span><span class="n">service</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">telemetry</span><span class="p">.</span><span class="n">sdk</span><span class="p">.</span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="n">otel</span><span class="p">.</span><span class="k">scope</span><span class="p">.</span><span class="n">name</span>
-</code></pre></div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">isNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">pod</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">service</span><span class="p">.</span><span class="n">namespace</span><span class="p">,</span><span class="w"> </span><span class="n">service</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">telemetry</span><span class="p">.</span><span class="n">sdk</span><span class="p">.</span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="n">otel</span><span class="p">.</span><span class="k">scope</span><span class="p">.</span><span class="n">name</span>
+</span></code></pre></div>
 Result:</p>
 <p><img alt="dql_otel_sdk_logs" src="../img/logs-dql_otel_sdk_logs.png" /></p>
 <h2 id="opentelemetry-collector-for-events">OpenTelemetry Collector for Events<a class="headerlink" href="#opentelemetry-collector-for-events" title="Permanent link">#</a></h2>
@@ -1439,91 +1444,91 @@ Result:</p>
 <h3 id="k8sobjects-receiver"><code>k8sobjects</code> Receiver<a class="headerlink" href="#k8sobjects-receiver" title="Permanent link">#</a></h3>
 <p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-objects-receiver" target="_blank">OpenTelemetry Documentation</a></p>
 <p>Our goal is to capture any events related to the <code>astronomy-shop</code> and <code>dynatrace</code> namespaces.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">receivers</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">k8sobjects/events</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serviceAccount</span>
-<span class="w">    </span><span class="nt">objects</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">events</span>
-<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watch</span>
-<span class="w">        </span><span class="nt">namespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">astronomy-shop</span><span class="p p-Indicator">,</span><span class="nv">dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nt">receivers</span><span class="p">:</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">  </span><span class="nt">k8sobjects/events</span><span class="p">:</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serviceAccount</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="nt">objects</span><span class="p">:</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">events</span>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watch</span>
+</span><span id="__span-32-7"><a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">        </span><span class="nt">namespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">astronomy-shop</span><span class="p p-Indicator">,</span><span class="nv">dynatrace</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
 <h3 id="configure-kubernetes-rbac_1">Configure Kubernetes RBAC<a class="headerlink" href="#configure-kubernetes-rbac_1" title="Permanent link">#</a></h3>
 <p><strong>Create <code>clusterrole</code> with read access to Kubernetes events</strong></p>
 <p>Since the processor uses the Kubernetes API, it needs the correct permission to work correctly. Since service accounts are the only authentication option you must give the service account the proper access. For any object you want to collect you need to ensure the name is added to the cluster role. </p>
-<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-events</span>
-<span class="nt">rules</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;events&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">]</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nn">---</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-events</span>
+</span><span id="__span-33-6"><a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="nt">rules</span><span class="p">:</span>
+</span><span id="__span-33-7"><a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-33-8"><a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;events&quot;</span><span class="p p-Indicator">]</span>
+</span><span id="__span-33-9"><a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;get&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;watch&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;list&quot;</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-events.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-events.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>clusterrole.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events created</p>
 </blockquote>
 <p><strong>Create <code>clusterrolebinding</code> for OpenTelemetry Collector service account</strong></p>
-<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-events-crb</span>
-<span class="nt">subjects</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-events-collector</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">roleRef</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-events</span>
-<span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nn">---</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io/v1</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRoleBinding</span>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-events-crb</span>
+</span><span id="__span-35-6"><a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="nt">subjects</span><span class="p">:</span>
+</span><span id="__span-35-7"><a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
+</span><span id="__span-35-8"><a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-events-collector</span>
+</span><span id="__span-35-9"><a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
+</span><span id="__span-35-10"><a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="nt">roleRef</span><span class="p">:</span>
+</span><span id="__span-35-11"><a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterRole</span>
+</span><span id="__span-35-12"><a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-collector-k8s-clusterrole-events</span>
+</span><span id="__span-35-13"><a id="__codelineno-35-13" name="__codelineno-35-13" href="#__codelineno-35-13"></a><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rbac.authorization.k8s.io</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-events-crb.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/rbac/otel-collector-k8s-clusterrole-events-crb.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>clusterrolebinding.rbac.authorization.k8s.io/otel-collector-k8s-clusterrole-events-crb created</p>
 </blockquote>
 <p><strong>Add <code>k8sobjects</code> receiver to collect Kubernetes events as logs</strong></p>
 <p><a href="https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-objects-receiver" target="_blank">OpenTelemetry Documentation</a></p>
-<div class="highlight"><pre><span></span><code><span class="nt">receivers</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">k8sobjects/events</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serviceAccount</span>
-<span class="w">    </span><span class="nt">objects</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">events</span>
-<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watch</span>
-<span class="w">        </span><span class="nt">namespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">astronomy-shop</span><span class="p p-Indicator">,</span><span class="nv">dynatrace</span><span class="p p-Indicator">]</span>
-</code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="nt">receivers</span><span class="p">:</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">  </span><span class="nt">k8sobjects/events</span><span class="p">:</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serviceAccount</span>
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="w">    </span><span class="nt">objects</span><span class="p">:</span>
+</span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">events</span>
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a><span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watch</span>
+</span><span id="__span-37-7"><a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a><span class="w">        </span><span class="nt">namespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">astronomy-shop</span><span class="p p-Indicator">,</span><span class="nv">dynatrace</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
 <p>Since the receiver gathers telemetry for the cluster as a whole, only one instance of the receiver is needed across the cluster in order to collect all the data.</p>
-<p><div class="highlight"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-events</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">envFrom</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-otelcol-dt-api-credentials</span>
-<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;deployment&quot;</span>
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest&quot;</span>
-</code></pre></div>
+<p><div class="language-yaml highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nn">---</span>
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry.io/v1beta1</span>
+</span><span id="__span-38-3"><a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenTelemetryCollector</span>
+</span><span id="__span-38-4"><a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-38-5"><a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-events</span>
+</span><span id="__span-38-6"><a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace</span>
+</span><span id="__span-38-7"><a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-38-8"><a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="w">  </span><span class="nt">envFrom</span><span class="p">:</span>
+</span><span id="__span-38-9"><a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+</span><span id="__span-38-10"><a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynatrace-otelcol-dt-api-credentials</span>
+</span><span id="__span-38-11"><a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a><span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;deployment&quot;</span>
+</span><span id="__span-38-12"><a id="__codelineno-38-12" name="__codelineno-38-12" href="#__codelineno-38-12"></a><span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ghcr.io/dynatrace/dynatrace-otel-collector/dynatrace-otel-collector:latest&quot;</span>
+</span></code></pre></div>
 Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/events/otel-collector-events-crd-01.yaml
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>opentelemetry/collector/events/otel-collector-events-crd-01.yaml
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>opentelemetrycollector.opentelemetry.io/dynatrace-events created</p>
 </blockquote>
 <p><strong>Validate running pod(s)</strong></p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
-</code></pre></div></p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace
+</span></code></pre></div></p>
 <p>Sample output:</p>
 <table>
 <thead>
@@ -1550,28 +1555,28 @@ Sample output:</p>
 <p><a href="https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/" target="_blank">Kubernetes Documentation</a></p>
 <p>We can generate new Kubernetes events related to the <code>astronomy-shop</code> namespace by scaling a deployment up and then scaling it back down.</p>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>scale<span class="w"> </span>deployment<span class="w"> </span>astronomy-shop-imageprovider<span class="w"> </span>-n<span class="w"> </span>astronomy-shop<span class="w"> </span>--replicas<span class="o">=</span><span class="m">2</span>
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>kubectl<span class="w"> </span>scale<span class="w"> </span>deployment<span class="w"> </span>astronomy-shop-imageprovider<span class="w"> </span>-n<span class="w"> </span>astronomy-shop<span class="w"> </span>--replicas<span class="o">=</span><span class="m">2</span>
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>deployment.apps/astronomy-shop-imageprovider scaled</p>
 </blockquote>
 <p>Command:
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>scale<span class="w"> </span>deployment<span class="w"> </span>astronomy-shop-imageprovider<span class="w"> </span>-n<span class="w"> </span>astronomy-shop<span class="w"> </span>--replicas<span class="o">=</span><span class="m">1</span>
-</code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>kubectl<span class="w"> </span>scale<span class="w"> </span>deployment<span class="w"> </span>astronomy-shop-imageprovider<span class="w"> </span>-n<span class="w"> </span>astronomy-shop<span class="w"> </span>--replicas<span class="o">=</span><span class="m">1</span>
+</span></code></pre></div>
 Sample output:</p>
 <blockquote>
 <p>deployment.apps/astronomy-shop-imageprovider scaled</p>
 </blockquote>
 <p><strong>Query logs in Dynatrace</strong></p>
 <p>DQL:
-<div class="highlight"><pre><span></span><code><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">dynatrace</span><span class="p">.</span><span class="n">otel</span><span class="p">.</span><span class="n">collector</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;dynatrace-events&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="k">domain</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;k8s&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">resource</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;events&quot;</span>
-<span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="k">object</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">namespace</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span>
-<span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
-<span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
-<span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="k">object</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">namespace</span><span class="p">,</span><span class="w"> </span><span class="k">alias</span><span class="p">:</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="k">object</span><span class="p">.</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="k">object</span><span class="p">.</span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="n">name</span>
-</code></pre></div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">fetch</span><span class="w"> </span><span class="n">logs</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="n">dynatrace</span><span class="p">.</span><span class="n">otel</span><span class="p">.</span><span class="n">collector</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;dynatrace-events&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="k">domain</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;k8s&quot;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">resource</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;events&quot;</span>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="o">|</span><span class="w"> </span><span class="n">filter</span><span class="w"> </span><span class="k">object</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">namespace</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="ss">&quot;astronomy-shop&quot;</span>
+</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="o">|</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">desc</span>
+</span><span id="__span-43-5"><a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="o">|</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">100</span>
+</span><span id="__span-43-6"><a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="o">|</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="k">cluster</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="k">object</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">namespace</span><span class="p">,</span><span class="w"> </span><span class="k">alias</span><span class="p">:</span><span class="w"> </span><span class="n">k8s</span><span class="p">.</span><span class="n">namespace</span><span class="p">.</span><span class="n">name</span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="k">object</span><span class="p">.</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="k">object</span><span class="p">.</span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="n">name</span>
+</span></code></pre></div>
 Result:</p>
 <p><img alt="dql_k8s_events" src="../img/logs-dql_k8s_events.png" /></p>
 <h2 id="wrap-up">Wrap Up<a class="headerlink" href="#wrap-up" title="Permanent link">#</a></h2>
@@ -1614,6 +1619,8 @@ Result:</p>
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1626,6 +1633,46 @@ Result:</p>
       </main>
       
         <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../3-codespaces/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 3. Codespaces">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                3. Codespaces
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../5-opentelemetry-traces/" class="md-footer__link md-footer__link--next" aria-label="Next: 5. OpenTelemetry Traces">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                5. OpenTelemetry Traces
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1649,7 +1696,7 @@ Result:</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "navigation.instant", "navigation.tracking", "navigation.top", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.footer", "toc.follow", "search.highlight", "search.suggest", "search.share"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
