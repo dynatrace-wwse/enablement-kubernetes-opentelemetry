@@ -9,6 +9,6 @@ source .devcontainer/util/source_framework.sh
 setBaseDir
 
 # attach to kind cluster
-startKindCluster
+startCluster
 
 printInfoSection "Your dev.container finished starting up"

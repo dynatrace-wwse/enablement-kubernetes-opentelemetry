@@ -5,7 +5,7 @@ source .devcontainer/util/source_framework.sh
 
 setUpTerminal
 
-startKindCluster
+startCluster
 
 installK9s
 
