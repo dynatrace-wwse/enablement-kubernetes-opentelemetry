@@ -1,4 +1,3 @@
---8<-- "snippets/send-bizevent/6-opentelemetry-metrics.js"
 # OpenTelemetry Metrics
 
 In this lab module we'll utilize the OpenTelemetry Collector deployed as a DaemonSet (Node Agent) to collect Node (kubelet) metrics from a Kubernetes cluster and ship them to Dynatrace.  Additionally, we'll utilize a second OpenTelemetry Collector deployed as a Deployment (Gateway) to collect Cluster (Kubernetes API) metrics from the Kubernetes cluster and ship them to Dynatrace.
