@@ -1,4 +1,3 @@
---8<-- "snippets/send-bizevent/index.js"
 # Kubernetes OpenTelemetry
 
 --8<-- "snippets/disclaimer.md"

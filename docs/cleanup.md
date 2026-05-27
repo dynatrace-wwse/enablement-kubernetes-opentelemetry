@@ -1,4 +1,3 @@
---8<-- "snippets/send-bizevent/cleanup.js"
 
 # Clean Up
 

@@ -1,4 +1,3 @@
---8<-- "snippets/send-bizevent/4-opentelemetry-logs.js"
 # OpenTelemetry Logs
 
 In this lab module we'll utilize the OpenTelemetry Collector deployed as a DaemonSet (Node Agent) to collect pod/container logs from a Kubernetes cluster and ship them to Dynatrace.  Additionally, we'll deploy the OpenTelemetry Collector as a Deployment (Gateway) to watch Kubernetes Events from the Cluster and ship them to Dynatrace.

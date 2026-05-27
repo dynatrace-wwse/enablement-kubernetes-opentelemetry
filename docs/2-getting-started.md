@@ -1,4 +1,3 @@
---8<-- "snippets/send-bizevent/2-getting-started.js"
 # Getting Started
 
 --8<-- "snippets/requirements.md"

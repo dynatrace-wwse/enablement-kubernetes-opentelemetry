@@ -1,4 +1,3 @@
---8<-- "snippets/send-bizevent/7-opentelemetry-capstone.js"
 # OpenTelemetry Capstone
 
 !!! tip "Capstone Module"
