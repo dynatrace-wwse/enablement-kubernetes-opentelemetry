@@ -8,7 +8,7 @@ source .devcontainer/util/source_framework.sh
 
 setBaseDir
 
-# attach to kind cluster
-startKindCluster
+# attach to cluster (k3d — matches post-create; Orbital standard)
+startK3dCluster
 
 printInfoSection "Your dev.container finished starting up"
