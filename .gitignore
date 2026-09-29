@@ -218,3 +218,6 @@ cluster-manifests/astronomy-shop/gen-default-values.yaml
 
 
 docs/stylesheets/extra.css
+
+
+docs/javascripts/mermaid.min.js
