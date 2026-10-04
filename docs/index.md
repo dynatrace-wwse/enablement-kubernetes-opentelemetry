@@ -1,3 +1,12 @@
+---
+description: Capture logs, traces and metrics from Kubernetes with OpenTelemetry Collectors and ship them to Dynatrace, with no Operator, OneAgent or ActiveGate on the cluster. Configure enrichment pipelines, query the data with DQL and finish with a capstone that also watches the Collectors' own health.
+tags:
+  - classic
+  - opentelemetry
+  - kubernetes
+  - otel-collector
+---
+
 # Kubernetes OpenTelemetry
 
 !!! warning "Not yet migrated to the Dynatrace Enablement App"
